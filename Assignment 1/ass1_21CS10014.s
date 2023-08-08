@@ -1,8 +1,8 @@
-	.file	"code.c"
-	.text
-	.globl	calculateFrequency
-	.type	calculateFrequency, @function
-calculateFrequency:
+	.file	"code.c"						# source file name
+	.text									# text section beginning
+	.globl	calculateFrequency				# global declaration of function calculateFrequency
+	.type	calculateFrequency, @function	# type of function calculateFrequency
+calculateFrequency:							# beginning of function calculateFrequency
 .LFB0:
 	.cfi_startproc
 	endbr64
