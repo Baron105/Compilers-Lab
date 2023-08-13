@@ -4,6 +4,7 @@
 
 # This .s file has been generated from the given code.c file using the command provided in the assigment specification.
 # All the lines in the .s file have been suitably commented and the corresponding link with .c is mentioned whereever applicable using a // to separate it
+# This has been generated on Ubuntu, therefore it can be further compiled to the a.out file using gcc on Ubuntu
 
 	.file	"code.c"						# source file name
 	.text									# code starts here
