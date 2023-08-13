@@ -1,3 +1,10 @@
+# Name - Barun Parua
+# Roll Number - 21CS10014
+# Assignment - 1
+
+# This .s file has been generated from the given code.c file using the command provided in the assigment specification.
+# All the lines in the .s file have been suitably commented and the corresponding link with .c is mentioned whereever applicable using a // to separate it
+
 	.file	"code.c"						# source file name
 	.text									# code starts here
 	.globl	calculateFrequency				# calculateFrequency is a global name
@@ -80,7 +87,7 @@ calculateFrequency:							# function calculateFrequency starts
 .LFE0:										# label LFE0
 	.size	calculateFrequency, .-calculateFrequency	# size of calculateFrequency function
 	.section	.rodata						# read only data section of calculateFrequency
-.LC0:										# label LC0, used to store string "Element\tFrequency" which is used for printf function in line 22 of .c code
+.LC0:										# label LC0, used to store string "Element\tFrequency" which is used for printf function in // line 22 of .c code
 	.string	"Element\tFrequency"			# store value of "Element\tFrequency" in LC0
 .LC1:										# label LC1, used to store string "%d\t%d\n" which is used for printf function in line 25 of .c code
 	.string	"%d\t%d\n"						# store value of "%d\t%d\n" in LC1
@@ -111,7 +118,7 @@ printArrayWithFrequency:					# function printArrayWithFrequency starts
 	movq	-32(%rbp), %rax					# load fr1[] stored at -32(%rbp) into %rax
 	addq	%rdx, %rax						# add %rdx to %rax, ie 4*i is added to address of fr1[] to get fr1[i] as rax is i
 	movl	(%rax), %eax					# load value of fr1[i] stored at (%rax) into %eax
-	testl	%eax, %eax						# test if fr1[i] is 0 or not
+	testl	%eax, %eax						# test if fr1[i] is 0 or not, // line 24 of .c code
 	je	.L10								# jump to L10 if fr1[i] is 0 else continue
 	movl	-4(%rbp), %eax					# load i stored at -4(%rbp) into %eax
 	cltq									# convert long to quad, sign extend %eax to %rax
@@ -170,7 +177,7 @@ main:										# function main starts
 	.cfi_offset 6, -16						# cfi directive
 	movq	%rsp, %rbp						# set new stack pointer %rsp to base pointer %rbp
 	.cfi_def_cfa_register 6					# cfi directive
-	subq	$832, %rsp						# allocate 832 bytes of memory on stack, to make space for local variables and arrays
+	subq	$832, %rsp						# allocate 832 bytes of memory on stack, to make space for local variables and arrays, based on // line 31 and line 32 of the .c code
 	movq	%fs:40, %rax					# load address into %rax for stack overflow handling
 	movq	%rax, -8(%rbp)					# load address stored in %rax into -8(%rbp)
 	xorl	%eax, %eax						# xor %eax with itself, ie store 0 in %eax
@@ -205,7 +212,7 @@ main:										# function main starts
 .L13:										# label L13, used for for loop condition
 	movl	-828(%rbp), %eax				# load n stored at -828(%rbp) into %eax
 	cmpl	%eax, -824(%rbp)				# compare n stored at %eax with i stored at -824(%rbp)
-	jl	.L14								# if i is less than n, jump to label L14
+	jl	.L14								# if i is less than n, jump to label L14, // line 40 of .c code
 	movl	$0, -820(%rbp)					# set i (inside for loop condition scope) to 0 and storing it at -820(%rbp), // line 45 of .c code
 	jmp	.L15								# jump to label L15
 .L16:										# label L16, used for second for loop
@@ -216,7 +223,7 @@ main:										# function main starts
 .L15:										# label L15
 	movl	-828(%rbp), %eax				# load n stored at -828(%rbp) into %eax
 	cmpl	%eax, -820(%rbp)				# compare n stored at %eax with i stored at -820(%rbp)
-	jl	.L16								# if i is less than n, jump to label L16
+	jl	.L16								# if i is less than n, jump to label L16, // line 45 of .c code
 	movl	-828(%rbp), %ecx				# load n stored at -828(%rbp) into %ecx
 	leaq	-416(%rbp), %rdx				# load address of array fr1 stored at -416(%rbp) into %rdx
 	leaq	-816(%rbp), %rax				# load address of array arr1 stored at -816(%rbp) into %rax
