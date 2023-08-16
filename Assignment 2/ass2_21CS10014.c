@@ -19,7 +19,7 @@ int printStr(char *s)
         "movq $1, %%rdi \n\t"
         "syscall \n\t"
         :
-        : "S"(str), "d"(i)
+        : "S"(s), "d"(i)
         );
     return i;
 }
