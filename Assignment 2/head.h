@@ -2,7 +2,6 @@
 // Roll Number - 21CS10014
 // Assignment - 3
 
-#include "myl.h"
 #define BUFF 500
 
 // function to print a string and return the number of characters printed
