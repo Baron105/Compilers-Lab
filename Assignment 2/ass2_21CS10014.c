@@ -32,7 +32,7 @@ int printInt(int n)
 {
     // declare a buffer to store the integer and some other auxiliary variables
     // zero is the ASCII value of '0' to make easier conversions
-    char buff[BUFF], zero = '0';
+    char buff[BUFF]={'\0'}, zero = '0';
     int i = 0, j, k;
 
     // if the integer is 0, then print 0, consider this case separately
@@ -90,7 +90,7 @@ int printFlt (float f)
 {
     // declare a buffer to store the floating point number and some other auxiliary variables
     // zero is the ASCII value of '0' to make easier conversions
-    char buff[BUFF], zero = '0';
+    char buff[BUFF]={'\0'}, zero = '0';
     int i = 0, j, k;
 
     // if the number is negative, then storing '-', incrementing counter and making the number positive
@@ -164,7 +164,7 @@ int printFlt (float f)
 int readInt(int *n)
 {
     // declare a buffer to store the integer and some other auxiliary variables
-    char buff[BUFF];
+    char buff[BUFF]={'\0'};
     int i = 0, j;
     int neg = 0;
 
@@ -229,7 +229,7 @@ int readInt(int *n)
 int readFlt(float *n)
 {
     // declare a buffer to store the integer and some other auxiliary variables
-    char buff[BUFF];
+    char buff[BUFF]={'\0'};
     int i = 0, j;
     int neg = 0;
 

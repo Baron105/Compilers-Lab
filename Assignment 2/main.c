@@ -6,18 +6,36 @@
 
 int main()
 {
+    int ret;
     printStr("Welcome to the test program for Assignment 2!\n");
     printStr("\n\n");
     printStr("Part 1: Checking printStr, printInt, printFlt\n");
     printStr("\n");
     printStr("Checking printStr\n");
-    printStr("Name: Barun Parua\n");
-    printStr("Roll Number: 21CS10014\n");
-    printStr("Assignment: 2\n\n");
+    ret = printStr("Name: Barun Parua");
+    printStr("\n");
+    printStr("Number of characters printed: ");
+    printInt(ret);
+    printStr("\n");
+    ret = printStr("Roll Number: 21CS10014");
+    printStr("\n");
+    printStr("Number of characters printed: ");
+    printInt(ret);
+    printStr("\n");
+    ret = printStr("Assignment: 2");
+    printStr("\n");
+    printStr("Number of characters printed: ");
+    printInt(ret);
+    printStr("\n");
+    ret = printStr("abcdefghijklmnopqrstuvwxyz");
+    printStr("\n");
+    printStr("Number of characters printed: ");
+    printInt(ret);
+    printStr("\n\n");
+
 
     printStr("Checking printInt\n");
 
-    int ret;
     printStr("Printing -40: ");
     ret = printInt(-40);
     printStr("\n");
