@@ -1,6 +1,6 @@
 // Name - Barun Parua
 // Roll Number - 21CS10014
-// Assignment - 3
+// Assignment - 2
 
 #include "myl.h"
 #define BUFF 200
@@ -86,7 +86,7 @@ int printInt(int n)
 }
 
 // function to print a floating point number and return the number of characters printed
-int printFlt (float n)
+int printFlt (float f)
 {
     // declare a buffer to store the floating point number and some other auxiliary variables
     // zero is the ASCII value of '0' to make easier conversions
@@ -94,15 +94,15 @@ int printFlt (float n)
     int i = 0, j, k;
 
     // if the number is negative, then storing '-', incrementing counter and making the number positive
-    if (n < 0)
+    if (f < 0)
     {
         buff[i++] = '-';
-        n = -n;
+        f = -f;
     }
 
     // get the integral and fractional part (till 4 digits) of the floating point number
-    long long ip = (long long)n;
-    long long fp = (long long)((n - ip) * 10000);
+    int ip = (int)f;
+    int fp = (int)((f - ip) * 10000);
 
     // handling the integral part = 0 case separately
     if (ip == 0) buff[i++] = zero;
@@ -178,7 +178,6 @@ int readInt(int *n)
     );
 
     // if the read was unsuccessful, then return ERR
-
     // first check if length of the string is <= 0, if yes, then return ERR
     if (j <= 0) return ERR;
 
@@ -244,7 +243,6 @@ int readFlt(float *n)
     );
 
     // if the read was unsuccessful, then return ERR
-
     // first check if length of the string is <= 0, if yes, then return ERR
     if (j <= 0) return ERR;
 
@@ -261,7 +259,7 @@ int readFlt(float *n)
     else if (buff[i] == '+') i++;
 
     // initialize the integer and fractional part to 0
-    long long ip = 0;
+    int ip = 0;
     double fp = 0.0;
 
     // now iterate over the string till the end of the string or till a non digit character is encountered
@@ -292,6 +290,7 @@ int readFlt(float *n)
     // now iterate over the string till the end of the string or till a non digit character is encountered
     // if a non digit character is encountered, then return ERR
 
+    // ad is the number of digits after the decimal point
     int l = 0, ad = 0;
     while(buff[i]!=' '&&buff[i]!='\n'&&buff[i]!='\t'&&buff[i]!='\0')
     {
@@ -300,7 +299,7 @@ int readFlt(float *n)
         
         int dig = buff[i] - '0';
 
-        // check if the number is within bounds, if not, then return ERR
+        // check till 4 digits after the decimal point
         if (l < 4)
         {
             fp = fp * 10 + dig;
@@ -317,7 +316,8 @@ int readFlt(float *n)
         ad--;
     }
 
-    // store the floating point number in the pointer and return OK
+    // store the floating point number in the pointer according to the sign
+    // return OK
     if (neg) *n = (float)(-ip - fp);
     else *n = (float)(ip + fp);
     return OK;

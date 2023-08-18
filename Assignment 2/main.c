@@ -1,19 +1,19 @@
 // Name - Barun Parua
 // Roll Number - 21CS10014
-// Assignment - 3
+// Assignment - 2
 
 #include "myl.h"
 
 int main()
 {
     printStr("Welcome to the test program for Assignment 2!\n");
-    printStr("Select an option:\n");
+    printStr("\n\n");
     printStr("Part 1: Checking printStr, printInt, printFlt\n");
     printStr("\n");
     printStr("Checking printStr\n");
     printStr("Name: Barun Parua\n");
     printStr("Roll Number: 21CS10014\n");
-    printStr("Assignment: 3\n\n");
+    printStr("Assignment: 2\n\n");
 
     printStr("Checking printInt\n");
 
@@ -41,6 +41,7 @@ int main()
 
     printStr("\n");
     printStr("Checking printFlt\n");
+    printStr("Note: The precision of the float is set to 4 decimal places\n");
 
     printStr("Printing pi: ");
     ret = printFlt(3.1415926535);
@@ -72,7 +73,8 @@ int main()
     printStr("This part will ask your choice of input type, then read the input and print it and the number of characters printed\n");
     printStr("1. Enter an integer and print it\n");
     printStr("2. Enter a float and print it\n");
-    printStr("3. Exit\n");
+    printStr("3. Exit the program\n");
+    printStr("Any other choice will be considered invalid and you will be asked to enter again\n");
     while(1)
     {
         printStr("\n");
