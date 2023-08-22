@@ -46,7 +46,7 @@ WS                                  [ \t\n]
 
 {KEYWORD}                           {return KEYWORD;}
 {IDENTIFIER}                        {return IDENTIFIER;}
-{PUCTUATOR}                         {return PUNCTUATOR;}
+{PUNCTUATOR}                        {return PUNCTUATOR;}
 {INTEGER_CONSTANT}                  {return INTEGER_CONSTANT;}
 {FLOATING_CONSTANT}                 {return FLOATING_CONSTANT;}
 {CHAR_CONSTANT}                     {return CHAR_CONSTANT;}
