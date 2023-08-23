@@ -819,7 +819,8 @@ YY_DECL
 #line 45 "ass3.l"
 
 
-#line 823 "lex.yy.c"
+
+#line 824 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -878,37 +879,37 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 47 "ass3.l"
+#line 48 "ass3.l"
 { return KEYWORD; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 48 "ass3.l"
+#line 49 "ass3.l"
 { return IDENTIFIER; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 49 "ass3.l"
+#line 50 "ass3.l"
 { return PUNCTUATOR; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 50 "ass3.l"
+#line 51 "ass3.l"
 { return INTEGER_CONSTANT; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 51 "ass3.l"
+#line 52 "ass3.l"
 { return FLOATING_CONSTANT; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 52 "ass3.l"
+#line 53 "ass3.l"
 { return CHAR_CONSTANT; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 53 "ass3.l"
+#line 54 "ass3.l"
 { return STRING_LITERAL; }
 	YY_BREAK
 case 8:
@@ -922,7 +923,7 @@ YY_RULE_SETUP
 #line 61 "ass3.l"
 ECHO;
 	YY_BREAK
-#line 926 "lex.yy.c"
+#line 927 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
