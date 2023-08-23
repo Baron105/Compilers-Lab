@@ -32,7 +32,7 @@ C_CHAR_SEQUENCE                     {C_CHAR}+
 CHAR_CONSTANT                       \'({C_CHAR_SEQUENCE})\'
 
 
-CONSTANT                            {INTEGER_CONSTANT}|{FLOATING_CONSTANT} | {CHAR_CONSTANT} | {ENUMERATION_CONSTANT}
+CONSTANT                            {INTEGER_CONSTANT}|{FLOATING_CONSTANT}|{CHAR_CONSTANT}|{ENUMERATION_CONSTANT}
 
 
 S_CHAR                              [^\"\\\n]|{ESCAPE_SEQUENCE}
