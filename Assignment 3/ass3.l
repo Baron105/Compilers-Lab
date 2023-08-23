@@ -44,6 +44,7 @@ WS                                  [ \t\n]
 
 %%
 
+
 {KEYWORD}                           { return KEYWORD; }
 {IDENTIFIER}                        { return IDENTIFIER; }
 {PUNCTUATOR}                        { return PUNCTUATOR; }
@@ -51,7 +52,6 @@ WS                                  [ \t\n]
 {FLOATING_CONSTANT}                 { return FLOATING_CONSTANT; }
 {CHAR_CONSTANT}                     { return CHAR_CONSTANT; }
 {STRING_LITERAL}                    { return STRING_LITERAL; }
-
 
 {WS}                                {/* ignore whitespace */}
 
