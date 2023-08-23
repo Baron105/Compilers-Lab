@@ -44,13 +44,13 @@ WS                                  [ \t\n]
 
 %%
 
-{KEYWORD}                           {return KEYWORD;}
-{IDENTIFIER}                        {return IDENTIFIER;}
-{PUCTUATOR}                         {return PUNCTUATOR;}
-{INTEGER_CONSTANT}                  {return INTEGER_CONSTANT;}
-{FLOATING_CONSTANT}                 {return FLOATING_CONSTANT;}
-{CHAR_CONSTANT}                     {return CHAR_CONSTANT;}
-{STRING_LITERAL}                    {return STRING_LITERAL;}
+{KEYWORD}                           { return KEYWORD; }
+{IDENTIFIER}                        { return IDENTIFIER; }
+{PUNCTUATOR}                        { return PUNCTUATOR; }
+{INTEGER_CONSTANT}                  { return INTEGER_CONSTANT; }
+{FLOATING_CONSTANT}                 { return FLOATING_CONSTANT; }
+{CHAR_CONSTANT}                     { return CHAR_CONSTANT; }
+{STRING_LITERAL}                    { return STRING_LITERAL; }
 
 {WS}                                {/* ignore whitespace */}
 
