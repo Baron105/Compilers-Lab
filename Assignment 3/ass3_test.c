@@ -19,3 +19,9 @@ int main()
     c = a >> b;
     return 0 ;
 }
+
+/*
+    this is a test for multiline comment
+    this is line 1 
+    this is line 2
+*/
