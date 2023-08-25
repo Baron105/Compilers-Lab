@@ -17,7 +17,7 @@ KEYWORD                             "auto"|"break"|"case"|"char"|"const"|"contin
 IDENTIFIER                          [a-zA-Z_][a-zA-Z0-9_]*
 
 /* Should 0 be included in INTEGER_CONSTANT ? */
-INTEGER_CONSTANT                    [1-9][0-9]*                 
+INTEGER_CONSTANT                    [0]|[1-9][0-9]*                
 
 DIGIT_SEQUENCE                      [0-9]+
 EXPONENT_PART                       [eE][+-]?{DIGIT_SEQUENCE}
