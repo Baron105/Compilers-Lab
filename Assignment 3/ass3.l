@@ -7,8 +7,13 @@
     #define CHAR_CONSTANT 5
     #define STRING_LITERAL 6
     #define PUNCTUATOR 7
+    #define MULTILINECOMMENT 8
+    #define SINGLELINECOMMENT 9
     
 %}
+
+%x MULTILINECOMMENT
+%x SINGLELINECOMMENT
 
 /* defining regular expressions */
 
@@ -32,7 +37,7 @@ C_CHAR_SEQUENCE                     {C_CHAR}+
 CHAR_CONSTANT                       \'({C_CHAR_SEQUENCE})\'
 
 
-CONSTANT                            {INTEGER_CONSTANT}|{FLOATING_CONSTANT} | {CHAR_CONSTANT} | {ENUMERATION_CONSTANT}
+CONSTANT                            {INTEGER_CONSTANT}|{FLOATING_CONSTANT}|{CHAR_CONSTANT}|{ENUMERATION_CONSTANT}
 
 
 S_CHAR                              [^\"\\\n]|{ESCAPE_SEQUENCE}
@@ -41,6 +46,7 @@ STRING_LITERAL                      \"({S_CHAR_SEQUENCE}?)\"
 
 PUNCTUATOR                          "["|"]"|"("|")"|"{"|"}"|","|"."|"->"|"++"|"--"|"&"|"*"|"+"|"-"|"~"|"!"|"/"|"%"|"<"|">"|"<="|">="|"=="|"!="|"^"|"|"|"&&"|"||"|"?"|":"|";"|"..."|"="|"+="|"-="|"*="|"/="|"%="|"&="|"^="|"|="|"<<="|">>="|","|"#"|"<<"|">>"
 WS                                  [ \t\n]
+                   
 
 %%
 
@@ -56,6 +62,15 @@ WS                                  [ \t\n]
 {WS}                                {/* ignore whitespace */}
 
 
+
+"/*"                                { BEGIN(MULTILINECOMMENT);return MULTILINECOMMENT; }
+<MULTILINECOMMENT>"*/"              { BEGIN(INITIAL);}
+<MULTILINECOMMENT>.                 {/* ignore multiline comment */}
+
+"//"                                { BEGIN(SINGLELINECOMMENT);return SINGLELINECOMMENT; }
+<SINGLELINECOMMENT>\n               { BEGIN(INITIAL);}
+<SINGLELINECOMMENT>.                {/* ignore singleline comment */}
+<SINGLELINECOMMENT><<EOF>>          { BEGIN(INITIAL);}
 
 
 %%
