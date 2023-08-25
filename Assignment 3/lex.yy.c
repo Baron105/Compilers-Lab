@@ -366,12 +366,12 @@ static const flex_int16_t yy_accept[188] =
        13,    3,    3,    3,   13,    3,    3,    3,    3,    3,
         3,    4,    4,    3,    3,    3,    2,    3,    2,    2,
         2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
-        2,    2,    2,    2,    3,   13,   12,    3,    0,    7,
-        0,    0,    0,    0,    0,    0,    5,    9,   11,    5,
+        2,    2,    2,    2,    3,   13,   10,    3,    0,    7,
+        0,    0,    0,    0,    0,    0,    5,   11,    9,    5,
         0,    0,    4,    3,    3,    2,    2,    2,    2,    2,
         2,    2,    2,    2,    2,    1,    2,    2,    2,    2,
         2,    2,    1,    2,    2,    2,    2,    2,    2,    2,
-        2,    2,    2,    2,   10,    6,    0,    0,    5,    2,
+        2,    2,    2,    2,   12,    6,    0,    0,    5,    2,
 
         2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
         2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
@@ -935,31 +935,31 @@ YY_RULE_SETUP
 case 9:
 YY_RULE_SETUP
 #line 65 "ass3.l"
-{ BEGIN(MULTILINE_COMMENT); return MULTILINE_COMMENT; }
-	YY_BREAK
-case 10:
-YY_RULE_SETUP
-#line 66 "ass3.l"
-{ BEGIN(INITIAL);}
-	YY_BREAK
-case 11:
-YY_RULE_SETUP
-#line 68 "ass3.l"
 { BEGIN(SINGLELINE_COMMENT); return SINGLELINE_COMMENT; }
 	YY_BREAK
-case 12:
-/* rule 12 can match eol */
+case 10:
+/* rule 10 can match eol */
 YY_RULE_SETUP
-#line 69 "ass3.l"
+#line 66 "ass3.l"
 { BEGIN(INITIAL); }
 	YY_BREAK
 case YY_STATE_EOF(SINGLELINE_COMMENT):
-#line 70 "ass3.l"
+#line 67 "ass3.l"
 {/* ignore single line comment */}
+	YY_BREAK
+case 11:
+YY_RULE_SETUP
+#line 70 "ass3.l"
+{ BEGIN(MULTILINE_COMMENT); return MULTILINE_COMMENT; }
+	YY_BREAK
+case 12:
+YY_RULE_SETUP
+#line 71 "ass3.l"
+{ BEGIN(INITIAL);}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 72 "ass3.l"
+#line 74 "ass3.l"
 ECHO;
 	YY_BREAK
 #line 966 "lex.yy.c"
@@ -1968,6 +1968,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 72 "ass3.l"
+#line 74 "ass3.l"
 
 

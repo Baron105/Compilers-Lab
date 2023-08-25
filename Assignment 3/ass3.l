@@ -62,11 +62,13 @@ WS                                  [ \t\n]
 
 {WS}                                {/* ignore whitespace */}
 
-"/*"                                { BEGIN(MULTILINE_COMMENT); return MULTILINE_COMMENT; }
-<MULTILINE_COMMENT>"*/"             { BEGIN(INITIAL);}
-
 "//"                                { BEGIN(SINGLELINE_COMMENT); return SINGLELINE_COMMENT; }
 <SINGLELINE_COMMENT>\n              { BEGIN(INITIAL); }
 <SINGLELINE_COMMENT><<EOF>>         {/* ignore single line comment */}
+
+
+"/*"                                { BEGIN(MULTILINE_COMMENT); return MULTILINE_COMMENT; }
+<MULTILINE_COMMENT>"*/"             { BEGIN(INITIAL);}
+
 
 %%
