@@ -7,8 +7,13 @@
     #define CHAR_CONSTANT 5
     #define STRING_LITERAL 6
     #define PUNCTUATOR 7
+    #define MULTILINE_COMMENT 8
+    #define SINGLELINE_COMMENT 9
     
 %}
+
+%x MULTILINE_COMMENT
+%x SINGLELINE_COMMENT
 
 
 /* defining regular expressions */
@@ -57,5 +62,11 @@ WS                                  [ \t\n]
 
 {WS}                                {/* ignore whitespace */}
 
+"/*"                                { BEGIN(MULTILINE_COMMENT); return MULTILINE_COMMENT; }
+<MULTILINE_COMMENT>"*/"             { BEGIN(INITIAL);}
+
+"//"                                { BEGIN(SINGLELINE_COMMENT); return SINGLELINE_COMMENT; }
+<SINGLELINE_COMMENT>\n              { BEGIN(INITIAL); }
+<SINGLELINE_COMMENT><<EOF>>         {/* ignore single line comment */}
 
 %%
