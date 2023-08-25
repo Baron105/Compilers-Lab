@@ -1,20 +1,20 @@
 %{
     #include <stdio.h>
-    #define KEYWORD 1
-    #define IDENTIFIER 2
-    #define INTEGER_CONSTANT 3
-    #define FLOATING_CONSTANT 4
-    #define CHAR_CONSTANT 5
-    #define STRING_LITERAL 6
-    #define PUNCTUATOR 7
-    #define MULTILINE_COMMENT 8
-    #define SINGLELINE_COMMENT 9
+    #define SINGLELINE_COMMENT 1
+    #define MULTILINE_COMMENT 2
+    #define KEYWORD 3
+    #define IDENTIFIER 4
+    #define INTEGER_CONSTANT 5
+    #define FLOATING_CONSTANT 6
+    #define CHAR_CONSTANT 7
+    #define STRING_LITERAL 8
+    #define PUNCTUATOR 9
     
 %}
 
-%x MULTILINE_COMMENT
-%x SINGLELINE_COMMENT
-
+SINGLELINE_COMMENT                  [/][/][^\n]*
+ANY                                 ([^*]|[*][^/])*
+MULTILINE_COMMENT                   [/][*]{ANY}*[*][/]
 
 /* defining regular expressions */
 
@@ -51,6 +51,8 @@ WS                                  [ \t\n]
 
 %%
 
+{SINGLELINE_COMMENT}                { return SINGLELINE_COMMENT; }
+{MULTILINE_COMMENT}                 { return MULTILINE_COMMENT; }
 
 {KEYWORD}                           { return KEYWORD; }
 {IDENTIFIER}                        { return IDENTIFIER; }
@@ -60,13 +62,7 @@ WS                                  [ \t\n]
 {CHAR_CONSTANT}                     { return CHAR_CONSTANT; }
 {STRING_LITERAL}                    { return STRING_LITERAL; }
 
+
 {WS}                                {/* ignore whitespace */}
-
-"/*"                                { BEGIN(MULTILINE_COMMENT); return MULTILINE_COMMENT; }
-<MULTILINE_COMMENT>"*/"             { BEGIN(INITIAL);}
-
-"//"                                { BEGIN(SINGLELINE_COMMENT); return SINGLELINE_COMMENT; }
-<SINGLELINE_COMMENT>\n              { BEGIN(INITIAL); }
-<SINGLELINE_COMMENT><<EOF>>         {/* ignore single line comment */}
 
 %%
