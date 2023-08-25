@@ -1,11 +1,5 @@
-<PUNCTUATOR, 7, />
-<PUNCTUATOR, 7, />
-<IDENTIFIER, 2, test>
-<IDENTIFIER, 2, file>
-<KEYWORD, 1, for>
-<IDENTIFIER, 2, assignment>
-<INTEGER_CONSTANT, 3, 3>
-<KEYWORD, 1, int>
+<IDENTIFIER, 2, //>
+ test file for assignment 3<KEYWORD, 1, int>
 <IDENTIFIER, 2, main>
 <PUNCTUATOR, 7, (>
 <PUNCTUATOR, 7, )>
