@@ -1,7 +1,6 @@
 #include <stdio.h>
 
 // macro definitions
-
 #define SINGLELINE_COMMENT 1
 #define MULTILINE_COMMENT 2
 #define KEYWORD 3
@@ -17,9 +16,12 @@ extern int yylex();
 
 int main()
 {
+    // read tokens from lex
+    // while there are tokens
     int token;
     while ((token = yylex()))
     {
+        // print token according to its type
         switch (token)
         {
         case SINGLELINE_COMMENT:
