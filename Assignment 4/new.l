@@ -107,8 +107,8 @@ WS                                  [ \t\n]
 "!"                                 { return LOGICAL_NOT; }
 "/"                                 { return DIVIDE; }
 "%"                                 { return MODULO; }
-"<<="                               { return LEFT_SHIFT; }
-">>="                               { return RIGHT_SHIFT; }
+"<<"                                { return LEFT_SHIFT; }
+">>"                                { return RIGHT_SHIFT; }
 "<"                                 { return LESS_THAN; }
 ">"                                 { return GREATER_THAN; }
 "<="                                { return LESS_THAN_EQUAL; }
