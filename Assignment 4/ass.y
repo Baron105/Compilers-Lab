@@ -36,6 +36,31 @@
 
 %%
 
+primary_expression
+    : IDENTIFIER { printf("primary-expression -> identifier\n"); }
+    | constant { printf("primary-expression -> constant\n"); }
+    | STRING_LITERAL { printf("primary-expression -> string-literal\n"); }
+    | ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE { printf("primary-expression -> ( expression )\n"); }
+    ;
 
+constant
+    : INTEGER_CONSTANT { printf("constant -> integer-constant\n"); }
+    | FLOATING_CONSTANT { printf("constant -> floating-constant\n"); }
+    | CHAR_CONSTANT { printf("constant -> character-constant\n"); }
+    ;
 
+postfix_expression
+    : primary_expression { printf("postfix-expression -> primary-expression\n"); }
+    | postfix_expression SQUARE_BRACKET_OPEN expression SQUARE_BRACKET_CLOSE { printf("postfix-expression -> postfix-expression [ expression ]\n"); }
+    | postfix_expression ROUND_BRACKET_OPEN ROUND_BRACKET_CLOSE { printf("postfix-expression -> postfix-expression ( )\n"); }
+    | postfix_expression ROUND_BRACKET_OPEN argument_expression_list_opt ROUND_BRACKET_CLOSE { printf("postfix-expression -> postfix-expression ( argument-expression-list )\n"); }
+    | postfix_expression DOT IDENTIFIER { printf("postfix-expression -> postfix-expression . identifier\n"); }
+    | postfix_expression ARROW IDENTIFIER { printf("postfix-expression -> postfix-expression -> identifier\n"); }
+    | postfix_expression INCREMENT { printf("postfix-expression -> postfix-expression ++\n"); }
+    | postfix_expression DECREMENT { printf("postfix-expression -> postfix-expression --\n"); }
+    | ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE CURLY_BRACKET_OPEN initializer_list CURLY_BRACKET_CLOSE { printf("postfix-expression -> ( type-name ) { initializer-list }\n"); }
+    | ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE CURLY_BRACKET_OPEN initializer_list COMMA CURLY_BRACKET_CLOSE { printf("postfix-expression -> ( type-name ) { initializer-list , }\n"); }
+    ;
+
+argument_expression_list_opt
 
