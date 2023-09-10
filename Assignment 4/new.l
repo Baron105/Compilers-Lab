@@ -3,6 +3,8 @@
     #include "y.tab.h"
 %}
 
+%option yylineno
+
 /* comments */
 SINGLELINE_COMMENT                  [/][/][^\n]*
 ANY                                 ([^*]|[*][^/])*

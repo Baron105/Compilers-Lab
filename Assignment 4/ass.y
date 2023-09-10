@@ -63,4 +63,12 @@ postfix_expression
     ;
 
 argument_expression_list_opt
+//
 
+%%
+
+void yyerror(char* s) {
+    printf("Error: %s\n", s);
+    printf("Line: %d\n", yylineno);
+    printf("Text: %s\n", yytext);
+}
