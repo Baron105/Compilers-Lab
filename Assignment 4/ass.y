@@ -63,6 +63,327 @@ postfix_expression
     ;
 
 argument_expression_list_opt
+    : argument_expression_list { printf("argument-expression-list-opt -> argument-expression-list\n"); }
+    | { printf("argument-expression-list-opt -> epsilon\n"); }
+    ;
+
+argument_expression_list 
+    : assignment_expression { printf("argument-expression-list -> assignment-expression\n"); }
+    | argument_expression_list COMMA assignment_expression { printf("argument-expression-list -> argument-expression-list , assignment-expression\n"); }
+    ;
+
+unary_expression
+    : postfix_expression { printf("unary-expression -> postfix-expression\n"); }
+    | INCREMENT unary_expression { printf("unary-expression -> ++ unary-expression\n"); }
+    | DECREMENT unary_expression { printf("unary-expression -> -- unary-expression\n"); }
+    | unary_operator cast_expression { printf("unary-expression -> unary-operator cast-expression\n"); }
+    | SIZEOF unary_expression { printf("unary-expression -> sizeof unary-expression\n"); }
+    | SIZEOF ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE { printf("unary-expression -> sizeof ( type-name )\n"); }
+    ;
+
+unary_operator
+    : BITWISE_AND { printf("unary-operator -> &\n"); }
+    | MULTIPLY { printf("unary-operator -> *\n"); }
+    | PLUS { printf("unary-operator -> +\n"); }
+    | MINUS { printf("unary-operator -> -\n"); }
+    | BITWISE_NOT { printf("unary-operator -> ~\n"); }
+    | LOGICAL_NOT { printf("unary-operator -> !\n"); }
+    ;
+
+cast_expression
+    : unary_expression { printf("cast-expression -> unary-expression\n"); }
+    | ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE cast_expression { printf("cast-expression -> ( type-name ) cast-expression\n"); }
+    ;
+
+multiplicative_expression
+    : cast_expression { printf("multiplicative-expression -> cast-expression\n"); }
+    | multiplicative_expression MULTIPLY cast_expression { printf("multiplicative-expression -> multiplicative-expression * cast-expression\n"); }
+    | multiplicative_expression DIVIDE cast_expression { printf("multiplicative-expression -> multiplicative-expression / cast-expression\n"); }
+    | multiplicative_expression MODULO cast_expression { printf("multiplicative-expression -> multiplicative-expression %% cast-expression\n"); }
+    ;
+
+additive_expression
+    : multiplicative_expression { printf("additive-expression -> multiplicative-expression\n"); }
+    | additive_expression PLUS multiplicative_expression { printf("additive-expression -> additive-expression + multiplicative-expression\n"); }
+    | additive_expression MINUS multiplicative_expression { printf("additive-expression -> additive-expression - multiplicative-expression\n"); }
+    ;
+
+shift_expression
+    : additive_expression { printf("shift-expression -> additive-expression\n"); }
+    | shift_expression LEFT_SHIFT additive_expression { printf("shift-expression -> shift-expression << additive-expression\n"); }
+    | shift_expression RIGHT_SHIFT additive_expression { printf("shift-expression -> shift-expression >> additive-expression\n"); }
+    ;
+
+relational_expression
+    : shift_expression { printf("relational-expression -> shift-expression\n"); }
+    | relational_expression LESS_THAN shift_expression { printf("relational-expression -> relational-expression < shift-expression\n"); }
+    | relational_expression GREATER_THAN shift_expression { printf("relational-expression -> relational-expression > shift-expression\n"); }
+    | relational_expression LESS_THAN_EQUAL shift_expression { printf("relational-expression -> relational-expression <= shift-expression\n"); }
+    | relational_expression GREATER_THAN_EQUAL shift_expression { printf("relational-expression -> relational-expression >= shift-expression\n"); }
+    ;
+
+equality_expression
+    : relational_expression { printf("equality-expression -> relational-expression\n"); }
+    | equality_expression EQUAL relational_expression { printf("equality-expression -> equality-expression == relational-expression\n"); }
+    | equality_expression NOT_EQUAL relational_expression { printf("equality-expression -> equality-expression != relational-expression\n"); }
+    ;
+
+AND_expression
+    : equality_expression { printf("AND-expression -> equality-expression\n"); }
+    | AND_expression BITWISE_AND equality_expression { printf("AND-expression -> AND-expression & equality-expression\n"); }
+    ;
+
+exclusive_OR_expression
+    : AND_expression { printf("exclusive-OR-expression -> AND-expression\n"); }
+    | exclusive_OR_expression BITWISE_XOR AND_expression { printf("exclusive-OR-expression -> exclusive-OR-expression ^ AND-expression\n"); }
+    ;
+
+inclusive_OR_expression
+    : exclusive_OR_expression { printf("inclusive-OR-expression -> exclusive-OR-expression\n"); }
+    | inclusive_OR_expression BITWISE_OR exclusive_OR_expression { printf("inclusive-OR-expression -> inclusive-OR-expression | exclusive-OR-expression\n"); }
+    ;
+
+logical_AND_expression
+    : inclusive_OR_expression { printf("logical-AND-expression -> inclusive-OR-expression\n"); }
+    | logical_AND_expression LOGICAL_AND inclusive_OR_expression { printf("logical-AND-expression -> logical-AND-expression && inclusive-OR-expression\n"); }
+    ;
+
+logical_OR_expression
+    : logical_AND_expression { printf("logical-OR-expression -> logical-AND-expression\n"); }
+    | logical_OR_expression LOGICAL_OR logical_AND_expression { printf("logical-OR-expression -> logical-OR-expression || logical-AND-expression\n"); }
+    ;
+
+conditional_expression
+    : logical_OR_expression { printf("conditional-expression -> logical-OR-expression\n"); }
+    | logical_OR_expression QUESTION_MARK expression COLON conditional_expression { printf("conditional-expression -> logical-OR-expression ? expression : conditional-expression\n"); }
+    ;
+
+assignment_expression
+    : conditional_expression { printf("assignment-expression -> conditional-expression\n"); }
+    | unary_expression assignment_operator assignment_expression { printf("assignment-expression -> unary-expression assignment-operator assignment-expression\n"); }
+    ;
+
+assignment_operator
+    : ASSIGN { printf("assignment-operator -> =\n"); }
+    | MULTIPLY_ASSIGN { printf("assignment-operator -> *=\n"); }
+    | DIVIDE_ASSIGN { printf("assignment-operator -> /=\n"); }
+    | MODULO_ASSIGN { printf("assignment-operator -> %%=\n"); }
+    | PLUS_ASSIGN { printf("assignment-operator -> +=\n"); }
+    | MINUS_ASSIGN { printf("assignment-operator -> -=\n"); }
+    | LEFT_SHIFT_ASSIGN { printf("assignment-operator -> <<=\n"); }
+    | RIGHT_SHIFT_ASSIGN { printf("assignment-operator -> >>=\n"); }
+    | BITWISE_AND_ASSIGN { printf("assignment-operator -> &=\n"); }
+    | BITWISE_XOR_ASSIGN { printf("assignment-operator -> ^=\n"); }
+    | BITWISE_OR_ASSIGN { printf("assignment-operator -> |=\n"); }
+    ;
+
+expression
+    : assignment_expression { printf("expression -> assignment-expression\n"); }
+    | expression COMMA assignment_expression { printf("expression -> expression , assignment-expression\n"); }
+    ;
+
+constant_expression
+    : conditional_expression { printf("constant-expression -> conditional-expression\n"); }
+    ;
+
+
+//Declarations
+
+declaration
+    : declaration_specifiers init_declarator_list_opt SEMICOLON { printf("declaration -> declaration-specifiers init-declarator-list-opt ;\n"); }
+    ;
+
+init_declarator_list_opt
+    : init_declarator_list { printf("init-declarator-list-opt -> init-declarator-list\n"); }
+    | { printf("init-declarator-list-opt -> epsilon\n"); }
+    ;
+
+declaration_specifiers
+    : storage_class_specifier declaration_specifiers_opt { printf("declaration-specifiers -> storage-class-specifier declaration-specifiers-opt\n"); }
+    | type_specifier declaration_specifiers_opt { printf("declaration-specifiers -> type-specifier declaration-specifiers-opt\n"); }
+    | type_qualifier declaration_specifiers_opt { printf("declaration-specifiers -> type-qualifier declaration-specifiers-opt\n"); }
+    | function_specifier declaration_specifiers_opt { printf("declaration-specifiers -> function-specifier declaration-specifiers-opt\n"); }
+    ;
+
+declaration_specifiers_opt
+    : declaration_specifiers { printf("declaration-specifiers-opt -> declaration-specifiers\n"); }
+    | { printf("declaration-specifiers-opt -> epsilon\n"); }
+    ;
+
+init_declarator_list 
+    : init_declarator { printf("init-declarator-list -> init-declarator\n"); }
+    | init_declarator_list COMMA init_declarator { printf("init-declarator-list -> init-declarator-list , init-declarator\n"); }
+    ;
+
+init_declarator
+    : declarator { printf("init-declarator -> declarator\n"); }
+    | declarator ASSIGN initializer { printf("init-declarator -> declarator = initializer\n"); }
+    ;
+
+storage_class_specifier
+    : EXTERN { printf("storage-class-specifier -> extern\n"); }
+    | STATIC { printf("storage-class-specifier -> static\n"); }
+    | AUTO { printf("storage-class-specifier -> auto\n"); }
+    | REGISTER { printf("storage-class-specifier -> register\n"); }
+    ;
+
+type_specifier
+    : VOID { printf("type-specifier -> void\n"); }
+    | CHAR { printf("type-specifier -> char\n"); }
+    | SHORT { printf("type-specifier -> short\n"); }
+    | INT { printf("type-specifier -> int\n"); }
+    | LONG { printf("type-specifier -> long\n"); }
+    | FLOAT { printf("type-specifier -> float\n"); }
+    | DOUBLE { printf("type-specifier -> double\n"); }
+    | SIGNED { printf("type-specifier -> signed\n"); }
+    | UNSIGNED { printf("type-specifier -> unsigned\n"); }
+    | BOOL { printf("type-specifier -> _Bool\n"); }
+    | COMPLEX { printf("type-specifier -> _Complex\n"); }
+    | IMAGINARY { printf("type-specifier -> _Imaginary\n"); }
+    | enum_specifier { printf("type-specifier -> enum-specifier\n"); }
+    ;
+
+specifier_qualifier_list
+    : type_specifier specifier_qualifier_list_opt { printf("specifier-qualifier-list -> type-specifier specifier-qualifier-list-opt\n"); }
+    | type_qualifier specifier_qualifier_list_opt { printf("specifier-qualifier-list -> type-qualifier specifier-qualifier-list-opt\n"); }
+    ;
+
+specifier_qualifier_list_opt
+    : specifier_qualifier_list { printf("specifier-qualifier-list-opt -> specifier-qualifier-list\n"); }
+    | { printf("specifier-qualifier-list-opt -> epsilon\n"); }
+    ;
+
+enum_specifier
+    : ENUM identifier_opt CURLY_BRACKET_OPEN enumerator_list CURLY_BRACKET_CLOSE { printf("enum-specifier -> enum identifier-opt { enumerator-list-opt }\n"); }
+    | ENUM identifier_opt CURLY_BRACKET_OPEN enumerator_list COMMA CURLY_BRACKET_CLOSE { printf("enum-specifier -> enum identifier-opt { enumerator-list , }\n"); }
+    | ENUM IDENTIFIER { printf("enum-specifier -> enum identifier\n"); }
+    ;
+
+identifier_opt 
+    : IDENTIFIER { printf("identifier-opt -> identifier\n"); }
+    | { printf("identifier-opt -> epsilon\n"); }
+    ;
+
+enumerator_list
+    : enumerator { printf("enumerator-list -> enumerator\n"); }
+    | enumerator_list COMMA enumerator { printf("enumerator-list -> enumerator-list , enumerator\n"); }
+    ;
+
+enumerator
+    : enumeration_constant { printf("enumerator -> enumeration-constant\n"); }
+    | enumeration_constant ASSIGN constant_expression { printf("enumerator -> enumeration-constant = constant-expression\n"); }
+    ;
+
+type_qualifier
+    : CONST { printf("type-qualifier -> const\n"); }
+    | RESTRICT { printf("type-qualifier -> restrict\n"); }
+    | VOLATILE { printf("type-qualifier -> volatile\n"); }
+    ;
+
+function_specifier
+    : INLINE { printf("function-specifier -> inline\n"); }
+    ;
+
+declarator
+    : pointer_opt direct_declarator { printf("declarator -> pointer-opt direct-declarator\n"); }
+    ;
+
+pointer_opt
+    : pointer { printf("pointer-opt -> pointer\n"); }
+    | { printf("pointer-opt -> epsilon\n"); }
+    ;
+
+direct_declarator
+    : IDENTIFIER { printf("direct-declarator -> identifier\n"); }
+    | ROUND_BRACKET_OPEN declarator ROUND_BRACKET_CLOSE { printf("direct-declarator -> ( declarator )\n"); }
+    | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list_opt assignment_expression_opt SQUARE_BRACKET_CLOSE { printf("direct-declarator -> direct-declarator [ type-qualifier-list-opt assignment-expression-opt ]\n"); }
+    | direct_declarator SQUARE_BRACKET_OPEN STATIC type_qualifier_list_opt assignment_expression SQUARE_BRACKET_CLOSE { printf("direct-declarator -> direct-declarator [ static type-qualifier-list-opt assignment-expression ]\n"); }
+    | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list STATIC assignment_expression SQUARE_BRACKET_CLOSE { printf("direct-declarator -> direct-declarator [ type-qualifier-list static assignment-expression ]\n"); }
+    | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list_opt MULTIPLY SQUARE_BRACKET_CLOSE { printf("direct-declarator -> direct-declarator [ type-qualifier-list-opt * ]\n"); }
+    | direct_declarator ROUND_BRACKET_OPEN parameter_type_list ROUND_BRACKET_CLOSE { printf("direct-declarator -> direct-declarator ( parameter-type-list )\n"); }
+    | direct_declarator ROUND_BRACKET_OPEN identifier_list_opt ROUND_BRACKET_CLOSE { printf("direct-declarator -> direct-declarator ( identifier-list-opt )\n"); }
+    ;
+
+identifier_list_opt
+    : identifier_list { printf("identifier-list-opt -> identifier-list\n"); }
+    | { printf("identifier-list-opt -> epsilon\n"); }
+    ;
+
+assignment_expression_opt
+    : assignment_expression { printf("assignment-expression-opt -> assignment-expression\n"); }
+    | { printf("assignment-expression-opt -> epsilon\n"); }
+    ;
+
+type_qualifier_list_opt
+    : type_qualifier_list { printf("type-qualifier-list-opt -> type-qualifier-list\n"); }
+    | { printf("type-qualifier-list-opt -> epsilon\n"); }
+    ;
+
+pointer 
+    : MULTIPLY type_qualifier_list_opt { printf("pointer -> * type-qualifier-list-opt\n"); }
+    | MULTIPLY type_qualifier_list_opt pointer { printf("pointer -> * type-qualifier-list-opt pointer\n"); }
+    ;
+
+type_qualifier_list
+    : type_qualifier { printf("type-qualifier-list -> type-qualifier\n"); }
+    | type_qualifier_list type_qualifier { printf("type-qualifier-list -> type-qualifier-list type-qualifier\n"); }
+    ;
+
+parameter_type_list
+    : parameter_list { printf("parameter-type-list -> parameter-list\n"); }
+    | parameter_list COMMA ELLIPSIS { printf("parameter-type-list -> parameter-list , ...\n"); }
+    ;
+
+parameter_list
+    : parameter_declaration { printf("parameter-list -> parameter-declaration\n"); }
+    | parameter_list COMMA parameter_declaration { printf("parameter-list -> parameter-list , parameter-declaration\n"); }
+    ;
+
+parameter_declaration
+    : declaration_specifiers declarator { printf("parameter-declaration -> declaration-specifiers declarator\n"); }
+    | declaration_specifiers { printf("parameter-declaration -> declaration-specifiers\n"); }
+    ;
+
+identifier_list
+    : IDENTIFIER { printf("identifier-list -> identifier\n"); }
+    | identifier_list COMMA IDENTIFIER { printf("identifier-list -> identifier-list , identifier\n"); }
+    ;
+
+type_name
+    : specifier_qualifier_list { printf("type-name -> specifier-qualifier-list\n"); }
+    ;
+
+initializer
+    : assignment_expression { printf("initializer -> assignment-expression\n"); }
+    | CURLY_BRACKET_OPEN initializer_list CURLY_BRACKET_CLOSE { printf("initializer -> { initializer-list }\n"); }
+    | CURLY_BRACKET_OPEN initializer_list COMMA CURLY_BRACKET_CLOSE { printf("initializer -> { initializer-list , }\n"); }
+    ;
+
+initializer_list
+    : designation_opt initializer { printf("initializer-list -> designation-opt initializer\n"); }
+    | initializer_list COMMA designation_opt initializer { printf("initializer-list -> initializer-list , designation-opt initializer\n"); }
+    ;
+
+designation_opt
+    : designation { printf("designation-opt -> designation\n"); }
+    | { printf("designation-opt -> epsilon\n"); }
+    ;
+
+designation
+    : designator_list ASSIGN { printf("designation -> designator-list =\n"); }
+    ;
+
+designator_list
+    : designator { printf("designator-list -> designator\n"); }
+    | designator_list designator { printf("designator-list -> designator-list designator\n"); }
+    ;
+
+designator
+    : SQUARE_BRACKET_OPEN constant_expression SQUARE_BRACKET_CLOSE { printf("designator -> [ constant-expression ]\n"); }
+    | DOT IDENTIFIER { printf("designator -> . identifier\n"); }
+    ;
+
+
 //
 
 %%
