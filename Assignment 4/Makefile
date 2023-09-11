@@ -13,10 +13,13 @@ y.tab.o: y.tab.c
 ass.o: ass.c
 	cc -c ass.c
 
-lex.yy.c: ass.l y.tab.c
+lex.yy.c: ass.l y.tab.h
 	flex ass.l
 
 y.tab.c: ass.y
+	bison -dty ass.y
+
+y.tab.h: ass.y
 	bison -dty ass.y
 
 ass.c:

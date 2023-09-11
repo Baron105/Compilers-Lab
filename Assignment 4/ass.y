@@ -4,7 +4,7 @@
     extern int yylineno;
     extern char* yytext;
     void yyerror(char* s);
-}%
+%}
 
 %union {
     int intval;
@@ -383,8 +383,96 @@ designator
     | DOT IDENTIFIER { printf("designator -> . identifier\n"); }
     ;
 
+// new
+// part 3
+statement 
+    : labeled_statement { printf("statement -> labeled-statement\n"); }
+    | compound_statement { printf("statement -> compound-statement\n"); }
+    | expression_statement { printf("statement -> expression-statement\n"); }
+    | selection_statement { printf("statement -> selection-statement\n"); }
+    | iteration_statement { printf("statement -> iteration-statement\n"); }
+    | jump_statement { printf("statement -> jump-statement\n"); }
+    ;
 
-//
+labeled_statement
+    : IDENTIFIER COLON statement { printf("labeled-statement -> identifier : statement\n"); }
+    | CASE constant_expression COLON statement { printf("labeled-statement -> case constant-expression : statement\n"); }
+    | DEFAULT COLON statement { printf("labeled-statement -> default : statement\n"); }
+    ;
+
+compound_statement
+    : CURLY_BRACKET_OPEN block_item_list_opt CURLY_BRACKET_CLOSE { printf("compound-statement -> { block-item-list-opt }\n"); }
+    ;
+
+block_item_list_opt
+    : block_item_list { printf("block-item-list-opt -> block-item-list\n"); }
+    | { printf("block-item-list-opt -> epsilon\n"); }
+    ;
+
+block_item_list
+    : block_item { printf("block-item-list -> block-item\n"); }
+    | block_item_list block_item { printf("block-item-list -> block-item-list block-item\n"); }
+    ;
+
+block_item
+    : declaration { printf("block-item -> declaration\n"); }
+    | statement { printf("block-item -> statement\n"); }
+    ;
+
+expression_statement
+    : expression_opt SEMICOLON { printf("expression-statement -> expression-opt ;\n"); }
+    ;
+
+expression_opt
+    : expression { printf("expression-opt -> expression\n"); }
+    | { printf("expression-opt -> epsilon\n"); }
+    ;
+
+selection_statement
+    : IF ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE statement { printf("selection-statement -> if ( expression ) statement\n"); }
+    | IF ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE statement ELSE statement { printf("selection-statement -> if ( expression ) statement else statement\n"); }
+    | SWITCH ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE statement { printf("selection-statement -> switch ( expression ) statement\n"); }
+    ;
+
+iteration_statement
+    : WHILE ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE statement { printf("iteration-statement -> while ( expression ) statement\n"); }
+    | DO statement WHILE ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE SEMICOLON { printf("iteration-statement -> do statement while ( expression ) ;\n"); }
+    | FOR ROUND_BRACKET_OPEN expression_opt SEMICOLON expression_opt SEMICOLON expression_opt ROUND_BRACKET_CLOSE statement { printf("iteration-statement -> for ( expression-opt ; expression-opt ; expression-opt ) statement\n"); }
+    | FOR ROUND_BRACKET_OPEN declaration expression_opt SEMICOLON expression_opt ROUND_BRACKET_CLOSE statement { printf("iteration-statement -> for ( declaration expression-opt ; expression-opt ) statement\n"); }
+    ;
+
+jump_statement
+    : GOTO IDENTIFIER SEMICOLON { printf("jump-statement -> goto identifier ;\n"); }
+    | CONTINUE SEMICOLON { printf("jump-statement -> continue ;\n"); }
+    | BREAK SEMICOLON { printf("jump-statement -> break ;\n"); }
+    | RETURN expression_opt SEMICOLON { printf("jump-statement -> return expression-opt ;\n"); }
+    ;
+
+
+// part 4
+translation_unit
+    : external_declaration { printf("translation-unit -> external-declaration\n"); }
+    | translation_unit external_declaration { printf("translation-unit -> translation-unit external-declaration\n"); }
+    ;
+
+external_declaration
+    : function_definition { printf("external-declaration -> function-definition\n"); }
+    | declaration { printf("external-declaration -> declaration\n"); }
+    ;
+
+function_definition
+    : declaration_specifiers declarator declaration_list_opt compound_statement { printf("function-definition --> declaration-specifiers declarator declaration-list-opt compound-statement\n"); }
+    ;
+
+declaration_list_opt
+    : declaration_list { printf("declaration-list-opt -> declaration-list\n"); }
+    | { printf("declaration-list-opt -> epsilon\n"); }
+    ;
+
+declaration_list
+    : declaration { printf("declaration-list -> declaration\n"); }
+    | declaration_list declaration { printf("declaration-list -> declaration-list declaration\n"); }
+    ;
 
 %%
 

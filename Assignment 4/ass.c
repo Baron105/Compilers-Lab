@@ -1,5 +1,5 @@
 #include <stdio.h>
-// #include "y.tab.h"
+#include "y.tab.h"
 
 int main()
 {

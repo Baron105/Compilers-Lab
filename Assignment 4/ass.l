@@ -1,15 +1,9 @@
 %{
     #include <stdio.h>
-    #define SINGLELINE_COMMENT 1
-    #define MULTILINE_COMMENT 2
-    #define KEYWORD 3
-    #define IDENTIFIER 4
-    #define INTEGER_CONSTANT 5
-    #define FLOATING_CONSTANT 6
-    #define CHAR_CONSTANT 7
-    #define STRING_LITERAL 8
-    #define PUNCTUATOR 9
+    #include "y.tab.h"
 %}
+
+%option yylineno
 
 /* comments */
 SINGLELINE_COMMENT                  [/][/][^\n]*
@@ -17,7 +11,7 @@ ANY                                 ([^*]|[*][^/])*
 MULTILINE_COMMENT                   [/][*]{ANY}*[*][/]
 
 /* all keywords */
-KEYWORD                             "auto"|"break"|"case"|"char"|"const"|"continue"|"default"|"do"|"double"|"else"|"enum"|"extern"|"float"|"for"|"goto"|"if"|"int"|"long"|"register"|"return"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"void"|"volatile"|"while"|"_Bool"|"_Complex"|"_Imaginary"
+/* KEYWORD                             "auto"|"break"|"case"|"char"|"const"|"continue"|"default"|"do"|"double"|"else"|"enum"|"extern"|"float"|"for"|"goto"|"if"|"int"|"long"|"register"|"return"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"void"|"volatile"|"while"|"_Bool"|"_Complex"|"_Imaginary" */
 
 /* identifiers */
 IDENTIFIER                          [a-zA-Z_][a-zA-Z0-9_]*
@@ -33,7 +27,8 @@ FLOATING_CONSTANT                   ({FRACTIONAL_CONSTANT}{EXPONENT_PART}?)|({DI
 ENUMERATION_CONSTANT                {IDENTIFIER}
 
 /* character constants */
-ESCAPE_SEQUENCE                     "\'"|"\""|"\?"|"\\"|"\a"|"\b"|"\f"|"\n"|"\r"|"\t"|"\v"
+/* check the escape sequences */
+ESCAPE_SEQUENCE                     "\\'"|"\\""|"\\?"|"\\\\"|"\\a"|"\\b"|"\\f"|"\\n"|"\\r"|"\\t"|"\\v"
 C_CHAR                              [^("\'"|"\\"|"\n")]|{ESCAPE_SEQUENCE}
 C_CHAR_SEQUENCE                     {C_CHAR}+
 CHAR_CONSTANT                       "\'"{C_CHAR_SEQUENCE}"\'"
@@ -47,7 +42,7 @@ S_CHAR_SEQUENCE                     {S_CHAR}+
 STRING_LITERAL                      "\""{S_CHAR_SEQUENCE}"\""
 
 /* punctuators */
-PUNCTUATOR                          "["|"]"|"("|")"|"{"|"}"|","|"."|"->"|"++"|"--"|"&"|"*"|"+"|"-"|"~"|"!"|"/"|"%"|"<"|">"|"<="|">="|"=="|"!="|"^"|"|"|"&&"|"||"|"?"|":"|";"|"..."|"="|"+="|"-="|"*="|"/="|"%="|"&="|"^="|"|="|"<<="|">>="|","|"#"|"<<"|">>"
+/* PUNCTUATOR                          "["|"]"|"("|")"|"{"|"}"|","|"."|"->"|"++"|"--"|"&"|"*"|"+"|"-"|"~"|"!"|"/"|"%"|"<"|">"|"<="|">="|"=="|"!="|"^"|"|"|"&&"|"||"|"?"|":"|";"|"..."|"="|"+="|"-="|"*="|"/="|"%="|"&="|"^="|"|="|"<<="|">>="|","|"#"|"<<"|">>" */
 
 /* whitespaces */
 WS                                  [ \t\n]
@@ -57,9 +52,95 @@ WS                                  [ \t\n]
 
 {SINGLELINE_COMMENT}                { return SINGLELINE_COMMENT; }
 {MULTILINE_COMMENT}                 { return MULTILINE_COMMENT; }
-{KEYWORD}                           { return KEYWORD; }
+
+"auto"                              { return AUTO; }
+"break"                             { return BREAK; }
+"case"                              { return CASE; }
+"char"                              { return CHAR; }
+"const"                             { return CONST; }
+"continue"                          { return CONTINUE; }
+"default"                           { return DEFAULT; }
+"do"                                { return DO; }
+"double"                            { return DOUBLE; }
+"else"                              { return ELSE; }
+"enum"                              { return ENUM; }             
+"extern"                            { return EXTERN; }
+"float"                             { return FLOAT; }
+"for"                               { return FOR; }
+"goto"                              { return GOTO; }
+"if"                                { return IF; }
+"inline"                            { return INLINE; }
+"int"                               { return INT; }
+"long"                              { return LONG; }
+"register"                          { return REGISTER; }
+"restrict"                          { return RESTRICT; }
+"return"                            { return RETURN; }
+"short"                             { return SHORT; }
+"signed"                            { return SIGNED; }
+"sizeof"                            { return SIZEOF; }
+"static"                            { return STATIC; }
+"struct"                            { return STRUCT; }
+"switch"                            { return SWITCH; }
+"typedef"                           { return TYPEDEF; }
+"union"                             { return UNION; }
+"unsigned"                          { return UNSIGNED; }
+"void"                              { return VOID; }
+"volatile"                          { return VOLATILE; }
+"while"                             { return WHILE; }
+"_Bool"                             { return BOOL; }
+"_Complex"                          { return COMPLEX; }
+"_Imaginary"                        { return IMAGINARY; }
+
+"["                                 { return SQUARE_BRACKET_OPEN; }
+"]"                                 { return SQUARE_BRACKET_CLOSE; }
+"("                                 { return ROUND_BRACKET_OPEN; }
+")"                                 { return ROUND_BRACKET_CLOSE; }
+"{"                                 { return CURLY_BRACKET_OPEN; }
+"}"                                 { return CURLY_BRACKET_CLOSE; }
+"."                                 { return DOT; }
+"->"                                { return ARROW; }
+"++"                                { return INCREMENT; }
+"--"                                { return DECREMENT; }
+"&"                                 { return BITWISE_AND; }
+"*"                                 { return MULTIPLY; }
+"+"                                 { return PLUS; }
+"-"                                 { return MINUS; }
+"~"                                 { return BITWISE_NOT; }
+"!"                                 { return LOGICAL_NOT; }
+"/"                                 { return DIVIDE; }
+"%"                                 { return MODULO; }
+"<<"                                { return LEFT_SHIFT; }
+">>"                                { return RIGHT_SHIFT; }
+"<"                                 { return LESS_THAN; }
+">"                                 { return GREATER_THAN; }
+"<="                                { return LESS_THAN_EQUAL; }
+">="                                { return GREATER_THAN_EQUAL; }
+"=="                                { return EQUAL; }
+"!="                                { return NOT_EQUAL; }
+"^"                                 { return BITWISE_XOR; }
+"|"                                 { return BITWISE_OR; }
+"&&"                                { return LOGICAL_AND; }
+"||"                                { return LOGICAL_OR; }
+"?"                                 { return QUESTION_MARK; }
+":"                                 { return COLON; }
+";"                                 { return SEMICOLON; }
+"..."                               { return ELLIPSIS; }
+"="                                 { return ASSIGN; }
+"*="                                { return MULTIPLY_ASSIGN; }
+"/="                                { return DIVIDE_ASSIGN; }
+"%="                                { return MODULO_ASSIGN; }
+"+="                                { return PLUS_ASSIGN; }
+"-="                                { return MINUS_ASSIGN; }
+"<<="                               { return LEFT_SHIFT_ASSIGN; }
+">>="                               { return RIGHT_SHIFT_ASSIGN; }
+"&="                                { return BITWISE_AND_ASSIGN; }
+"^="                                { return BITWISE_XOR_ASSIGN; }
+"|="                                { return BITWISE_OR_ASSIGN; }
+","                                 { return COMMA; }
+"#"                                 { return HASH; }
+
 {IDENTIFIER}                        { return IDENTIFIER; }
-{PUNCTUATOR}                        { return PUNCTUATOR; }
+
 {INTEGER_CONSTANT}                  { return INTEGER_CONSTANT; }
 {FLOATING_CONSTANT}                 { return FLOATING_CONSTANT; }
 {CHAR_CONSTANT}                     { return CHAR_CONSTANT; }
