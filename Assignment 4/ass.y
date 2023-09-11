@@ -270,8 +270,8 @@ enumerator_list
     ;
 
 enumerator
-    : enumeration_constant { printf("enumerator -> enumeration-constant\n"); }
-    | enumeration_constant ASSIGN constant_expression { printf("enumerator -> enumeration-constant = constant-expression\n"); }
+    : IDENTIFIER { printf("enumerator -> enumeration-constant\n"); }
+    | IDENTIFIER ASSIGN constant_expression { printf("enumerator -> enumeration-constant = constant-expression\n"); }
     ;
 
 type_qualifier
