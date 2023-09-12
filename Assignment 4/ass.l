@@ -41,15 +41,14 @@ S_CHAR                              [^("\""|"\\"|"\n")]|{ESCAPE_SEQUENCE}
 S_CHAR_SEQUENCE                     {S_CHAR}+
 STRING_LITERAL                      "\""{S_CHAR_SEQUENCE}"\""
 
-/* punctuators */
-/* PUNCTUATOR                          "["|"]"|"("|")"|"{"|"}"|","|"."|"->"|"++"|"--"|"&"|"*"|"+"|"-"|"~"|"!"|"/"|"%"|"<"|">"|"<="|">="|"=="|"!="|"^"|"|"|"&&"|"||"|"?"|":"|";"|"..."|"="|"+="|"-="|"*="|"/="|"%="|"&="|"^="|"|="|"<<="|">>="|","|"#"|"<<"|">>" */
 
 /* whitespaces */
 WS                                  [ \t\n]
                    
 /* return tokens */
-%%
 
+
+%%
 {SINGLELINE_COMMENT}                { return SINGLELINE_COMMENT; }
 {MULTILINE_COMMENT}                 { return MULTILINE_COMMENT; }
 
@@ -139,13 +138,14 @@ WS                                  [ \t\n]
 ","                                 { return COMMA; }
 "#"                                 { return HASH; }
 
+
 {IDENTIFIER}                        { return IDENTIFIER; }
 
 {INTEGER_CONSTANT}                  { return INTEGER_CONSTANT; }
 {FLOATING_CONSTANT}                 { return FLOATING_CONSTANT; }
+
 {CHAR_CONSTANT}                     { return CHAR_CONSTANT; }
 {STRING_LITERAL}                    { return STRING_LITERAL; }
 
 {WS}                                {/* ignore whitespace */}
-
 %%
