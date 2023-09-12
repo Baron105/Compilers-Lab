@@ -28,18 +28,18 @@ ENUMERATION_CONSTANT                {IDENTIFIER}
 
 /* character constants */
 /* check the escape sequences */
-ESCAPE_SEQUENCE                     "\\'"|"\\""|"\\?"|"\\\\"|"\\a"|"\\b"|"\\f"|"\\n"|"\\r"|"\\t"|"\\v"
-C_CHAR                              [^("\'"|"\\"|"\n")]|{ESCAPE_SEQUENCE}
+ESCAPE_SEQUENCE                     \\['"?\\abfnrtv]
+C_CHAR                              [^\'\\\n]|{ESCAPE_SEQUENCE}
 C_CHAR_SEQUENCE                     {C_CHAR}+
-CHAR_CONSTANT                       "\'"{C_CHAR_SEQUENCE}"\'"
+CHAR_CONSTANT                       \'{C_CHAR_SEQUENCE}\'
 
 /* all constants */
 CONSTANT                            {INTEGER_CONSTANT}|{FLOATING_CONSTANT}|{CHAR_CONSTANT}|{ENUMERATION_CONSTANT}
 
 /* string literals */
-S_CHAR                              [^("\""|"\\"|"\n")]|{ESCAPE_SEQUENCE}
+S_CHAR                              [^\"\\\n]|{ESCAPE_SEQUENCE}
 S_CHAR_SEQUENCE                     {S_CHAR}+
-STRING_LITERAL                      "\""{S_CHAR_SEQUENCE}"\""
+STRING_LITERAL                      \"{S_CHAR_SEQUENCE}\"
 
 /* punctuators */
 /* PUNCTUATOR                          "["|"]"|"("|")"|"{"|"}"|","|"."|"->"|"++"|"--"|"&"|"*"|"+"|"-"|"~"|"!"|"/"|"%"|"<"|">"|"<="|">="|"=="|"!="|"^"|"|"|"&&"|"||"|"?"|":"|";"|"..."|"="|"+="|"-="|"*="|"/="|"%="|"&="|"^="|"|="|"<<="|">>="|","|"#"|"<<"|">>" */
@@ -50,8 +50,8 @@ WS                                  [ \t\n]
 /* return tokens */
 %%
 
-{SINGLELINE_COMMENT}                { return SINGLELINE_COMMENT; }
-{MULTILINE_COMMENT}                 { return MULTILINE_COMMENT; }
+{SINGLELINE_COMMENT}                { }
+{MULTILINE_COMMENT}                 { }
 
 "auto"                              { return AUTO; }
 "break"                             { return BREAK; }

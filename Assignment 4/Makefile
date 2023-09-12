@@ -27,3 +27,6 @@ ass.c:
 
 clean:
 	rm output.txt a.out lex.yy.* y.tab.* ass.o
+
+out:
+	rm a.out lex.* y.* ass.o
