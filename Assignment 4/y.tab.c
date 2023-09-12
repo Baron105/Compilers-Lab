@@ -66,7 +66,7 @@
 
 
 /* First part of user prologue.  */
-#line 1 "ass.y"
+#line 1 "ass4_21CS10014_21CS30032.y"
 
     #include <stdio.h>
     extern int yylex();
@@ -310,7 +310,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 9 "ass.y"
+#line 9 "ass4_21CS10014_21CS30032.y"
 
     int intval;
     float floatval;
@@ -1907,1255 +1907,1255 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 40 "ass.y"
+#line 40 "ass4_21CS10014_21CS30032.y"
                  { printf("primary-expression -> identifier\n"); }
 #line 1913 "y.tab.c"
     break;
 
   case 3:
-#line 41 "ass.y"
+#line 41 "ass4_21CS10014_21CS30032.y"
                { printf("primary-expression -> constant\n"); }
 #line 1919 "y.tab.c"
     break;
 
   case 4:
-#line 42 "ass.y"
+#line 42 "ass4_21CS10014_21CS30032.y"
                      { printf("primary-expression -> string-literal\n"); }
 #line 1925 "y.tab.c"
     break;
 
   case 5:
-#line 43 "ass.y"
+#line 43 "ass4_21CS10014_21CS30032.y"
                                                         { printf("primary-expression -> ( expression )\n"); }
 #line 1931 "y.tab.c"
     break;
 
   case 6:
-#line 47 "ass.y"
+#line 47 "ass4_21CS10014_21CS30032.y"
                        { printf("constant -> integer-constant\n"); }
 #line 1937 "y.tab.c"
     break;
 
   case 7:
-#line 48 "ass.y"
+#line 48 "ass4_21CS10014_21CS30032.y"
                         { printf("constant -> floating-constant\n"); }
 #line 1943 "y.tab.c"
     break;
 
   case 8:
-#line 49 "ass.y"
+#line 49 "ass4_21CS10014_21CS30032.y"
                     { printf("constant -> character-constant\n"); }
 #line 1949 "y.tab.c"
     break;
 
   case 9:
-#line 53 "ass.y"
+#line 53 "ass4_21CS10014_21CS30032.y"
                          { printf("postfix-expression -> primary-expression\n"); }
 #line 1955 "y.tab.c"
     break;
 
   case 10:
-#line 54 "ass.y"
+#line 54 "ass4_21CS10014_21CS30032.y"
                                                                              { printf("postfix-expression -> postfix-expression [ expression ]\n"); }
 #line 1961 "y.tab.c"
     break;
 
   case 11:
-#line 55 "ass.y"
+#line 55 "ass4_21CS10014_21CS30032.y"
                                                                 { printf("postfix-expression -> postfix-expression ( )\n"); }
 #line 1967 "y.tab.c"
     break;
 
   case 12:
-#line 56 "ass.y"
+#line 56 "ass4_21CS10014_21CS30032.y"
                                                                                              { printf("postfix-expression -> postfix-expression ( argument-expression-list )\n"); }
 #line 1973 "y.tab.c"
     break;
 
   case 13:
-#line 57 "ass.y"
+#line 57 "ass4_21CS10014_21CS30032.y"
                                         { printf("postfix-expression -> postfix-expression . identifier\n"); }
 #line 1979 "y.tab.c"
     break;
 
   case 14:
-#line 58 "ass.y"
+#line 58 "ass4_21CS10014_21CS30032.y"
                                           { printf("postfix-expression -> postfix-expression -> identifier\n"); }
 #line 1985 "y.tab.c"
     break;
 
   case 15:
-#line 59 "ass.y"
+#line 59 "ass4_21CS10014_21CS30032.y"
                                    { printf("postfix-expression -> postfix-expression ++\n"); }
 #line 1991 "y.tab.c"
     break;
 
   case 16:
-#line 60 "ass.y"
+#line 60 "ass4_21CS10014_21CS30032.y"
                                    { printf("postfix-expression -> postfix-expression --\n"); }
 #line 1997 "y.tab.c"
     break;
 
   case 17:
-#line 61 "ass.y"
+#line 61 "ass4_21CS10014_21CS30032.y"
                                                                                                                { printf("postfix-expression -> ( type-name ) { initializer-list }\n"); }
 #line 2003 "y.tab.c"
     break;
 
   case 18:
-#line 62 "ass.y"
+#line 62 "ass4_21CS10014_21CS30032.y"
                                                                                                                      { printf("postfix-expression -> ( type-name ) { initializer-list , }\n"); }
 #line 2009 "y.tab.c"
     break;
 
   case 19:
-#line 66 "ass.y"
+#line 66 "ass4_21CS10014_21CS30032.y"
                                { printf("argument-expression-list-opt -> argument-expression-list\n"); }
 #line 2015 "y.tab.c"
     break;
 
   case 20:
-#line 67 "ass.y"
+#line 67 "ass4_21CS10014_21CS30032.y"
       { printf("argument-expression-list-opt -> epsilon\n"); }
 #line 2021 "y.tab.c"
     break;
 
   case 21:
-#line 71 "ass.y"
+#line 71 "ass4_21CS10014_21CS30032.y"
                             { printf("argument-expression-list -> assignment-expression\n"); }
 #line 2027 "y.tab.c"
     break;
 
   case 22:
-#line 72 "ass.y"
+#line 72 "ass4_21CS10014_21CS30032.y"
                                                            { printf("argument-expression-list -> argument-expression-list , assignment-expression\n"); }
 #line 2033 "y.tab.c"
     break;
 
   case 23:
-#line 76 "ass.y"
+#line 76 "ass4_21CS10014_21CS30032.y"
                          { printf("unary-expression -> postfix-expression\n"); }
 #line 2039 "y.tab.c"
     break;
 
   case 24:
-#line 77 "ass.y"
+#line 77 "ass4_21CS10014_21CS30032.y"
                                  { printf("unary-expression -> ++ unary-expression\n"); }
 #line 2045 "y.tab.c"
     break;
 
   case 25:
-#line 78 "ass.y"
+#line 78 "ass4_21CS10014_21CS30032.y"
                                  { printf("unary-expression -> -- unary-expression\n"); }
 #line 2051 "y.tab.c"
     break;
 
   case 26:
-#line 79 "ass.y"
+#line 79 "ass4_21CS10014_21CS30032.y"
                                      { printf("unary-expression -> unary-operator cast-expression\n"); }
 #line 2057 "y.tab.c"
     break;
 
   case 27:
-#line 80 "ass.y"
+#line 80 "ass4_21CS10014_21CS30032.y"
                               { printf("unary-expression -> sizeof unary-expression\n"); }
 #line 2063 "y.tab.c"
     break;
 
   case 28:
-#line 81 "ass.y"
+#line 81 "ass4_21CS10014_21CS30032.y"
                                                               { printf("unary-expression -> sizeof ( type-name )\n"); }
 #line 2069 "y.tab.c"
     break;
 
   case 29:
-#line 85 "ass.y"
+#line 85 "ass4_21CS10014_21CS30032.y"
                   { printf("unary-operator -> &\n"); }
 #line 2075 "y.tab.c"
     break;
 
   case 30:
-#line 86 "ass.y"
+#line 86 "ass4_21CS10014_21CS30032.y"
                { printf("unary-operator -> *\n"); }
 #line 2081 "y.tab.c"
     break;
 
   case 31:
-#line 87 "ass.y"
+#line 87 "ass4_21CS10014_21CS30032.y"
            { printf("unary-operator -> +\n"); }
 #line 2087 "y.tab.c"
     break;
 
   case 32:
-#line 88 "ass.y"
+#line 88 "ass4_21CS10014_21CS30032.y"
             { printf("unary-operator -> -\n"); }
 #line 2093 "y.tab.c"
     break;
 
   case 33:
-#line 89 "ass.y"
+#line 89 "ass4_21CS10014_21CS30032.y"
                   { printf("unary-operator -> ~\n"); }
 #line 2099 "y.tab.c"
     break;
 
   case 34:
-#line 90 "ass.y"
+#line 90 "ass4_21CS10014_21CS30032.y"
                   { printf("unary-operator -> !\n"); }
 #line 2105 "y.tab.c"
     break;
 
   case 35:
-#line 94 "ass.y"
+#line 94 "ass4_21CS10014_21CS30032.y"
                        { printf("cast-expression -> unary-expression\n"); }
 #line 2111 "y.tab.c"
     break;
 
   case 36:
-#line 95 "ass.y"
+#line 95 "ass4_21CS10014_21CS30032.y"
                                                                        { printf("cast-expression -> ( type-name ) cast-expression\n"); }
 #line 2117 "y.tab.c"
     break;
 
   case 37:
-#line 99 "ass.y"
+#line 99 "ass4_21CS10014_21CS30032.y"
                       { printf("multiplicative-expression -> cast-expression\n"); }
 #line 2123 "y.tab.c"
     break;
 
   case 38:
-#line 100 "ass.y"
+#line 100 "ass4_21CS10014_21CS30032.y"
                                                          { printf("multiplicative-expression -> multiplicative-expression * cast-expression\n"); }
 #line 2129 "y.tab.c"
     break;
 
   case 39:
-#line 101 "ass.y"
+#line 101 "ass4_21CS10014_21CS30032.y"
                                                        { printf("multiplicative-expression -> multiplicative-expression / cast-expression\n"); }
 #line 2135 "y.tab.c"
     break;
 
   case 40:
-#line 102 "ass.y"
+#line 102 "ass4_21CS10014_21CS30032.y"
                                                        { printf("multiplicative-expression -> multiplicative-expression %% cast-expression\n"); }
 #line 2141 "y.tab.c"
     break;
 
   case 41:
-#line 106 "ass.y"
+#line 106 "ass4_21CS10014_21CS30032.y"
                                 { printf("additive-expression -> multiplicative-expression\n"); }
 #line 2147 "y.tab.c"
     break;
 
   case 42:
-#line 107 "ass.y"
+#line 107 "ass4_21CS10014_21CS30032.y"
                                                          { printf("additive-expression -> additive-expression + multiplicative-expression\n"); }
 #line 2153 "y.tab.c"
     break;
 
   case 43:
-#line 108 "ass.y"
+#line 108 "ass4_21CS10014_21CS30032.y"
                                                           { printf("additive-expression -> additive-expression - multiplicative-expression\n"); }
 #line 2159 "y.tab.c"
     break;
 
   case 44:
-#line 112 "ass.y"
+#line 112 "ass4_21CS10014_21CS30032.y"
                           { printf("shift-expression -> additive-expression\n"); }
 #line 2165 "y.tab.c"
     break;
 
   case 45:
-#line 113 "ass.y"
+#line 113 "ass4_21CS10014_21CS30032.y"
                                                       { printf("shift-expression -> shift-expression << additive-expression\n"); }
 #line 2171 "y.tab.c"
     break;
 
   case 46:
-#line 114 "ass.y"
+#line 114 "ass4_21CS10014_21CS30032.y"
                                                        { printf("shift-expression -> shift-expression >> additive-expression\n"); }
 #line 2177 "y.tab.c"
     break;
 
   case 47:
-#line 118 "ass.y"
+#line 118 "ass4_21CS10014_21CS30032.y"
                        { printf("relational-expression -> shift-expression\n"); }
 #line 2183 "y.tab.c"
     break;
 
   case 48:
-#line 119 "ass.y"
+#line 119 "ass4_21CS10014_21CS30032.y"
                                                        { printf("relational-expression -> relational-expression < shift-expression\n"); }
 #line 2189 "y.tab.c"
     break;
 
   case 49:
-#line 120 "ass.y"
+#line 120 "ass4_21CS10014_21CS30032.y"
                                                           { printf("relational-expression -> relational-expression > shift-expression\n"); }
 #line 2195 "y.tab.c"
     break;
 
   case 50:
-#line 121 "ass.y"
+#line 121 "ass4_21CS10014_21CS30032.y"
                                                              { printf("relational-expression -> relational-expression <= shift-expression\n"); }
 #line 2201 "y.tab.c"
     break;
 
   case 51:
-#line 122 "ass.y"
+#line 122 "ass4_21CS10014_21CS30032.y"
                                                                 { printf("relational-expression -> relational-expression >= shift-expression\n"); }
 #line 2207 "y.tab.c"
     break;
 
   case 52:
-#line 126 "ass.y"
+#line 126 "ass4_21CS10014_21CS30032.y"
                             { printf("equality-expression -> relational-expression\n"); }
 #line 2213 "y.tab.c"
     break;
 
   case 53:
-#line 127 "ass.y"
+#line 127 "ass4_21CS10014_21CS30032.y"
                                                       { printf("equality-expression -> equality-expression == relational-expression\n"); }
 #line 2219 "y.tab.c"
     break;
 
   case 54:
-#line 128 "ass.y"
+#line 128 "ass4_21CS10014_21CS30032.y"
                                                           { printf("equality-expression -> equality-expression != relational-expression\n"); }
 #line 2225 "y.tab.c"
     break;
 
   case 55:
-#line 132 "ass.y"
+#line 132 "ass4_21CS10014_21CS30032.y"
                           { printf("AND-expression -> equality-expression\n"); }
 #line 2231 "y.tab.c"
     break;
 
   case 56:
-#line 133 "ass.y"
+#line 133 "ass4_21CS10014_21CS30032.y"
                                                      { printf("AND-expression -> AND-expression & equality-expression\n"); }
 #line 2237 "y.tab.c"
     break;
 
   case 57:
-#line 137 "ass.y"
+#line 137 "ass4_21CS10014_21CS30032.y"
                      { printf("exclusive-OR-expression -> AND-expression\n"); }
 #line 2243 "y.tab.c"
     break;
 
   case 58:
-#line 138 "ass.y"
+#line 138 "ass4_21CS10014_21CS30032.y"
                                                          { printf("exclusive-OR-expression -> exclusive-OR-expression ^ AND-expression\n"); }
 #line 2249 "y.tab.c"
     break;
 
   case 59:
-#line 142 "ass.y"
+#line 142 "ass4_21CS10014_21CS30032.y"
                               { printf("inclusive-OR-expression -> exclusive-OR-expression\n"); }
 #line 2255 "y.tab.c"
     break;
 
   case 60:
-#line 143 "ass.y"
+#line 143 "ass4_21CS10014_21CS30032.y"
                                                                  { printf("inclusive-OR-expression -> inclusive-OR-expression | exclusive-OR-expression\n"); }
 #line 2261 "y.tab.c"
     break;
 
   case 61:
-#line 147 "ass.y"
+#line 147 "ass4_21CS10014_21CS30032.y"
                               { printf("logical-AND-expression -> inclusive-OR-expression\n"); }
 #line 2267 "y.tab.c"
     break;
 
   case 62:
-#line 148 "ass.y"
+#line 148 "ass4_21CS10014_21CS30032.y"
                                                                  { printf("logical-AND-expression -> logical-AND-expression && inclusive-OR-expression\n"); }
 #line 2273 "y.tab.c"
     break;
 
   case 63:
-#line 152 "ass.y"
+#line 152 "ass4_21CS10014_21CS30032.y"
                              { printf("logical-OR-expression -> logical-AND-expression\n"); }
 #line 2279 "y.tab.c"
     break;
 
   case 64:
-#line 153 "ass.y"
+#line 153 "ass4_21CS10014_21CS30032.y"
                                                               { printf("logical-OR-expression -> logical-OR-expression || logical-AND-expression\n"); }
 #line 2285 "y.tab.c"
     break;
 
   case 65:
-#line 157 "ass.y"
+#line 157 "ass4_21CS10014_21CS30032.y"
                             { printf("conditional-expression -> logical-OR-expression\n"); }
 #line 2291 "y.tab.c"
     break;
 
   case 66:
-#line 158 "ass.y"
+#line 158 "ass4_21CS10014_21CS30032.y"
                                                                                   { printf("conditional-expression -> logical-OR-expression ? expression : conditional-expression\n"); }
 #line 2297 "y.tab.c"
     break;
 
   case 67:
-#line 162 "ass.y"
+#line 162 "ass4_21CS10014_21CS30032.y"
                              { printf("assignment-expression -> conditional-expression\n"); }
 #line 2303 "y.tab.c"
     break;
 
   case 68:
-#line 163 "ass.y"
+#line 163 "ass4_21CS10014_21CS30032.y"
                                                                  { printf("assignment-expression -> unary-expression assignment-operator assignment-expression\n"); }
 #line 2309 "y.tab.c"
     break;
 
   case 69:
-#line 167 "ass.y"
+#line 167 "ass4_21CS10014_21CS30032.y"
              { printf("assignment-operator -> =\n"); }
 #line 2315 "y.tab.c"
     break;
 
   case 70:
-#line 168 "ass.y"
+#line 168 "ass4_21CS10014_21CS30032.y"
                       { printf("assignment-operator -> *=\n"); }
 #line 2321 "y.tab.c"
     break;
 
   case 71:
-#line 169 "ass.y"
+#line 169 "ass4_21CS10014_21CS30032.y"
                     { printf("assignment-operator -> /=\n"); }
 #line 2327 "y.tab.c"
     break;
 
   case 72:
-#line 170 "ass.y"
+#line 170 "ass4_21CS10014_21CS30032.y"
                     { printf("assignment-operator -> %%=\n"); }
 #line 2333 "y.tab.c"
     break;
 
   case 73:
-#line 171 "ass.y"
+#line 171 "ass4_21CS10014_21CS30032.y"
                   { printf("assignment-operator -> +=\n"); }
 #line 2339 "y.tab.c"
     break;
 
   case 74:
-#line 172 "ass.y"
+#line 172 "ass4_21CS10014_21CS30032.y"
                    { printf("assignment-operator -> -=\n"); }
 #line 2345 "y.tab.c"
     break;
 
   case 75:
-#line 173 "ass.y"
+#line 173 "ass4_21CS10014_21CS30032.y"
                         { printf("assignment-operator -> <<=\n"); }
 #line 2351 "y.tab.c"
     break;
 
   case 76:
-#line 174 "ass.y"
+#line 174 "ass4_21CS10014_21CS30032.y"
                          { printf("assignment-operator -> >>=\n"); }
 #line 2357 "y.tab.c"
     break;
 
   case 77:
-#line 175 "ass.y"
+#line 175 "ass4_21CS10014_21CS30032.y"
                          { printf("assignment-operator -> &=\n"); }
 #line 2363 "y.tab.c"
     break;
 
   case 78:
-#line 176 "ass.y"
+#line 176 "ass4_21CS10014_21CS30032.y"
                          { printf("assignment-operator -> ^=\n"); }
 #line 2369 "y.tab.c"
     break;
 
   case 79:
-#line 177 "ass.y"
+#line 177 "ass4_21CS10014_21CS30032.y"
                         { printf("assignment-operator -> |=\n"); }
 #line 2375 "y.tab.c"
     break;
 
   case 80:
-#line 181 "ass.y"
+#line 181 "ass4_21CS10014_21CS30032.y"
                             { printf("expression -> assignment-expression\n"); }
 #line 2381 "y.tab.c"
     break;
 
   case 81:
-#line 182 "ass.y"
+#line 182 "ass4_21CS10014_21CS30032.y"
                                              { printf("expression -> expression , assignment-expression\n"); }
 #line 2387 "y.tab.c"
     break;
 
   case 82:
-#line 186 "ass.y"
+#line 186 "ass4_21CS10014_21CS30032.y"
                              { printf("constant-expression -> conditional-expression\n"); }
 #line 2393 "y.tab.c"
     break;
 
   case 83:
-#line 193 "ass.y"
+#line 193 "ass4_21CS10014_21CS30032.y"
                                                                 { printf("declaration -> declaration-specifiers init-declarator-list-opt ;\n"); }
 #line 2399 "y.tab.c"
     break;
 
   case 84:
-#line 197 "ass.y"
+#line 197 "ass4_21CS10014_21CS30032.y"
                            { printf("init-declarator-list-opt -> init-declarator-list\n"); }
 #line 2405 "y.tab.c"
     break;
 
   case 85:
-#line 198 "ass.y"
+#line 198 "ass4_21CS10014_21CS30032.y"
       { printf("init-declarator-list-opt -> epsilon\n"); }
 #line 2411 "y.tab.c"
     break;
 
   case 86:
-#line 202 "ass.y"
+#line 202 "ass4_21CS10014_21CS30032.y"
                                                          { printf("declaration-specifiers -> storage-class-specifier declaration-specifiers-opt\n"); }
 #line 2417 "y.tab.c"
     break;
 
   case 87:
-#line 203 "ass.y"
+#line 203 "ass4_21CS10014_21CS30032.y"
                                                 { printf("declaration-specifiers -> type-specifier declaration-specifiers-opt\n"); }
 #line 2423 "y.tab.c"
     break;
 
   case 88:
-#line 204 "ass.y"
+#line 204 "ass4_21CS10014_21CS30032.y"
                                                 { printf("declaration-specifiers -> type-qualifier declaration-specifiers-opt\n"); }
 #line 2429 "y.tab.c"
     break;
 
   case 89:
-#line 205 "ass.y"
+#line 205 "ass4_21CS10014_21CS30032.y"
                                                     { printf("declaration-specifiers -> function-specifier declaration-specifiers-opt\n"); }
 #line 2435 "y.tab.c"
     break;
 
   case 90:
-#line 209 "ass.y"
+#line 209 "ass4_21CS10014_21CS30032.y"
                              { printf("declaration-specifiers-opt -> declaration-specifiers\n"); }
 #line 2441 "y.tab.c"
     break;
 
   case 91:
-#line 210 "ass.y"
+#line 210 "ass4_21CS10014_21CS30032.y"
       { printf("declaration-specifiers-opt -> epsilon\n"); }
 #line 2447 "y.tab.c"
     break;
 
   case 92:
-#line 214 "ass.y"
+#line 214 "ass4_21CS10014_21CS30032.y"
                       { printf("init-declarator-list -> init-declarator\n"); }
 #line 2453 "y.tab.c"
     break;
 
   case 93:
-#line 215 "ass.y"
+#line 215 "ass4_21CS10014_21CS30032.y"
                                                  { printf("init-declarator-list -> init-declarator-list , init-declarator\n"); }
 #line 2459 "y.tab.c"
     break;
 
   case 94:
-#line 219 "ass.y"
+#line 219 "ass4_21CS10014_21CS30032.y"
                  { printf("init-declarator -> declarator\n"); }
 #line 2465 "y.tab.c"
     break;
 
   case 95:
-#line 220 "ass.y"
+#line 220 "ass4_21CS10014_21CS30032.y"
                                     { printf("init-declarator -> declarator = initializer\n"); }
 #line 2471 "y.tab.c"
     break;
 
   case 96:
-#line 224 "ass.y"
+#line 224 "ass4_21CS10014_21CS30032.y"
              { printf("storage-class-specifier -> extern\n"); }
 #line 2477 "y.tab.c"
     break;
 
   case 97:
-#line 225 "ass.y"
+#line 225 "ass4_21CS10014_21CS30032.y"
              { printf("storage-class-specifier -> static\n"); }
 #line 2483 "y.tab.c"
     break;
 
   case 98:
-#line 226 "ass.y"
+#line 226 "ass4_21CS10014_21CS30032.y"
            { printf("storage-class-specifier -> auto\n"); }
 #line 2489 "y.tab.c"
     break;
 
   case 99:
-#line 227 "ass.y"
+#line 227 "ass4_21CS10014_21CS30032.y"
                { printf("storage-class-specifier -> register\n"); }
 #line 2495 "y.tab.c"
     break;
 
   case 100:
-#line 231 "ass.y"
+#line 231 "ass4_21CS10014_21CS30032.y"
            { printf("type-specifier -> void\n"); }
 #line 2501 "y.tab.c"
     break;
 
   case 101:
-#line 232 "ass.y"
+#line 232 "ass4_21CS10014_21CS30032.y"
            { printf("type-specifier -> char\n"); }
 #line 2507 "y.tab.c"
     break;
 
   case 102:
-#line 233 "ass.y"
+#line 233 "ass4_21CS10014_21CS30032.y"
             { printf("type-specifier -> short\n"); }
 #line 2513 "y.tab.c"
     break;
 
   case 103:
-#line 234 "ass.y"
+#line 234 "ass4_21CS10014_21CS30032.y"
           { printf("type-specifier -> int\n"); }
 #line 2519 "y.tab.c"
     break;
 
   case 104:
-#line 235 "ass.y"
+#line 235 "ass4_21CS10014_21CS30032.y"
            { printf("type-specifier -> long\n"); }
 #line 2525 "y.tab.c"
     break;
 
   case 105:
-#line 236 "ass.y"
+#line 236 "ass4_21CS10014_21CS30032.y"
             { printf("type-specifier -> float\n"); }
 #line 2531 "y.tab.c"
     break;
 
   case 106:
-#line 237 "ass.y"
+#line 237 "ass4_21CS10014_21CS30032.y"
              { printf("type-specifier -> double\n"); }
 #line 2537 "y.tab.c"
     break;
 
   case 107:
-#line 238 "ass.y"
+#line 238 "ass4_21CS10014_21CS30032.y"
              { printf("type-specifier -> signed\n"); }
 #line 2543 "y.tab.c"
     break;
 
   case 108:
-#line 239 "ass.y"
+#line 239 "ass4_21CS10014_21CS30032.y"
                { printf("type-specifier -> unsigned\n"); }
 #line 2549 "y.tab.c"
     break;
 
   case 109:
-#line 240 "ass.y"
+#line 240 "ass4_21CS10014_21CS30032.y"
            { printf("type-specifier -> _Bool\n"); }
 #line 2555 "y.tab.c"
     break;
 
   case 110:
-#line 241 "ass.y"
+#line 241 "ass4_21CS10014_21CS30032.y"
               { printf("type-specifier -> _Complex\n"); }
 #line 2561 "y.tab.c"
     break;
 
   case 111:
-#line 242 "ass.y"
+#line 242 "ass4_21CS10014_21CS30032.y"
                 { printf("type-specifier -> _Imaginary\n"); }
 #line 2567 "y.tab.c"
     break;
 
   case 112:
-#line 243 "ass.y"
+#line 243 "ass4_21CS10014_21CS30032.y"
                      { printf("type-specifier -> enum-specifier\n"); }
 #line 2573 "y.tab.c"
     break;
 
   case 113:
-#line 247 "ass.y"
+#line 247 "ass4_21CS10014_21CS30032.y"
                                                   { printf("specifier-qualifier-list -> type-specifier specifier-qualifier-list-opt\n"); }
 #line 2579 "y.tab.c"
     break;
 
   case 114:
-#line 248 "ass.y"
+#line 248 "ass4_21CS10014_21CS30032.y"
                                                   { printf("specifier-qualifier-list -> type-qualifier specifier-qualifier-list-opt\n"); }
 #line 2585 "y.tab.c"
     break;
 
   case 115:
-#line 252 "ass.y"
+#line 252 "ass4_21CS10014_21CS30032.y"
                                { printf("specifier-qualifier-list-opt -> specifier-qualifier-list\n"); }
 #line 2591 "y.tab.c"
     break;
 
   case 116:
-#line 253 "ass.y"
+#line 253 "ass4_21CS10014_21CS30032.y"
       { printf("specifier-qualifier-list-opt -> epsilon\n"); }
 #line 2597 "y.tab.c"
     break;
 
   case 117:
-#line 257 "ass.y"
+#line 257 "ass4_21CS10014_21CS30032.y"
                                                                                  { printf("enum-specifier -> enum identifier-opt { enumerator-list-opt }\n"); }
 #line 2603 "y.tab.c"
     break;
 
   case 118:
-#line 258 "ass.y"
+#line 258 "ass4_21CS10014_21CS30032.y"
                                                                                        { printf("enum-specifier -> enum identifier-opt { enumerator-list , }\n"); }
 #line 2609 "y.tab.c"
     break;
 
   case 119:
-#line 259 "ass.y"
+#line 259 "ass4_21CS10014_21CS30032.y"
                       { printf("enum-specifier -> enum identifier\n"); }
 #line 2615 "y.tab.c"
     break;
 
   case 120:
-#line 263 "ass.y"
+#line 263 "ass4_21CS10014_21CS30032.y"
                  { printf("identifier-opt -> identifier\n"); }
 #line 2621 "y.tab.c"
     break;
 
   case 121:
-#line 264 "ass.y"
+#line 264 "ass4_21CS10014_21CS30032.y"
       { printf("identifier-opt -> epsilon\n"); }
 #line 2627 "y.tab.c"
     break;
 
   case 122:
-#line 268 "ass.y"
+#line 268 "ass4_21CS10014_21CS30032.y"
                  { printf("enumerator-list -> enumerator\n"); }
 #line 2633 "y.tab.c"
     break;
 
   case 123:
-#line 269 "ass.y"
+#line 269 "ass4_21CS10014_21CS30032.y"
                                        { printf("enumerator-list -> enumerator-list , enumerator\n"); }
 #line 2639 "y.tab.c"
     break;
 
   case 124:
-#line 273 "ass.y"
+#line 273 "ass4_21CS10014_21CS30032.y"
                  { printf("enumerator -> enumeration-constant\n"); }
 #line 2645 "y.tab.c"
     break;
 
   case 125:
-#line 274 "ass.y"
+#line 274 "ass4_21CS10014_21CS30032.y"
                                             { printf("enumerator -> enumeration-constant = constant-expression\n"); }
 #line 2651 "y.tab.c"
     break;
 
   case 126:
-#line 278 "ass.y"
+#line 278 "ass4_21CS10014_21CS30032.y"
             { printf("type-qualifier -> const\n"); }
 #line 2657 "y.tab.c"
     break;
 
   case 127:
-#line 279 "ass.y"
+#line 279 "ass4_21CS10014_21CS30032.y"
                { printf("type-qualifier -> restrict\n"); }
 #line 2663 "y.tab.c"
     break;
 
   case 128:
-#line 280 "ass.y"
+#line 280 "ass4_21CS10014_21CS30032.y"
                { printf("type-qualifier -> volatile\n"); }
 #line 2669 "y.tab.c"
     break;
 
   case 129:
-#line 284 "ass.y"
+#line 284 "ass4_21CS10014_21CS30032.y"
              { printf("function-specifier -> inline\n"); }
 #line 2675 "y.tab.c"
     break;
 
   case 130:
-#line 288 "ass.y"
+#line 288 "ass4_21CS10014_21CS30032.y"
                                     { printf("declarator -> pointer-opt direct-declarator\n"); }
 #line 2681 "y.tab.c"
     break;
 
   case 131:
-#line 292 "ass.y"
+#line 292 "ass4_21CS10014_21CS30032.y"
               { printf("pointer-opt -> pointer\n"); }
 #line 2687 "y.tab.c"
     break;
 
   case 132:
-#line 293 "ass.y"
+#line 293 "ass4_21CS10014_21CS30032.y"
       { printf("pointer-opt -> epsilon\n"); }
 #line 2693 "y.tab.c"
     break;
 
   case 133:
-#line 297 "ass.y"
+#line 297 "ass4_21CS10014_21CS30032.y"
                  { printf("direct-declarator -> identifier\n"); }
 #line 2699 "y.tab.c"
     break;
 
   case 134:
-#line 298 "ass.y"
+#line 298 "ass4_21CS10014_21CS30032.y"
                                                         { printf("direct-declarator -> ( declarator )\n"); }
 #line 2705 "y.tab.c"
     break;
 
   case 135:
-#line 299 "ass.y"
+#line 299 "ass4_21CS10014_21CS30032.y"
                                                                                                                    { printf("direct-declarator -> direct-declarator [ type-qualifier-list-opt assignment-expression-opt ]\n"); }
 #line 2711 "y.tab.c"
     break;
 
   case 136:
-#line 300 "ass.y"
+#line 300 "ass4_21CS10014_21CS30032.y"
                                                                                                                       { printf("direct-declarator -> direct-declarator [ static type-qualifier-list-opt assignment-expression ]\n"); }
 #line 2717 "y.tab.c"
     break;
 
   case 137:
-#line 301 "ass.y"
+#line 301 "ass4_21CS10014_21CS30032.y"
                                                                                                                   { printf("direct-declarator -> direct-declarator [ type-qualifier-list static assignment-expression ]\n"); }
 #line 2723 "y.tab.c"
     break;
 
   case 138:
-#line 302 "ass.y"
+#line 302 "ass4_21CS10014_21CS30032.y"
                                                                                                   { printf("direct-declarator -> direct-declarator [ type-qualifier-list-opt * ]\n"); }
 #line 2729 "y.tab.c"
     break;
 
   case 139:
-#line 303 "ass.y"
+#line 303 "ass4_21CS10014_21CS30032.y"
                                                                                    { printf("direct-declarator -> direct-declarator ( parameter-type-list )\n"); }
 #line 2735 "y.tab.c"
     break;
 
   case 140:
-#line 304 "ass.y"
+#line 304 "ass4_21CS10014_21CS30032.y"
                                                                                    { printf("direct-declarator -> direct-declarator ( identifier-list-opt )\n"); }
 #line 2741 "y.tab.c"
     break;
 
   case 141:
-#line 308 "ass.y"
+#line 308 "ass4_21CS10014_21CS30032.y"
                       { printf("identifier-list-opt -> identifier-list\n"); }
 #line 2747 "y.tab.c"
     break;
 
   case 142:
-#line 309 "ass.y"
+#line 309 "ass4_21CS10014_21CS30032.y"
       { printf("identifier-list-opt -> epsilon\n"); }
 #line 2753 "y.tab.c"
     break;
 
   case 143:
-#line 313 "ass.y"
+#line 313 "ass4_21CS10014_21CS30032.y"
                             { printf("assignment-expression-opt -> assignment-expression\n"); }
 #line 2759 "y.tab.c"
     break;
 
   case 144:
-#line 314 "ass.y"
+#line 314 "ass4_21CS10014_21CS30032.y"
       { printf("assignment-expression-opt -> epsilon\n"); }
 #line 2765 "y.tab.c"
     break;
 
   case 145:
-#line 318 "ass.y"
+#line 318 "ass4_21CS10014_21CS30032.y"
                           { printf("type-qualifier-list-opt -> type-qualifier-list\n"); }
 #line 2771 "y.tab.c"
     break;
 
   case 146:
-#line 319 "ass.y"
+#line 319 "ass4_21CS10014_21CS30032.y"
       { printf("type-qualifier-list-opt -> epsilon\n"); }
 #line 2777 "y.tab.c"
     break;
 
   case 147:
-#line 323 "ass.y"
+#line 323 "ass4_21CS10014_21CS30032.y"
                                        { printf("pointer -> * type-qualifier-list-opt\n"); }
 #line 2783 "y.tab.c"
     break;
 
   case 148:
-#line 324 "ass.y"
+#line 324 "ass4_21CS10014_21CS30032.y"
                                                { printf("pointer -> * type-qualifier-list-opt pointer\n"); }
 #line 2789 "y.tab.c"
     break;
 
   case 149:
-#line 328 "ass.y"
+#line 328 "ass4_21CS10014_21CS30032.y"
                      { printf("type-qualifier-list -> type-qualifier\n"); }
 #line 2795 "y.tab.c"
     break;
 
   case 150:
-#line 329 "ass.y"
+#line 329 "ass4_21CS10014_21CS30032.y"
                                          { printf("type-qualifier-list -> type-qualifier-list type-qualifier\n"); }
 #line 2801 "y.tab.c"
     break;
 
   case 151:
-#line 333 "ass.y"
+#line 333 "ass4_21CS10014_21CS30032.y"
                      { printf("parameter-type-list -> parameter-list\n"); }
 #line 2807 "y.tab.c"
     break;
 
   case 152:
-#line 334 "ass.y"
+#line 334 "ass4_21CS10014_21CS30032.y"
                                     { printf("parameter-type-list -> parameter-list , ...\n"); }
 #line 2813 "y.tab.c"
     break;
 
   case 153:
-#line 338 "ass.y"
+#line 338 "ass4_21CS10014_21CS30032.y"
                             { printf("parameter-list -> parameter-declaration\n"); }
 #line 2819 "y.tab.c"
     break;
 
   case 154:
-#line 339 "ass.y"
+#line 339 "ass4_21CS10014_21CS30032.y"
                                                  { printf("parameter-list -> parameter-list , parameter-declaration\n"); }
 #line 2825 "y.tab.c"
     break;
 
   case 155:
-#line 343 "ass.y"
+#line 343 "ass4_21CS10014_21CS30032.y"
                                         { printf("parameter-declaration -> declaration-specifiers declarator\n"); }
 #line 2831 "y.tab.c"
     break;
 
   case 156:
-#line 344 "ass.y"
+#line 344 "ass4_21CS10014_21CS30032.y"
                              { printf("parameter-declaration -> declaration-specifiers\n"); }
 #line 2837 "y.tab.c"
     break;
 
   case 157:
-#line 348 "ass.y"
+#line 348 "ass4_21CS10014_21CS30032.y"
                  { printf("identifier-list -> identifier\n"); }
 #line 2843 "y.tab.c"
     break;
 
   case 158:
-#line 349 "ass.y"
+#line 349 "ass4_21CS10014_21CS30032.y"
                                        { printf("identifier-list -> identifier-list , identifier\n"); }
 #line 2849 "y.tab.c"
     break;
 
   case 159:
-#line 353 "ass.y"
+#line 353 "ass4_21CS10014_21CS30032.y"
                                { printf("type-name -> specifier-qualifier-list\n"); }
 #line 2855 "y.tab.c"
     break;
 
   case 160:
-#line 357 "ass.y"
+#line 357 "ass4_21CS10014_21CS30032.y"
                             { printf("initializer -> assignment-expression\n"); }
 #line 2861 "y.tab.c"
     break;
 
   case 161:
-#line 358 "ass.y"
+#line 358 "ass4_21CS10014_21CS30032.y"
                                                               { printf("initializer -> { initializer-list }\n"); }
 #line 2867 "y.tab.c"
     break;
 
   case 162:
-#line 359 "ass.y"
+#line 359 "ass4_21CS10014_21CS30032.y"
                                                                     { printf("initializer -> { initializer-list , }\n"); }
 #line 2873 "y.tab.c"
     break;
 
   case 163:
-#line 363 "ass.y"
+#line 363 "ass4_21CS10014_21CS30032.y"
                                   { printf("initializer-list -> designation-opt initializer\n"); }
 #line 2879 "y.tab.c"
     break;
 
   case 164:
-#line 364 "ass.y"
+#line 364 "ass4_21CS10014_21CS30032.y"
                                                          { printf("initializer-list -> initializer-list , designation-opt initializer\n"); }
 #line 2885 "y.tab.c"
     break;
 
   case 165:
-#line 368 "ass.y"
+#line 368 "ass4_21CS10014_21CS30032.y"
                   { printf("designation-opt -> designation\n"); }
 #line 2891 "y.tab.c"
     break;
 
   case 166:
-#line 369 "ass.y"
+#line 369 "ass4_21CS10014_21CS30032.y"
       { printf("designation-opt -> epsilon\n"); }
 #line 2897 "y.tab.c"
     break;
 
   case 167:
-#line 373 "ass.y"
+#line 373 "ass4_21CS10014_21CS30032.y"
                              { printf("designation -> designator-list =\n"); }
 #line 2903 "y.tab.c"
     break;
 
   case 168:
-#line 377 "ass.y"
+#line 377 "ass4_21CS10014_21CS30032.y"
                  { printf("designator-list -> designator\n"); }
 #line 2909 "y.tab.c"
     break;
 
   case 169:
-#line 378 "ass.y"
+#line 378 "ass4_21CS10014_21CS30032.y"
                                  { printf("designator-list -> designator-list designator\n"); }
 #line 2915 "y.tab.c"
     break;
 
   case 170:
-#line 382 "ass.y"
+#line 382 "ass4_21CS10014_21CS30032.y"
                                                                    { printf("designator -> [ constant-expression ]\n"); }
 #line 2921 "y.tab.c"
     break;
 
   case 171:
-#line 383 "ass.y"
+#line 383 "ass4_21CS10014_21CS30032.y"
                      { printf("designator -> . identifier\n"); }
 #line 2927 "y.tab.c"
     break;
 
   case 172:
-#line 389 "ass.y"
+#line 389 "ass4_21CS10014_21CS30032.y"
                         { printf("statement -> labeled-statement\n"); }
 #line 2933 "y.tab.c"
     break;
 
   case 173:
-#line 390 "ass.y"
+#line 390 "ass4_21CS10014_21CS30032.y"
                          { printf("statement -> compound-statement\n"); }
 #line 2939 "y.tab.c"
     break;
 
   case 174:
-#line 391 "ass.y"
+#line 391 "ass4_21CS10014_21CS30032.y"
                            { printf("statement -> expression-statement\n"); }
 #line 2945 "y.tab.c"
     break;
 
   case 175:
-#line 392 "ass.y"
+#line 392 "ass4_21CS10014_21CS30032.y"
                           { printf("statement -> selection-statement\n"); }
 #line 2951 "y.tab.c"
     break;
 
   case 176:
-#line 393 "ass.y"
+#line 393 "ass4_21CS10014_21CS30032.y"
                           { printf("statement -> iteration-statement\n"); }
 #line 2957 "y.tab.c"
     break;
 
   case 177:
-#line 394 "ass.y"
+#line 394 "ass4_21CS10014_21CS30032.y"
                      { printf("statement -> jump-statement\n"); }
 #line 2963 "y.tab.c"
     break;
 
   case 178:
-#line 398 "ass.y"
+#line 398 "ass4_21CS10014_21CS30032.y"
                                  { printf("labeled-statement -> identifier : statement\n"); }
 #line 2969 "y.tab.c"
     break;
 
   case 179:
-#line 399 "ass.y"
+#line 399 "ass4_21CS10014_21CS30032.y"
                                                { printf("labeled-statement -> case constant-expression : statement\n"); }
 #line 2975 "y.tab.c"
     break;
 
   case 180:
-#line 400 "ass.y"
+#line 400 "ass4_21CS10014_21CS30032.y"
                               { printf("labeled-statement -> default : statement\n"); }
 #line 2981 "y.tab.c"
     break;
 
   case 181:
-#line 404 "ass.y"
+#line 404 "ass4_21CS10014_21CS30032.y"
                                                                  { printf("compound-statement -> { block-item-list-opt }\n"); }
 #line 2987 "y.tab.c"
     break;
 
   case 182:
-#line 408 "ass.y"
+#line 408 "ass4_21CS10014_21CS30032.y"
                       { printf("block-item-list-opt -> block-item-list\n"); }
 #line 2993 "y.tab.c"
     break;
 
   case 183:
-#line 409 "ass.y"
+#line 409 "ass4_21CS10014_21CS30032.y"
       { printf("block-item-list-opt -> epsilon\n"); }
 #line 2999 "y.tab.c"
     break;
 
   case 184:
-#line 413 "ass.y"
+#line 413 "ass4_21CS10014_21CS30032.y"
                  { printf("block-item-list -> block-item\n"); }
 #line 3005 "y.tab.c"
     break;
 
   case 185:
-#line 414 "ass.y"
+#line 414 "ass4_21CS10014_21CS30032.y"
                                  { printf("block-item-list -> block-item-list block-item\n"); }
 #line 3011 "y.tab.c"
     break;
 
   case 186:
-#line 418 "ass.y"
+#line 418 "ass4_21CS10014_21CS30032.y"
                   { printf("block-item -> declaration\n"); }
 #line 3017 "y.tab.c"
     break;
 
   case 187:
-#line 419 "ass.y"
+#line 419 "ass4_21CS10014_21CS30032.y"
                 { printf("block-item -> statement\n"); }
 #line 3023 "y.tab.c"
     break;
 
   case 188:
-#line 423 "ass.y"
+#line 423 "ass4_21CS10014_21CS30032.y"
                                { printf("expression-statement -> expression-opt ;\n"); }
 #line 3029 "y.tab.c"
     break;
 
   case 189:
-#line 427 "ass.y"
+#line 427 "ass4_21CS10014_21CS30032.y"
                  { printf("expression-opt -> expression\n"); }
 #line 3035 "y.tab.c"
     break;
 
   case 190:
-#line 428 "ass.y"
+#line 428 "ass4_21CS10014_21CS30032.y"
       { printf("expression-opt -> epsilon\n"); }
 #line 3041 "y.tab.c"
     break;
 
   case 191:
-#line 432 "ass.y"
+#line 432 "ass4_21CS10014_21CS30032.y"
                                                                      { printf("selection-statement -> if ( expression ) statement\n"); }
 #line 3047 "y.tab.c"
     break;
 
   case 192:
-#line 433 "ass.y"
+#line 433 "ass4_21CS10014_21CS30032.y"
                                                                                     { printf("selection-statement -> if ( expression ) statement else statement\n"); }
 #line 3053 "y.tab.c"
     break;
 
   case 193:
-#line 434 "ass.y"
+#line 434 "ass4_21CS10014_21CS30032.y"
                                                                          { printf("selection-statement -> switch ( expression ) statement\n"); }
 #line 3059 "y.tab.c"
     break;
 
   case 194:
-#line 438 "ass.y"
+#line 438 "ass4_21CS10014_21CS30032.y"
                                                                         { printf("iteration-statement -> while ( expression ) statement\n"); }
 #line 3065 "y.tab.c"
     break;
 
   case 195:
-#line 439 "ass.y"
+#line 439 "ass4_21CS10014_21CS30032.y"
                                                                                      { printf("iteration-statement -> do statement while ( expression ) ;\n"); }
 #line 3071 "y.tab.c"
     break;
 
   case 196:
-#line 440 "ass.y"
+#line 440 "ass4_21CS10014_21CS30032.y"
                                                                                                                             { printf("iteration-statement -> for ( expression-opt ; expression-opt ; expression-opt ) statement\n"); }
 #line 3077 "y.tab.c"
     break;
 
   case 197:
-#line 441 "ass.y"
+#line 441 "ass4_21CS10014_21CS30032.y"
                                                                                                                { printf("iteration-statement -> for ( declaration expression-opt ; expression-opt ) statement\n"); }
 #line 3083 "y.tab.c"
     break;
 
   case 198:
-#line 445 "ass.y"
+#line 445 "ass4_21CS10014_21CS30032.y"
                                 { printf("jump-statement -> goto identifier ;\n"); }
 #line 3089 "y.tab.c"
     break;
 
   case 199:
-#line 446 "ass.y"
+#line 446 "ass4_21CS10014_21CS30032.y"
                          { printf("jump-statement -> continue ;\n"); }
 #line 3095 "y.tab.c"
     break;
 
   case 200:
-#line 447 "ass.y"
+#line 447 "ass4_21CS10014_21CS30032.y"
                       { printf("jump-statement -> break ;\n"); }
 #line 3101 "y.tab.c"
     break;
 
   case 201:
-#line 448 "ass.y"
+#line 448 "ass4_21CS10014_21CS30032.y"
                                       { printf("jump-statement -> return expression-opt ;\n"); }
 #line 3107 "y.tab.c"
     break;
 
   case 202:
-#line 454 "ass.y"
+#line 454 "ass4_21CS10014_21CS30032.y"
                            { printf("translation-unit -> external-declaration\n"); }
 #line 3113 "y.tab.c"
     break;
 
   case 203:
-#line 455 "ass.y"
+#line 455 "ass4_21CS10014_21CS30032.y"
                                             { printf("translation-unit -> translation-unit external-declaration\n"); }
 #line 3119 "y.tab.c"
     break;
 
   case 204:
-#line 459 "ass.y"
+#line 459 "ass4_21CS10014_21CS30032.y"
                           { printf("external-declaration -> function-definition\n"); }
 #line 3125 "y.tab.c"
     break;
 
   case 205:
-#line 460 "ass.y"
+#line 460 "ass4_21CS10014_21CS30032.y"
                   { printf("external-declaration -> declaration\n"); }
 #line 3131 "y.tab.c"
     break;
 
   case 206:
-#line 464 "ass.y"
+#line 464 "ass4_21CS10014_21CS30032.y"
                                                                                 { printf("function-definition --> declaration-specifiers declarator declaration-list-opt compound-statement\n"); }
 #line 3137 "y.tab.c"
     break;
 
   case 207:
-#line 468 "ass.y"
+#line 468 "ass4_21CS10014_21CS30032.y"
                        { printf("declaration-list-opt -> declaration-list\n"); }
 #line 3143 "y.tab.c"
     break;
 
   case 208:
-#line 469 "ass.y"
+#line 469 "ass4_21CS10014_21CS30032.y"
       { printf("declaration-list-opt -> epsilon\n"); }
 #line 3149 "y.tab.c"
     break;
 
   case 209:
-#line 473 "ass.y"
+#line 473 "ass4_21CS10014_21CS30032.y"
                   { printf("declaration-list -> declaration\n"); }
 #line 3155 "y.tab.c"
     break;
 
   case 210:
-#line 474 "ass.y"
+#line 474 "ass4_21CS10014_21CS30032.y"
                                    { printf("declaration-list -> declaration-list declaration\n"); }
 #line 3161 "y.tab.c"
     break;
@@ -3393,7 +3393,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 477 "ass.y"
+#line 477 "ass4_21CS10014_21CS30032.y"
 
 
 void yyerror(char* s) {

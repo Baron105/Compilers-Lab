@@ -84,5 +84,25 @@ int main()
     // p1->x_coord = 10;
     // p1->y_coord = 20;
 
+    int x,y;
+
+    x = 10;
+    y = 20;
+
+    x=x&&y;
+    x=x||y;
+    x=!y;
+    x=x<y;
+    x=x>y;
+    x=x<=y;
+    x=x>=y;
+    x=x==y;
+    x=x!=y;
+    x=x<<y;
+    x=x>>y;
+
+
+    
+
     return 0;
 }

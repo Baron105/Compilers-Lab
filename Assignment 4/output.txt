@@ -1,4 +1,4 @@
-type-specifier -> int
+type-specifier -> int
 declaration-specifiers-opt -> epsilon
 declaration-specifiers -> type-specifier declaration-specifiers-opt
 pointer-opt -> epsilon
@@ -21,9 +21,9 @@ parameter-declaration -> declaration-specifiers declarator
 parameter-list -> parameter-list , parameter-declaration
 parameter-type-list -> parameter-list
 direct-declarator -> direct-declarator ( parameter-type-list )
-declarator -> pointer-opt direct-declarator
+declarator -> pointer-opt direct-declarator
 declaration-list-opt -> epsilon
-primary-expression -> identifier
+primary-expression -> identifier
 postfix-expression -> primary-expression
 unary-expression -> postfix-expression
 cast-expression -> unary-expression
@@ -48,7 +48,7 @@ logical-OR-expression -> logical-AND-expression
 conditional-expression -> logical-OR-expression
 assignment-expression -> conditional-expression
 expression -> assignment-expression
-primary-expression -> identifier
+primary-expression -> identifier
 postfix-expression -> primary-expression
 unary-expression -> postfix-expression
 cast-expression -> unary-expression
@@ -70,10 +70,10 @@ jump-statement -> return expression-opt ;
 statement -> jump-statement
 block-item -> statement
 block-item-list -> block-item
-block-item-list-opt -> block-item-list
+block-item-list-opt -> block-item-list
 compound-statement -> { block-item-list-opt }
 statement -> compound-statement
-primary-expression -> identifier
+primary-expression -> identifier
 postfix-expression -> primary-expression
 unary-expression -> postfix-expression
 cast-expression -> unary-expression
@@ -95,19 +95,19 @@ jump-statement -> return expression-opt ;
 statement -> jump-statement
 block-item -> statement
 block-item-list -> block-item
-block-item-list-opt -> block-item-list
+block-item-list-opt -> block-item-list
 compound-statement -> { block-item-list-opt }
 statement -> compound-statement
 selection-statement -> if ( expression ) statement else statement
 statement -> selection-statement
 block-item -> statement
 block-item-list -> block-item
-block-item-list-opt -> block-item-list
+block-item-list-opt -> block-item-list
 compound-statement -> { block-item-list-opt }
 function-definition --> declaration-specifiers declarator declaration-list-opt compound-statement
 external-declaration -> function-definition
 translation-unit -> external-declaration
-type-specifier -> void
+type-specifier -> void
 declaration-specifiers-opt -> epsilon
 declaration-specifiers -> type-specifier declaration-specifiers-opt
 pointer-opt -> epsilon
@@ -134,9 +134,9 @@ parameter-declaration -> declaration-specifiers declarator
 parameter-list -> parameter-list , parameter-declaration
 parameter-type-list -> parameter-list
 direct-declarator -> direct-declarator ( parameter-type-list )
-declarator -> pointer-opt direct-declarator
+declarator -> pointer-opt direct-declarator
 declaration-list-opt -> epsilon
-type-specifier -> int
+type-specifier -> int
 declaration-specifiers-opt -> epsilon
 declaration-specifiers -> type-specifier declaration-specifiers-opt
 pointer-opt -> epsilon
@@ -168,7 +168,7 @@ init-declarator-list-opt -> init-declarator-list
 declaration -> declaration-specifiers init-declarator-list-opt ;
 block-item -> declaration
 block-item-list -> block-item
-unary-operator -> *
+unary-operator -> *
 primary-expression -> identifier
 postfix-expression -> primary-expression
 unary-expression -> postfix-expression
@@ -201,7 +201,7 @@ expression-statement -> expression-opt ;
 statement -> expression-statement
 block-item -> statement
 block-item-list -> block-item-list block-item
-unary-operator -> *
+unary-operator -> *
 primary-expression -> identifier
 postfix-expression -> primary-expression
 unary-expression -> postfix-expression
@@ -231,26 +231,26 @@ expression-statement -> expression-opt ;
 statement -> expression-statement
 block-item -> statement
 block-item-list -> block-item-list block-item
-expression-opt -> epsilon
+expression-opt -> epsilon
 jump-statement -> return expression-opt ;
 statement -> jump-statement
 block-item -> statement
 block-item-list -> block-item-list block-item
-block-item-list-opt -> block-item-list
+block-item-list-opt -> block-item-list
 compound-statement -> { block-item-list-opt }
 function-definition --> declaration-specifiers declarator declaration-list-opt compound-statement
 external-declaration -> function-definition
 translation-unit -> translation-unit external-declaration
-type-specifier -> int
+type-specifier -> int
 declaration-specifiers-opt -> epsilon
 declaration-specifiers -> type-specifier declaration-specifiers-opt
 pointer-opt -> epsilon
 direct-declarator -> identifier
 identifier-list-opt -> epsilon
 direct-declarator -> direct-declarator ( identifier-list-opt )
-declarator -> pointer-opt direct-declarator
+declarator -> pointer-opt direct-declarator
 declaration-list-opt -> epsilon
-storage-class-specifier -> auto
+storage-class-specifier -> auto
 declaration-specifiers-opt -> epsilon
 declaration-specifiers -> storage-class-specifier declaration-specifiers-opt
 pointer-opt -> epsilon
@@ -280,7 +280,7 @@ init-declarator-list-opt -> init-declarator-list
 declaration -> declaration-specifiers init-declarator-list-opt ;
 block-item -> declaration
 block-item-list -> block-item
-type-specifier -> float
+type-specifier -> float
 declaration-specifiers-opt -> epsilon
 declaration-specifiers -> type-specifier declaration-specifiers-opt
 pointer-opt -> epsilon
@@ -310,7 +310,7 @@ init-declarator-list-opt -> init-declarator-list
 declaration -> declaration-specifiers init-declarator-list-opt ;
 block-item -> declaration
 block-item-list -> block-item-list block-item
-type-specifier -> int
+type-specifier -> int
 declaration-specifiers-opt -> epsilon
 declaration-specifiers -> type-specifier declaration-specifiers-opt
 pointer-opt -> epsilon
@@ -344,7 +344,7 @@ init-declarator-list-opt -> init-declarator-list
 declaration -> declaration-specifiers init-declarator-list-opt ;
 block-item -> declaration
 block-item-list -> block-item-list block-item
-primary-expression -> identifier
+primary-expression -> identifier
 postfix-expression -> primary-expression
 unary-expression -> postfix-expression
 assignment-operator -> =
@@ -379,7 +379,7 @@ expression-statement -> expression-opt ;
 statement -> expression-statement
 block-item -> statement
 block-item-list -> block-item-list block-item
-primary-expression -> identifier
+primary-expression -> identifier
 postfix-expression -> primary-expression
 unary-expression -> postfix-expression
 assignment-operator -> +=
@@ -407,7 +407,7 @@ expression-statement -> expression-opt ;
 statement -> expression-statement
 block-item -> statement
 block-item-list -> block-item-list block-item
-primary-expression -> identifier
+primary-expression -> identifier
 postfix-expression -> primary-expression
 postfix-expression -> postfix-expression ++
 unary-expression -> postfix-expression
@@ -430,7 +430,7 @@ expression-statement -> expression-opt ;
 statement -> expression-statement
 block-item -> statement
 block-item-list -> block-item-list block-item
-type-specifier -> int
+type-specifier -> int
 declaration-specifiers-opt -> epsilon
 declaration-specifiers -> type-specifier declaration-specifiers-opt
 pointer-opt -> epsilon
@@ -469,7 +469,7 @@ init-declarator-list-opt -> init-declarator-list
 declaration -> declaration-specifiers init-declarator-list-opt ;
 block-item -> declaration
 block-item-list -> block-item-list block-item
-primary-expression -> identifier
+primary-expression -> identifier
 postfix-expression -> primary-expression
 unary-expression -> postfix-expression
 assignment-operator -> =
@@ -508,7 +508,7 @@ expression-statement -> expression-opt ;
 statement -> expression-statement
 block-item -> statement
 block-item-list -> block-item-list block-item
-primary-expression -> identifier
+primary-expression -> identifier
 postfix-expression -> primary-expression
 unary-expression -> postfix-expression
 assignment-operator -> =
@@ -546,7 +546,7 @@ expression-statement -> expression-opt ;
 statement -> expression-statement
 block-item -> statement
 block-item-list -> block-item-list block-item
-type-specifier -> long
+type-specifier -> long
 type-specifier -> long
 type-specifier -> int
 declaration-specifiers-opt -> epsilon
@@ -582,7 +582,7 @@ init-declarator-list-opt -> init-declarator-list
 declaration -> declaration-specifiers init-declarator-list-opt ;
 block-item -> declaration
 block-item-list -> block-item-list block-item
-primary-expression -> identifier
+primary-expression -> identifier
 postfix-expression -> primary-expression
 unary-expression -> postfix-expression
 assignment-operator -> /=
@@ -610,7 +610,7 @@ expression-statement -> expression-opt ;
 statement -> expression-statement
 block-item -> statement
 block-item-list -> block-item-list block-item
-type-specifier -> short
+type-specifier -> short
 type-specifier -> int
 declaration-specifiers-opt -> epsilon
 declaration-specifiers -> type-specifier declaration-specifiers-opt
@@ -643,7 +643,7 @@ init-declarator-list-opt -> init-declarator-list
 declaration -> declaration-specifiers init-declarator-list-opt ;
 block-item -> declaration
 block-item-list -> block-item-list block-item
-type-specifier -> double
+type-specifier -> double
 declaration-specifiers-opt -> epsilon
 declaration-specifiers -> type-specifier declaration-specifiers-opt
 pointer-opt -> epsilon
@@ -673,7 +673,7 @@ init-declarator-list-opt -> init-declarator-list
 declaration -> declaration-specifiers init-declarator-list-opt ;
 block-item -> declaration
 block-item-list -> block-item-list block-item
-type-specifier -> long
+type-specifier -> long
 type-specifier -> double
 declaration-specifiers-opt -> epsilon
 declaration-specifiers -> type-specifier declaration-specifiers-opt
@@ -688,7 +688,7 @@ init-declarator-list-opt -> init-declarator-list
 declaration -> declaration-specifiers init-declarator-list-opt ;
 block-item -> declaration
 block-item-list -> block-item-list block-item
-primary-expression -> identifier
+primary-expression -> identifier
 postfix-expression -> primary-expression
 unary-expression -> postfix-expression
 assignment-operator -> =
@@ -716,7 +716,7 @@ expression-statement -> expression-opt ;
 statement -> expression-statement
 block-item -> statement
 block-item-list -> block-item-list block-item
-type-specifier -> char
+type-specifier -> char
 declaration-specifiers-opt -> epsilon
 declaration-specifiers -> type-specifier declaration-specifiers-opt
 pointer-opt -> epsilon
@@ -746,7 +746,7 @@ init-declarator-list-opt -> init-declarator-list
 declaration -> declaration-specifiers init-declarator-list-opt ;
 block-item -> declaration
 block-item-list -> block-item-list block-item
-type-specifier -> char
+type-specifier -> char
 declaration-specifiers-opt -> epsilon
 declaration-specifiers -> type-specifier declaration-specifiers-opt
 type-qualifier-list-opt -> epsilon
@@ -777,7 +777,7 @@ init-declarator-list-opt -> init-declarator-list
 declaration -> declaration-specifiers init-declarator-list-opt ;
 block-item -> declaration
 block-item-list -> block-item-list block-item
-identifier-opt -> identifier
+identifier-opt -> identifier
 enumerator -> enumeration-constant
 enumerator-list -> enumerator
 enumerator -> enumeration-constant
@@ -800,7 +800,7 @@ init-declarator-list-opt -> epsilon
 declaration -> declaration-specifiers init-declarator-list-opt ;
 block-item -> declaration
 block-item-list -> block-item-list block-item
-enum-specifier -> enum identifier
+enum-specifier -> enum identifier
 type-specifier -> enum-specifier
 declaration-specifiers-opt -> epsilon
 declaration-specifiers -> type-specifier declaration-specifiers-opt
@@ -830,7 +830,7 @@ init-declarator-list-opt -> init-declarator-list
 declaration -> declaration-specifiers init-declarator-list-opt ;
 block-item -> declaration
 block-item-list -> block-item-list block-item
-primary-expression -> identifier
+primary-expression -> identifier
 postfix-expression -> primary-expression
 postfix-expression -> postfix-expression ++
 unary-expression -> postfix-expression
@@ -853,7 +853,7 @@ expression-statement -> expression-opt ;
 statement -> expression-statement
 block-item -> statement
 block-item-list -> block-item
-block-item-list-opt -> block-item-list
+block-item-list-opt -> block-item-list
 compound-statement -> { block-item-list-opt }
 statement -> compound-statement
 primary-expression -> identifier
@@ -886,7 +886,7 @@ iteration-statement -> do statement while ( expression ) ;
 statement -> iteration-statement
 block-item -> statement
 block-item-list -> block-item-list block-item
-primary-expression -> identifier
+primary-expression -> identifier
 postfix-expression -> primary-expression
 unary-expression -> postfix-expression
 cast-expression -> unary-expression
@@ -912,7 +912,7 @@ logical-OR-expression -> logical-AND-expression
 conditional-expression -> logical-OR-expression
 assignment-expression -> conditional-expression
 expression -> assignment-expression
-primary-expression -> identifier
+primary-expression -> identifier
 postfix-expression -> primary-expression
 postfix-expression -> postfix-expression ++
 unary-expression -> postfix-expression
@@ -935,14 +935,14 @@ expression-statement -> expression-opt ;
 statement -> expression-statement
 block-item -> statement
 block-item-list -> block-item
-block-item-list-opt -> block-item-list
+block-item-list-opt -> block-item-list
 compound-statement -> { block-item-list-opt }
 statement -> compound-statement
 iteration-statement -> while ( expression ) statement
 statement -> iteration-statement
 block-item -> statement
 block-item-list -> block-item-list block-item
-type-specifier -> int
+type-specifier -> int
 declaration-specifiers-opt -> epsilon
 declaration-specifiers -> type-specifier declaration-specifiers-opt
 pointer-opt -> epsilon
@@ -1016,18 +1016,18 @@ conditional-expression -> logical-OR-expression
 assignment-expression -> conditional-expression
 expression -> assignment-expression
 expression-opt -> expression
-jump-statement -> continue ;
+jump-statement -> continue ;
 statement -> jump-statement
 block-item -> statement
 block-item-list -> block-item
-block-item-list-opt -> block-item-list
+block-item-list-opt -> block-item-list
 compound-statement -> { block-item-list-opt }
 statement -> compound-statement
 iteration-statement -> for ( declaration expression-opt ; expression-opt ) statement
 statement -> iteration-statement
 block-item -> statement
 block-item-list -> block-item-list block-item
-primary-expression -> identifier
+primary-expression -> identifier
 postfix-expression -> primary-expression
 unary-expression -> postfix-expression
 cast-expression -> unary-expression
@@ -1054,7 +1054,7 @@ logical-OR-expression -> logical-AND-expression
 conditional-expression -> logical-OR-expression
 assignment-expression -> conditional-expression
 expression -> assignment-expression
-primary-expression -> identifier
+primary-expression -> identifier
 postfix-expression -> primary-expression
 unary-expression -> postfix-expression
 assignment-operator -> =
@@ -1081,10 +1081,10 @@ expression-statement -> expression-opt ;
 statement -> expression-statement
 block-item -> statement
 block-item-list -> block-item
-block-item-list-opt -> block-item-list
+block-item-list-opt -> block-item-list
 compound-statement -> { block-item-list-opt }
 statement -> compound-statement
-primary-expression -> identifier
+primary-expression -> identifier
 postfix-expression -> primary-expression
 unary-expression -> postfix-expression
 assignment-operator -> =
@@ -1111,14 +1111,478 @@ expression-statement -> expression-opt ;
 statement -> expression-statement
 block-item -> statement
 block-item-list -> block-item
-block-item-list-opt -> block-item-list
+block-item-list-opt -> block-item-list
 compound-statement -> { block-item-list-opt }
 statement -> compound-statement
 selection-statement -> if ( expression ) statement else statement
 statement -> selection-statement
 block-item -> statement
 block-item-list -> block-item-list block-item
-constant -> integer-constant
+type-specifier -> int
+declaration-specifiers-opt -> epsilon
+declaration-specifiers -> type-specifier declaration-specifiers-opt
+pointer-opt -> epsilon
+direct-declarator -> identifier
+declarator -> pointer-opt direct-declarator
+init-declarator -> declarator
+init-declarator-list -> init-declarator
+pointer-opt -> epsilon
+direct-declarator -> identifier
+declarator -> pointer-opt direct-declarator
+init-declarator -> declarator
+init-declarator-list -> init-declarator-list , init-declarator
+init-declarator-list-opt -> init-declarator-list
+declaration -> declaration-specifiers init-declarator-list-opt ;
+block-item -> declaration
+block-item-list -> block-item-list block-item
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+assignment-operator -> =
+constant -> integer-constant
+primary-expression -> constant
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> shift-expression
+equality-expression -> relational-expression
+AND-expression -> equality-expression
+exclusive-OR-expression -> AND-expression
+inclusive-OR-expression -> exclusive-OR-expression
+logical-AND-expression -> inclusive-OR-expression
+logical-OR-expression -> logical-AND-expression
+conditional-expression -> logical-OR-expression
+assignment-expression -> conditional-expression
+assignment-expression -> unary-expression assignment-operator assignment-expression
+expression -> assignment-expression
+expression-opt -> expression
+expression-statement -> expression-opt ;
+statement -> expression-statement
+block-item -> statement
+block-item-list -> block-item-list block-item
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+assignment-operator -> =
+constant -> integer-constant
+primary-expression -> constant
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> shift-expression
+equality-expression -> relational-expression
+AND-expression -> equality-expression
+exclusive-OR-expression -> AND-expression
+inclusive-OR-expression -> exclusive-OR-expression
+logical-AND-expression -> inclusive-OR-expression
+logical-OR-expression -> logical-AND-expression
+conditional-expression -> logical-OR-expression
+assignment-expression -> conditional-expression
+assignment-expression -> unary-expression assignment-operator assignment-expression
+expression -> assignment-expression
+expression-opt -> expression
+expression-statement -> expression-opt ;
+statement -> expression-statement
+block-item -> statement
+block-item-list -> block-item-list block-item
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+assignment-operator -> =
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> shift-expression
+equality-expression -> relational-expression
+AND-expression -> equality-expression
+exclusive-OR-expression -> AND-expression
+inclusive-OR-expression -> exclusive-OR-expression
+logical-AND-expression -> inclusive-OR-expression
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> shift-expression
+equality-expression -> relational-expression
+AND-expression -> equality-expression
+exclusive-OR-expression -> AND-expression
+inclusive-OR-expression -> exclusive-OR-expression
+logical-AND-expression -> logical-AND-expression && inclusive-OR-expression
+logical-OR-expression -> logical-AND-expression
+conditional-expression -> logical-OR-expression
+assignment-expression -> conditional-expression
+assignment-expression -> unary-expression assignment-operator assignment-expression
+expression -> assignment-expression
+expression-opt -> expression
+expression-statement -> expression-opt ;
+statement -> expression-statement
+block-item -> statement
+block-item-list -> block-item-list block-item
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+assignment-operator -> =
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> shift-expression
+equality-expression -> relational-expression
+AND-expression -> equality-expression
+exclusive-OR-expression -> AND-expression
+inclusive-OR-expression -> exclusive-OR-expression
+logical-AND-expression -> inclusive-OR-expression
+logical-OR-expression -> logical-AND-expression
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> shift-expression
+equality-expression -> relational-expression
+AND-expression -> equality-expression
+exclusive-OR-expression -> AND-expression
+inclusive-OR-expression -> exclusive-OR-expression
+logical-AND-expression -> inclusive-OR-expression
+logical-OR-expression -> logical-OR-expression || logical-AND-expression
+conditional-expression -> logical-OR-expression
+assignment-expression -> conditional-expression
+assignment-expression -> unary-expression assignment-operator assignment-expression
+expression -> assignment-expression
+expression-opt -> expression
+expression-statement -> expression-opt ;
+statement -> expression-statement
+block-item -> statement
+block-item-list -> block-item-list block-item
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+assignment-operator -> =
+unary-operator -> !
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+unary-expression -> unary-operator cast-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> shift-expression
+equality-expression -> relational-expression
+AND-expression -> equality-expression
+exclusive-OR-expression -> AND-expression
+inclusive-OR-expression -> exclusive-OR-expression
+logical-AND-expression -> inclusive-OR-expression
+logical-OR-expression -> logical-AND-expression
+conditional-expression -> logical-OR-expression
+assignment-expression -> conditional-expression
+assignment-expression -> unary-expression assignment-operator assignment-expression
+expression -> assignment-expression
+expression-opt -> expression
+expression-statement -> expression-opt ;
+statement -> expression-statement
+block-item -> statement
+block-item-list -> block-item-list block-item
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+assignment-operator -> =
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> shift-expression
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> relational-expression < shift-expression
+equality-expression -> relational-expression
+AND-expression -> equality-expression
+exclusive-OR-expression -> AND-expression
+inclusive-OR-expression -> exclusive-OR-expression
+logical-AND-expression -> inclusive-OR-expression
+logical-OR-expression -> logical-AND-expression
+conditional-expression -> logical-OR-expression
+assignment-expression -> conditional-expression
+assignment-expression -> unary-expression assignment-operator assignment-expression
+expression -> assignment-expression
+expression-opt -> expression
+expression-statement -> expression-opt ;
+statement -> expression-statement
+block-item -> statement
+block-item-list -> block-item-list block-item
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+assignment-operator -> =
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> shift-expression
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> relational-expression > shift-expression
+equality-expression -> relational-expression
+AND-expression -> equality-expression
+exclusive-OR-expression -> AND-expression
+inclusive-OR-expression -> exclusive-OR-expression
+logical-AND-expression -> inclusive-OR-expression
+logical-OR-expression -> logical-AND-expression
+conditional-expression -> logical-OR-expression
+assignment-expression -> conditional-expression
+assignment-expression -> unary-expression assignment-operator assignment-expression
+expression -> assignment-expression
+expression-opt -> expression
+expression-statement -> expression-opt ;
+statement -> expression-statement
+block-item -> statement
+block-item-list -> block-item-list block-item
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+assignment-operator -> =
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> shift-expression
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> relational-expression <= shift-expression
+equality-expression -> relational-expression
+AND-expression -> equality-expression
+exclusive-OR-expression -> AND-expression
+inclusive-OR-expression -> exclusive-OR-expression
+logical-AND-expression -> inclusive-OR-expression
+logical-OR-expression -> logical-AND-expression
+conditional-expression -> logical-OR-expression
+assignment-expression -> conditional-expression
+assignment-expression -> unary-expression assignment-operator assignment-expression
+expression -> assignment-expression
+expression-opt -> expression
+expression-statement -> expression-opt ;
+statement -> expression-statement
+block-item -> statement
+block-item-list -> block-item-list block-item
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+assignment-operator -> =
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> shift-expression
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> relational-expression >= shift-expression
+equality-expression -> relational-expression
+AND-expression -> equality-expression
+exclusive-OR-expression -> AND-expression
+inclusive-OR-expression -> exclusive-OR-expression
+logical-AND-expression -> inclusive-OR-expression
+logical-OR-expression -> logical-AND-expression
+conditional-expression -> logical-OR-expression
+assignment-expression -> conditional-expression
+assignment-expression -> unary-expression assignment-operator assignment-expression
+expression -> assignment-expression
+expression-opt -> expression
+expression-statement -> expression-opt ;
+statement -> expression-statement
+block-item -> statement
+block-item-list -> block-item-list block-item
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+assignment-operator -> =
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> shift-expression
+equality-expression -> relational-expression
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> shift-expression
+equality-expression -> equality-expression == relational-expression
+AND-expression -> equality-expression
+exclusive-OR-expression -> AND-expression
+inclusive-OR-expression -> exclusive-OR-expression
+logical-AND-expression -> inclusive-OR-expression
+logical-OR-expression -> logical-AND-expression
+conditional-expression -> logical-OR-expression
+assignment-expression -> conditional-expression
+assignment-expression -> unary-expression assignment-operator assignment-expression
+expression -> assignment-expression
+expression-opt -> expression
+expression-statement -> expression-opt ;
+statement -> expression-statement
+block-item -> statement
+block-item-list -> block-item-list block-item
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+assignment-operator -> =
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> shift-expression
+equality-expression -> relational-expression
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+relational-expression -> shift-expression
+equality-expression -> equality-expression != relational-expression
+AND-expression -> equality-expression
+exclusive-OR-expression -> AND-expression
+inclusive-OR-expression -> exclusive-OR-expression
+logical-AND-expression -> inclusive-OR-expression
+logical-OR-expression -> logical-AND-expression
+conditional-expression -> logical-OR-expression
+assignment-expression -> conditional-expression
+assignment-expression -> unary-expression assignment-operator assignment-expression
+expression -> assignment-expression
+expression-opt -> expression
+expression-statement -> expression-opt ;
+statement -> expression-statement
+block-item -> statement
+block-item-list -> block-item-list block-item
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+assignment-operator -> =
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> shift-expression << additive-expression
+relational-expression -> shift-expression
+equality-expression -> relational-expression
+AND-expression -> equality-expression
+exclusive-OR-expression -> AND-expression
+inclusive-OR-expression -> exclusive-OR-expression
+logical-AND-expression -> inclusive-OR-expression
+logical-OR-expression -> logical-AND-expression
+conditional-expression -> logical-OR-expression
+assignment-expression -> conditional-expression
+assignment-expression -> unary-expression assignment-operator assignment-expression
+expression -> assignment-expression
+expression-opt -> expression
+expression-statement -> expression-opt ;
+statement -> expression-statement
+block-item -> statement
+block-item-list -> block-item-list block-item
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+assignment-operator -> =
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> additive-expression
+primary-expression -> identifier
+postfix-expression -> primary-expression
+unary-expression -> postfix-expression
+cast-expression -> unary-expression
+multiplicative-expression -> cast-expression
+additive-expression -> multiplicative-expression
+shift-expression -> shift-expression >> additive-expression
+relational-expression -> shift-expression
+equality-expression -> relational-expression
+AND-expression -> equality-expression
+exclusive-OR-expression -> AND-expression
+inclusive-OR-expression -> exclusive-OR-expression
+logical-AND-expression -> inclusive-OR-expression
+logical-OR-expression -> logical-AND-expression
+conditional-expression -> logical-OR-expression
+assignment-expression -> conditional-expression
+assignment-expression -> unary-expression assignment-operator assignment-expression
+expression -> assignment-expression
+expression-opt -> expression
+expression-statement -> expression-opt ;
+statement -> expression-statement
+block-item -> statement
+block-item-list -> block-item-list block-item
+constant -> integer-constant
 primary-expression -> constant
 postfix-expression -> primary-expression
 unary-expression -> postfix-expression
@@ -1141,7 +1605,7 @@ jump-statement -> return expression-opt ;
 statement -> jump-statement
 block-item -> statement
 block-item-list -> block-item-list block-item
-block-item-list-opt -> block-item-list
+block-item-list-opt -> block-item-list
 compound-statement -> { block-item-list-opt }
 function-definition --> declaration-specifiers declarator declaration-list-opt compound-statement
 external-declaration -> function-definition
