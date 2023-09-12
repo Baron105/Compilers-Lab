@@ -7,11 +7,11 @@
     Assignment 3 - Lexer for tinyC
 */
 
-struct point
-{
-    int x_coord;
-    int y_coord;
-} *p1;
+// struct point
+// {
+//     int x_coord;
+//     int y_coord;
+// } *p1;
 
 int max(int x, int y)
 {
@@ -81,8 +81,8 @@ int main()
         alpha1 = c;
     }
 
-    p1->x_coord = 10;
-    p1->y_coord = 20;
+    // p1->x_coord = 10;
+    // p1->y_coord = 20;
 
     return 0;
 }
