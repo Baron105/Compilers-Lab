@@ -81,8 +81,8 @@ int main()
         alpha1 = c;
     }
 
-    // p1->x_coord = 10;
-    // p1->y_coord = 20;
+    p1->x_coord = 10;
+    p1->y_coord = 20;
 
     int x,y;
 
