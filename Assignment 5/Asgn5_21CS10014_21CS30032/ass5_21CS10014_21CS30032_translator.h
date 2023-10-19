@@ -47,7 +47,7 @@ public:
     int size;
     int offset;
     symbol_table* nested_table;
-    symbol(string name, string type, symbol_type* t, int size = 0);
+    symbol(string name, string type, symbol_type* t = NULL, int size = 0);
     symbol* update(symbol_type* type);
 };
 
@@ -61,7 +61,7 @@ public:
 
     symbol_table(string name = "", symbol_table* parent = NULL);
     symbol* lookup(string name);
-    symbol* gentemp(symbol_type* type);
+    static symbol* gentemp(symbol_type* type, string init = "");
 
     void print_st();
     void update();
@@ -151,7 +151,7 @@ list<int> merge(list<int> &, list<int> &);
 // function definition for backpatch
 // it takes a list of indices of the quads and a target label
 // it inserts the label at the target of all the quads in the list
-void backpatch(list<int> &, int );
+void backpatch(list<int> , int );
 
 // functions to carry out typecheck 
 // it takes two symbols and checks if they are of same type
