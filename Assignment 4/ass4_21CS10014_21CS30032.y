@@ -1,10 +1,16 @@
 %{
-    #include <stdio.h>
-    extern int yylex();
-    extern int yylineno;
-    extern char* yytext;
-    void yyerror(char* s);
+    #include <iostream>
+    #include "ass5_19CS10014_19CS30032_translator.h"
+    using namespace std;
+
+    extern int yylex();         
+    void yyerror(string s);     
+    extern char* yytext;        
+    extern int yylineno;        
+    extern string varType;      
 %}
+
+// Changes to be made here
 
 %union {
     int intval;
@@ -35,6 +41,8 @@
 %start translation_unit
 
 %%
+
+// End of changes to declaration
 
 primary_expression
     : IDENTIFIER { printf("primary-expression -> identifier\n"); }

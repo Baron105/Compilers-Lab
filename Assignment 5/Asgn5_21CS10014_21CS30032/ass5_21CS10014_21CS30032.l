@@ -1,9 +1,11 @@
 %{
     #include <stdio.h>
-    #include "y.tab.h"
+    #include "ass5_21CS10014_21CS30032.tab.h"
+    #include "ass5_19CS10014_19CS300032_translator.h"
 %}
 
 %option yylineno
+%option noyywrap
 
 /* comments */
 SINGLELINE_COMMENT                  [/][/][^\n]*
