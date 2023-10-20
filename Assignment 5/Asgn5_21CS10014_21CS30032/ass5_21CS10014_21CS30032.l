@@ -142,7 +142,7 @@ WS                                  [ \t\n]
 "#"                                 { return HASH; }
 
 
-{IDENTIFIER}                        { return IDENTIFIER; }
+{IDENTIFIER}                        { ;return IDENTIFIER; }
 
 {INTEGER_CONSTANT}                  { return INTEGER_CONSTANT; }
 {FLOATING_CONSTANT}                 { return FLOATING_CONSTANT; }
