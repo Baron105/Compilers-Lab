@@ -142,13 +142,13 @@ WS                                  [ \t\n]
 "#"                                 { return HASH; }
 
 
-{IDENTIFIER}                        { ;return IDENTIFIER; }
+{IDENTIFIER}                        {yyval.sym = current_symbol_table->lookup(yytext) ;return IDENTIFIER; }
 
-{INTEGER_CONSTANT}                  { return INTEGER_CONSTANT; }
+{INTEGER_CONSTANT}                  { yyval.intval = atoi(yytext) ;return INTEGER_CONSTANT; }
 {FLOATING_CONSTANT}                 { return FLOATING_CONSTANT; }
 
-{CHAR_CONSTANT}                     { return CHAR_CONSTANT; }
-{STRING_LITERAL}                    { return STRING_LITERAL; }
+{CHAR_CONSTANT}                     {yyval.charval = yytext ;return CHAR_CONSTANT; }
+{STRING_LITERAL}                    { yyval.strval = yytext return STRING_LITERAL; }
 
 {WS}                                {/* ignore whitespace */}
 %%
