@@ -12,6 +12,7 @@ int symbol_table_counter;
 string current_block_name;
 
 // string last_var_type;
+string var_type;
 
 symbol::symbol(string name, string t, symbol_type* st, int size):
     name(name), type(st), value("x"), size(size), offset(0), nested_table(NULL) {

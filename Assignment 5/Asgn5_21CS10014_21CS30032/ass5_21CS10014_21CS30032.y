@@ -1,6 +1,6 @@
 %{
     #include <iostream>
-    #include "ass5_19CS10014_19CS30032_translator.h"
+    #include "ass5_21CS10014_21CS30032_translator.h"
     using namespace std;
 
     extern int yylex();         
@@ -56,145 +56,586 @@
 %type <stmt> statement compound_statement loop_statement jump_statement labeled_statement selection_statement iteration_statement expression_statement block_item_list_opt block_item_list block_item
 
 
+// Some NON terminal symbols to be defined 
+
+
+// ----------------------x------------------
+
+
+
+
 primary_expression
-    : IDENTIFIER { printf("primary-expression -> identifier\n"); }
-    | constant { printf("primary-expression -> constant\n"); }
-    | STRING_LITERAL { printf("primary-expression -> string-literal\n"); }
-    | ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE { printf("primary-expression -> ( expression )\n"); }
+    : IDENTIFIER { $$ = new expression(); $$->loc = $1 ; $$->type = "non_bool"; }
+    | constant { $$ = new expression(); $$->loc = $1 ; }
+    | STRING_LITERAL { $$ new expression() ; $$->loc = symbol_table :: gentemp(new symbol_type("ptr"),$1); $$->loc->type->ptr = new symbol_type("char"); }
+    | ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE { $$ = $2 ; }
     ;
 
 constant
-    : INTEGER_CONSTANT { printf("constant -> integer-constant\n"); }
-    | FLOATING_CONSTANT { printf("constant -> floating-constant\n"); }
-    | CHAR_CONSTANT { printf("constant -> character-constant\n"); }
+    : INTEGER_CONSTANT {
+        $$ = symbol_table :: gentemp(new symbol_type("int"),int2string($1));
+        emit("=",$$->name,$1);
+    }
+    | FLOATING_CONSTANT { 
+        $$ = symbol_table :: gentemp(new symbol_type("float"),float2string($1));
+        emit("=",$$->name,$1);
+     }
+    | CHAR_CONSTANT {
+        $$ = symbol_table :: gentemp(new symbol_type("char"),string($1));
+        emit("=",$$->name,$1);
+    }
     ;
 
 postfix_expression
-    : primary_expression { printf("postfix-expression -> primary-expression\n"); }
-    | postfix_expression SQUARE_BRACKET_OPEN expression SQUARE_BRACKET_CLOSE { printf("postfix-expression -> postfix-expression [ expression ]\n"); }
-    | postfix_expression ROUND_BRACKET_OPEN ROUND_BRACKET_CLOSE { printf("postfix-expression -> postfix-expression ( )\n"); }
-    | postfix_expression ROUND_BRACKET_OPEN argument_expression_list_opt ROUND_BRACKET_CLOSE { printf("postfix-expression -> postfix-expression ( argument-expression-list )\n"); }
-    | postfix_expression DOT IDENTIFIER { printf("postfix-expression -> postfix-expression . identifier\n"); }
-    | postfix_expression ARROW IDENTIFIER { printf("postfix-expression -> postfix-expression -> identifier\n"); }
-    | postfix_expression INCREMENT { printf("postfix-expression -> postfix-expression ++\n"); }
-    | postfix_expression DECREMENT { printf("postfix-expression -> postfix-expression --\n"); }
-    | ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE CURLY_BRACKET_OPEN initializer_list CURLY_BRACKET_CLOSE { printf("postfix-expression -> ( type-name ) { initializer-list }\n"); }
-    | ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE CURLY_BRACKET_OPEN initializer_list COMMA CURLY_BRACKET_CLOSE { printf("postfix-expression -> ( type-name ) { initializer-list , }\n"); }
+    : primary_expression {
+        $$ = new Array();
+        $$->arr = $1->loc;
+        $$->type = $1->loc->type;
+        $$->loc = $$->arr;
+
+    }
+    | postfix_expression SQUARE_BRACKET_OPEN expression SQUARE_BRACKET_CLOSE {
+        $$ = new Array();
+        $$->type = $1->type->ptr;
+        $$->arr = $1->arr;
+        $$->loc = symbol_table :: gentemp(new symbol_type("int"));
+        $$->arrtype = "arr";
+
+        if($1->arrtype == "arr")
+        {
+            symbol * symb = symbol_table :: gentemp(new symbol_type("int"));
+            int size  = getsize($$->type);
+            emit("+",symb->name,%3->loc->name,int2string(size));
+            emit("+",$$->loc->name,$1->loc->name,symb->name);
+        }
+        else 
+        {
+            int size = getsize($$->type);
+            emit("+",$$->loc->name,$3->loc->name,int2string(size));
+        }
+    }
+    | postfix_expression ROUND_BRACKET_OPEN ROUND_BRACKET_CLOSE 
+    { /* nothin */}
+    | postfix_expression ROUND_BRACKET_OPEN argument_expression_list_opt ROUND_BRACKET_CLOSE { 
+        // Corresponds to calling a function with the  function name and the appropriate number of parameters
+        $$ = new Array();
+        $$->arr = symbol_table :: gentemp($1->type);
+        emit("call",$$->arr->name,$1->arr->name,int2string($3));
+    }
+    | postfix_expression DOT IDENTIFIER 
+    { /* nothin */}
+    | postfix_expression ARROW IDENTIFIER 
+    { /* nothin */}
+    | postfix_expression INCREMENT {
+        $$ = new Array();
+        $$->arr = symbol_table :: gentemp($1->arr->type);
+        emit("=",$$->arr->name,$1->arr->name);
+        emit("+",$1->arr->name,$1->arr->name,"1");
+    }
+    | postfix_expression DECREMENT {
+        $$ = new Array();
+        $$->arr = symbol_table :: gentemp($1->arr->type);
+        emit("=",$$->arr->name,$1->arr->name);
+        emit("-",$1->arr->name,$1->arr->name,"1");
+    }
+    | ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE CURLY_BRACKET_OPEN initializer_list CURLY_BRACKET_CLOSE 
+    { /* nothin */}
+    | ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE CURLY_BRACKET_OPEN initializer_list COMMA CURLY_BRACKET_CLOSE 
+    { /* nothin */}
     ;
 
 argument_expression_list_opt
-    : argument_expression_list { printf("argument-expression-list-opt -> argument-expression-list\n"); }
-    | { printf("argument-expression-list-opt -> epsilon\n"); }
+    : argument_expression_list {$$ = $1;}
+    | { $$ = 0; }
     ;
 
 argument_expression_list 
-    : assignment_expression { printf("argument-expression-list -> assignment-expression\n"); }
-    | argument_expression_list COMMA assignment_expression { printf("argument-expression-list -> argument-expression-list , assignment-expression\n"); }
+    : assignment_expression {
+        $$ = 1;
+        emit("param",$1->loc->name);
+    }
+    | argument_expression_list COMMA assignment_expression { 
+        $$ = $1 + 1;
+        emit("param",$3->loc->name);
+    }
     ;
 
 unary_expression
-    : postfix_expression { printf("unary-expression -> postfix-expression\n"); }
-    | INCREMENT unary_expression { printf("unary-expression -> ++ unary-expression\n"); }
-    | DECREMENT unary_expression { printf("unary-expression -> -- unary-expression\n"); }
-    | unary_operator cast_expression { printf("unary-expression -> unary-operator cast-expression\n"); }
-    | SIZEOF unary_expression { printf("unary-expression -> sizeof unary-expression\n"); }
-    | SIZEOF ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE { printf("unary-expression -> sizeof ( type-name )\n"); }
+    : postfix_expression {$$ = $1;}
+    | INCREMENT unary_expression {
+        emit("+",$2->arr->name,$2->arr->name,"1");
+        $$ = $2;
+    }
+    | DECREMENT unary_expression {
+        emit("-",$2->arr->name,$2->arr->name,"1");
+        $$ = $2;
+    }
+    | unary_operator cast_expression {
+        $$ = new Array();
+        switch($1)
+        {
+            case '&' : 
+                $$->arr = symbol_table :: gentemp(new symbol_type("ptr"));
+                $$->arr->type->ptr = $2->arr->type;
+                emit("= &",$$->arr->name,$2->arr->name);
+                break;
+            
+            case '*' :
+                $$->arrtype = "ptr" ;
+                $$->loc = symbol_table :: gentemp($2->arr->type->ptr);
+                $$->arr = $2->arr;
+                emit("= *",$$->loc->name,$2->arr->name);
+                break;
+            
+            case '+' :
+                $$ = $2;
+                break;
+
+            case '-' :
+                $$->arr = symbol_table :: gentemp($2->arr->type->type);
+                emit("= -",$$->arr->name,$2->arr->name);
+                break;
+
+            case '~' :
+                $$->arr = symbol_table :: gentemp($2->arr->type->type);
+                emit("= ~",$$->arr->name,$2->arr->name);
+                break;
+            
+            case '!' :
+                $$->arr = symbol_table :: gentemp($2->arr->type->type);
+                emit("= !",$$->arr->name,$2->arr->name);
+                break;
+        }
+    }
+    | SIZEOF unary_expression 
+    { /* nothin */}
+    | SIZEOF ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE 
+    { /* nothin */}
     ;
 
 unary_operator
-    : BITWISE_AND { printf("unary-operator -> &\n"); }
-    | MULTIPLY { printf("unary-operator -> *\n"); }
-    | PLUS { printf("unary-operator -> +\n"); }
-    | MINUS { printf("unary-operator -> -\n"); }
-    | BITWISE_NOT { printf("unary-operator -> ~\n"); }
-    | LOGICAL_NOT { printf("unary-operator -> !\n"); }
+    : BITWISE_AND { $$ = '&'; }
+    | MULTIPLY { $$ = '*';}
+    | PLUS { $$ = '+';}
+    | MINUS { $$ = '-';}
+    | BITWISE_NOT { $$ = '~';}
+    | LOGICAL_NOT { $$ = '!';}
     ;
 
 cast_expression
-    : unary_expression { printf("cast-expression -> unary-expression\n"); }
-    | ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE cast_expression { printf("cast-expression -> ( type-name ) cast-expression\n"); }
+    : unary_expression { $$ = $1; }
+    | ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE cast_expression {
+        $$ = new Array() ;
+        $$->arr = convertType($4->arr,varType);
+    }
     ;
 
 multiplicative_expression
-    : cast_expression { printf("multiplicative-expression -> cast-expression\n"); }
-    | multiplicative_expression MULTIPLY cast_expression { printf("multiplicative-expression -> multiplicative-expression * cast-expression\n"); }
-    | multiplicative_expression DIVIDE cast_expression { printf("multiplicative-expression -> multiplicative-expression / cast-expression\n"); }
-    | multiplicative_expression MODULO cast_expression { printf("multiplicative-expression -> multiplicative-expression %% cast-expression\n"); }
+    : cast_expression {
+        $$ = new expression();
+        if($1->arrtype == "arr")
+        {
+            $$->loc = symbol_table :: gentemp($1->loc->type);
+            emit("=[]",$$->loc->name,$1->arr->name,$1->loc->name);
+        }
+        else if($1->arrtype == "ptr")
+        {
+            $$->loc = $1->arr;
+        }
+        else 
+        {
+            $$->loc = $1->arr;
+        }
+    }
+    | multiplicative_expression MULTIPLY cast_expression {
+        
+        if(typecheck($1->loc,$3->arr))
+        {
+            $$ = new expression();
+            $$->loc = symbol_table :: gentemp(new symbol_type($1->loc->type->type));
+            emit("*",$$->loc->name,$1->loc->name,$3->arr->name);
+        }
+        else 
+        {
+            yyerror("Type mismatch");
+        }
+    }
+    | multiplicative_expression DIVIDE cast_expression {
+        
+        if(typecheck($1->loc,$3->arr))
+        {
+            $$ = new expression();
+            $$->loc = symbol_table :: gentemp(new symbol_type($1->loc->type->type));
+            emit("/",$$->loc->name,$1->loc->name,$3->arr->name);
+        }
+        else 
+        {
+            yyerror("Type mismatch");
+        }
+    }
+    | multiplicative_expression MODULO cast_expression {
+        
+        if(typecheck($1->loc,$3->arr))
+        {
+            $$ = new expression();
+            $$->loc = symbol_table :: gentemp(new symbol_type($1->loc->type->type));
+            emit("%",$$->loc->name,$1->loc->name,$3->arr->name);
+        }
+        else 
+        {
+            yyerror("Type mismatch");
+        }
+    }
     ;
 
 additive_expression
-    : multiplicative_expression { printf("additive-expression -> multiplicative-expression\n"); }
-    | additive_expression PLUS multiplicative_expression { printf("additive-expression -> additive-expression + multiplicative-expression\n"); }
-    | additive_expression MINUS multiplicative_expression { printf("additive-expression -> additive-expression - multiplicative-expression\n"); }
+    : multiplicative_expression { $$=$1; }
+    | additive_expression PLUS multiplicative_expression {
+
+        if(typecheck($1->loc,$3->arr))
+        {
+            $$ = new expression();
+            $$->loc = symbol_table :: gentemp(new symbol_type($1->loc->type->type));
+            emit("+",$$->loc->name,$1->loc->name,$3->arr->name);
+        }
+        else 
+        {
+            yyerror("Type mismatch");
+        }
+    }
+    | additive_expression MINUS multiplicative_expression {
+        
+        if(typecheck($1->loc,$3->arr))
+        {
+            $$ = new expression();
+            $$->loc = symbol_table :: gentemp(new symbol_type($1->loc->type->type));
+            emit("-",$$->loc->name,$1->loc->name,$3->arr->name);
+        }
+        else 
+        {
+            yyerror("Type mismatch");
+        }
+    }
     ;
 
 shift_expression
-    : additive_expression { printf("shift-expression -> additive-expression\n"); }
-    | shift_expression LEFT_SHIFT additive_expression { printf("shift-expression -> shift-expression << additive-expression\n"); }
-    | shift_expression RIGHT_SHIFT additive_expression { printf("shift-expression -> shift-expression >> additive-expression\n"); }
+    : additive_expression { $$=$1; }
+    | shift_expression LEFT_SHIFT additive_expression {
+        
+        if($3->loc->type->type == "int")
+        {
+            $$ = new expression();
+            $$->loc = symbol_table :: gentemp(new symbol_type("int"));
+            emit("<<",$$->loc->name,$1->loc->name,$3->loc->name);
+        }
+        else 
+        {
+            yyerror("Type mismatch");
+        }
+    }
+    | shift_expression RIGHT_SHIFT additive_expression {
+        
+        if($3->loc->type->type == "int")
+        {
+            $$ = new expression();
+            $$->loc = symbol_table :: gentemp(new symbol_type("int"));
+            emit(">>",$$->loc->name,$1->loc->name,$3->loc->name);
+        }
+        else 
+        {
+            yyerror("Type mismatch");
+        }
+    }
     ;
 
 relational_expression
-    : shift_expression { printf("relational-expression -> shift-expression\n"); }
-    | relational_expression LESS_THAN shift_expression { printf("relational-expression -> relational-expression < shift-expression\n"); }
-    | relational_expression GREATER_THAN shift_expression { printf("relational-expression -> relational-expression > shift-expression\n"); }
-    | relational_expression LESS_THAN_EQUAL shift_expression { printf("relational-expression -> relational-expression <= shift-expression\n"); }
-    | relational_expression GREATER_THAN_EQUAL shift_expression { printf("relational-expression -> relational-expression >= shift-expression\n"); }
+    : shift_expression { $$ = $1; }
+    | relational_expression LESS_THAN shift_expression
+    {
+        if(typecheck($1->loc ,$3->loc))
+        {
+            $$ = new expression();
+            $$->type = "bool";
+            $$->truelist = makelist(nextinstr());
+            $$->falselist = makelist(nextinstr()+1);
+            emit("<","",$1->loc->name,$3->loc->name);
+            emit("goto","");
+        }
+        else 
+        {
+            yyerror("Type mismatch");
+        }
+    }
+    | relational_expression GREATER_THAN shift_expression { 
+        if(typecheck($1->loc ,$3->loc))
+        {
+            $$ = new expression();
+            $$->type = "bool";
+            $$->truelist = makelist(nextinstr());
+            $$->falselist = makelist(nextinstr()+1);
+            emit(">","",$1->loc->name,$3->loc->name);
+            emit("goto","");
+        }
+        else 
+        {
+            yyerror("Type mismatch");
+        }
+     }
+    | relational_expression LESS_THAN_EQUAL shift_expression {
+        if(typecheck($1->loc ,$3->loc))
+        {
+            $$ = new expression();
+            $$->type = "bool";
+            $$->truelist = makelist(nextinstr());
+            $$->falselist = makelist(nextinstr()+1);
+            emit("<=","",$1->loc->name,$3->loc->name);
+            emit("goto","");
+        }
+        else 
+        {
+            yyerror("Type mismatch");
+        }
+    }
+    
+    | relational_expression GREATER_THAN_EQUAL shift_expression 
+    {
+        if(typecheck($1->loc ,$3->loc))
+        {
+            $$ = new expression();
+            $$->type = "bool";
+            $$->truelist = makelist(nextinstr());
+            $$->falselist = makelist(nextinstr()+1);
+            emit(">=","",$1->loc->name,$3->loc->name);
+            emit("goto","");
+        }
+        else 
+        {
+            yyerror("Type mismatch");
+        }
+    }
+    
     ;
 
 equality_expression
-    : relational_expression { printf("equality-expression -> relational-expression\n"); }
-    | equality_expression EQUAL relational_expression { printf("equality-expression -> equality-expression == relational-expression\n"); }
-    | equality_expression NOT_EQUAL relational_expression { printf("equality-expression -> equality-expression != relational-expression\n"); }
+    : relational_expression { $$ = $1; }
+    | equality_expression EQUAL relational_expression {
+        
+        if(typecheck($1->loc,$3->loc))
+        {
+            convertBoolToInt($1);
+            convertBoolToInt($3);
+            $$ = new expression();
+            $$->type = "bool";
+            $$->truelist = makelist(nextinstr());
+            $$->falselist = makelist(nextinstr()+1);
+            emit("==","",$1->loc->name,$3->loc->name);
+            emit("goto","");
+        }
+        else 
+        {
+            yyerror("Type mismatch");
+        }
+    }
+    | equality_expression NOT_EQUAL relational_expression {
+        
+        if(typecheck($1->loc,$3->loc))
+        {
+            convertBoolToInt($1);
+            convertBoolToInt($3);
+            $$ = new expression();
+            $$->type = "bool";
+            $$->truelist = makelist(nextinstr());
+            $$->falselist = makelist(nextinstr()+1);
+            emit("!=","",$1->loc->name,$3->loc->name);
+            emit("goto","");
+        }
+        else 
+        {
+            yyerror("Type mismatch");
+        }
+    }
     ;
 
 AND_expression
-    : equality_expression { printf("AND-expression -> equality-expression\n"); }
-    | AND_expression BITWISE_AND equality_expression { printf("AND-expression -> AND-expression & equality-expression\n"); }
+    : equality_expression { $$ = $1; }
+    | AND_expression BITWISE_AND equality_expression { 
+        
+        if(typecheck($1->loc,$3->loc))
+        {
+            convertBoolToInt($1);
+            convertBoolToInt($3);
+            $$ = new expression();
+            $$->type = "not_bool";
+            $$->loc = symbol_table :: gentemp(new symbol_type("int"));
+            emit("&",$$->loc->name,$1->loc->name,$3->loc->name);
+        }
+        else 
+        {
+            yyerror("Type mismatch");
+        }
+    }
     ;
 
 exclusive_OR_expression
-    : AND_expression { printf("exclusive-OR-expression -> AND-expression\n"); }
-    | exclusive_OR_expression BITWISE_XOR AND_expression { printf("exclusive-OR-expression -> exclusive-OR-expression ^ AND-expression\n"); }
+    : AND_expression { $$ = $1; }
+    | exclusive_OR_expression BITWISE_XOR AND_expression {
+        
+        if(typecheck($1->loc,$3->loc))
+        {
+            convertBoolToInt($1);
+            convertBoolToInt($3);
+            $$ = new expression();
+            $$->type = "not_bool";
+            $$->loc = symbol_table :: gentemp(new symbol_type("int"));
+            emit("^",$$->loc->name,$1->loc->name,$3->loc->name);
+        }
+        else 
+        {
+            yyerror("Type mismatch");
+        }
+    }
     ;
 
 inclusive_OR_expression
-    : exclusive_OR_expression { printf("inclusive-OR-expression -> exclusive-OR-expression\n"); }
-    | inclusive_OR_expression BITWISE_OR exclusive_OR_expression { printf("inclusive-OR-expression -> inclusive-OR-expression | exclusive-OR-expression\n"); }
+    : exclusive_OR_expression {$$ = $1;}
+    | inclusive_OR_expression BITWISE_OR exclusive_OR_expression {
+        
+        if(typecheck($1->loc,$3->loc))
+        {
+            convertBoolToInt($1);
+            convertBoolToInt($3);
+            $$ = new expression();
+            $$->type = "not_bool";
+            $$->loc = symbol_table :: gentemp(new symbol_type("int"));
+            emit("|",$$->loc->name,$1->loc->name,$3->loc->name);
+        }
+        else 
+        {
+            yyerror("Type mismatch");
+        }
+    }
     ;
 
 logical_AND_expression
-    : inclusive_OR_expression { printf("logical-AND-expression -> inclusive-OR-expression\n"); }
-    | logical_AND_expression LOGICAL_AND inclusive_OR_expression { printf("logical-AND-expression -> logical-AND-expression && inclusive-OR-expression\n"); }
+    : inclusive_OR_expression { $$ = $1; }
+    | logical_AND_expression LOGICAL_AND M inclusive_OR_expression {
+        
+        /* 
+            here we have made few changes to the grammar to incorporate non terminal M to handle backpatching
+        */
+
+        convertBoolToInt($1);
+        convertBoolToInt($4);
+        $$ = new expression();
+        $$->type = "bool";
+        backpatch($1->truelist,$3);
+        $$->truelist = $4->truelist;
+        $$->falselist = merge($1->falselist,$4->falselist);
+
+    }
     ;
 
 logical_OR_expression
-    : logical_AND_expression { printf("logical-OR-expression -> logical-AND-expression\n"); }
-    | logical_OR_expression LOGICAL_OR logical_AND_expression { printf("logical-OR-expression -> logical-OR-expression || logical-AND-expression\n"); }
+    : logical_AND_expression { $$ = $1; }
+    | logical_OR_expression LOGICAL_OR M logical_AND_expression {
+        
+        convertBoolToInt($1);
+        convertBoolToInt($4);
+        $$ = new expression();
+        $$->type = "bool";
+        backpatch($1->falselist,$3);
+        $$->truelist = merge($1->truelist,$4->truelist);
+        $$->falselist = $4->falselist;
+    }
     ;
 
 conditional_expression
-    : logical_OR_expression { printf("conditional-expression -> logical-OR-expression\n"); }
-    | logical_OR_expression QUESTION_MARK expression COLON conditional_expression { printf("conditional-expression -> logical-OR-expression ? expression : conditional-expression\n"); }
+    : logical_OR_expression { $$ = $1; }
+    | logical_OR_expression N QUESTION_MARK M expression N COLON M conditional_expression {
+        
+        /* 
+            here we have made few changes to the grammar to incorporate non terminal N and M to handle backpatching
+        */
+
+        $$->loc = symbol_table :: gentemp($5->loc->type);
+        $$->loc->update($5->loc->type);
+        emit("=", $$->loc->name, $9->loc->name);
+        list<int> l1 = makelist(nextinstr());
+        emit("goto", "");
+        backpatch($6->nextlist, nextinstr());
+        emit("=", $$->loc->name, $5->loc->name);
+        list<int> l2 = makelist(nextinstr());
+        l1=merge(l1,l2);
+        emit("goto", "");
+        backpatch($2->nextlist, nextinstr());
+        convertIntToBool($1);
+        backpatch($1->truelist,$4);
+        backpatch($1->falselist,$8);
+        backpatch(l1,nextinstr());
+    }
+    ;
+
+M:  {
+        // keeps track of the next instruction and is useful in backpatching
+
+        $$ = nextinstr();
+    }
+    ;
+
+N:  {
+        // helps in the handling control flow
+
+        $$ = new statement();
+        $$->nextlist = makelist(nextinstr());
+        emit("goto","");
+    }
     ;
 
 assignment_expression
-    : conditional_expression { printf("assignment-expression -> conditional-expression\n"); }
-    | unary_expression assignment_operator assignment_expression { printf("assignment-expression -> unary-expression assignment-operator assignment-expression\n"); }
+    : conditional_expression { $$ = $1; }
+    | unary_expression assignment_operator assignment_expression {
+        
+        if($1->arrtype == "arr")
+        {
+            $3->loc = convertType($3->loc,$1->type->type);
+            emit("[]=", $1->arr->name,$1->loc->name,$3->loc->name);
+        }
+        else if($1->arrtype == "ptr")
+        {
+            emit("*=", $1->arr->name,$3->loc->name);
+        }
+        else 
+        {
+            $3->loc = convertType($3->loc,$1->arr->type->type);
+            emit("=", $1->arr->name,$3->loc->name);
+        }
+        $$ = $3;
+    }
     ;
 
 assignment_operator
-    : ASSIGN { printf("assignment-operator -> =\n"); }
-    | MULTIPLY_ASSIGN { printf("assignment-operator -> *=\n"); }
-    | DIVIDE_ASSIGN { printf("assignment-operator -> /=\n"); }
-    | MODULO_ASSIGN { printf("assignment-operator -> %%=\n"); }
-    | PLUS_ASSIGN { printf("assignment-operator -> +=\n"); }
-    | MINUS_ASSIGN { printf("assignment-operator -> -=\n"); }
-    | LEFT_SHIFT_ASSIGN { printf("assignment-operator -> <<=\n"); }
-    | RIGHT_SHIFT_ASSIGN { printf("assignment-operator -> >>=\n"); }
-    | BITWISE_AND_ASSIGN { printf("assignment-operator -> &=\n"); }
-    | BITWISE_XOR_ASSIGN { printf("assignment-operator -> ^=\n"); }
-    | BITWISE_OR_ASSIGN { printf("assignment-operator -> |=\n"); }
+    : ASSIGN 
+    { /* nothin */}
+    | MULTIPLY_ASSIGN 
+    { /* nothin */}
+    | DIVIDE_ASSIGN 
+    { /* nothin */}
+    | MODULO_ASSIGN 
+    { /* nothin */}
+    | PLUS_ASSIGN 
+    { /* nothin */}
+    | MINUS_ASSIGN 
+    { /* nothin */}
+    | LEFT_SHIFT_ASSIGN 
+    { /* nothin */}
+    | RIGHT_SHIFT_ASSIGN 
+    { /* nothin */}
+    | BITWISE_AND_ASSIGN 
+    { /* nothin */}
+    | BITWISE_XOR_ASSIGN 
+    { /* nothin */}
+    | BITWISE_OR_ASSIGN 
+    { /* nothin */}
     ;
 
 expression
