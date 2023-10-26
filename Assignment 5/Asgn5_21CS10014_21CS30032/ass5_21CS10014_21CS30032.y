@@ -25,6 +25,7 @@
     symbol* sym;
     symbol_type* symtyp;
     Array* arr;
+    int instr;
 }
 
 %token AUTO BREAK CASE CHAR CONST CONTINUE DEFAULT DO DOUBLE ELSE ENUM EXTERN FLOAT FOR GOTO IF INLINE INT LONG REGISTER RESTRICT RETURN SHORT SIGNED SIZEOF STATIC STRUCT SWITCH TYPEDEF UNION UNSIGNED VOID VOLATILE WHILE BOOL COMPLEX IMAGINARY
@@ -58,6 +59,21 @@
 
 // Some NON terminal symbols to be defined 
 
+// The pointer non-terminal is treated with type symbolType
+%type <symtyp> pointer
+
+// Non-terminals of type symp (symbol*)
+%type <sym> constant initializer
+%type <sym> direct_declarator init_declarator declarator
+
+// Non-terminals of type arr
+%type <arr> postfix_expression unary_expression cast_expression
+
+// Auxiliary non-terminal M of type instr to help in backpatching
+%type <instr> M
+
+// Auxiliary non-terminal N of type stmt to help in control flow statements
+%type <stmt> N
 
 // ----------------------x------------------
 
