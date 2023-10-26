@@ -24,8 +24,11 @@ $(BASE).tab.h: $(BASE).y
 
 test :a.out
 	mkdir -p ./output_test_codes
-
 	./a.out < test_codes/ass5_21CS10014_21CS30032_test1.c > output_test_codes/ass5_21CS10014_21CS30032_quads1.out
+	./a.out < test_codes/ass5_21CS10014_21CS30032_test2.c > output_test_codes/ass5_21CS10014_21CS30032_quads2.out
+	./a.out < test_codes/ass5_21CS10014_21CS30032_test3.c > output_test_codes/ass5_21CS10014_21CS30032_quads3.out
+
+
 
 	@echo "\nTest outputs generated and written to ./test-outputs.\n"
 
