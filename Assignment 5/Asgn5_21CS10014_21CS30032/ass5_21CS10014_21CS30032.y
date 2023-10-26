@@ -39,8 +39,8 @@
 %token COMMA COLON SEMICOLON ELLIPSIS QUESTION_MARK HASH
 
 %token <intval> INTEGER_CONSTANT
-%token <floatval> FLOATING_CONSTANT
-%token <charval> CHAR_CONSTANT
+%token <strval> FLOATING_CONSTANT
+%token <strval> CHAR_CONSTANT
 %token <strval> STRING_LITERAL
 %token <sym> IDENTIFIER
 

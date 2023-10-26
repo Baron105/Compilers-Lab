@@ -145,9 +145,9 @@ WS                                  [ \t\n]
 {IDENTIFIER}                        { yylval.sym = current_symbol_table->lookup(yytext); return IDENTIFIER; }
 
 {INTEGER_CONSTANT}                  { yylval.intval = atoi(yytext); return INTEGER_CONSTANT; }
-{FLOATING_CONSTANT}                 { return FLOATING_CONSTANT; }
+{FLOATING_CONSTANT}                 { yylval.strval = yytext; return FLOATING_CONSTANT; }
 
-{CHAR_CONSTANT}                     { yylval.charval = yytext; return CHAR_CONSTANT; }
+{CHAR_CONSTANT}                     { yylval.strval = yytext; return CHAR_CONSTANT; }
 {STRING_LITERAL}                    { yylval.strval = yytext; return STRING_LITERAL; }
 
 {WS}                                {/* ignore whitespace */}
