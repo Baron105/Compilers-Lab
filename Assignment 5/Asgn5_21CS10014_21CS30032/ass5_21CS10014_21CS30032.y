@@ -17,11 +17,11 @@
     float floatval;
     char charval;
     char* strval;
-    char operator;
+    char op;
     int nparam;
     expression* expr;
     statement* stmt;
-    quad* q;
+    int bp;
     symbol* sym;
     symbol_type* symtyp;
     Array* arr;
@@ -50,16 +50,20 @@
 
 %start translation_unit
 
-%type <operator> unary_operator
+%type <op> unary_operator
 %type <nparam> argument_expression_list_opt argument_expression_list
-%type <expr> expression primary_expression multiplicative_expression additive_expression shift_expression relational_expression equality_expression AND_expression exclusive_OR_expression inclusive_OR_expression logical_AND_expression logical_OR_expression conditional_expression assignment_expression constant_expression
-%type <stmt> statement compound_statement loop_statement jump_statement labeled_statement selection_statement iteration_statement expression_statement block_item_list_opt block_item_list block_item
+%type <expr> expression primary_expression multiplicative_expression additive_expression shift_expression relational_expression equality_expression AND_expression exclusive_OR_expression inclusive_OR_expression logical_AND_expression logical_OR_expression conditional_expression assignment_expression constant_expression expression_statement
+%type <stmt> statement compound_statement loop_statement jump_statement labeled_statement selection_statement iteration_statement block_item_list_opt block_item_list block_item
+%type <symtyp> pointer
+%type <sym> direct_declarator declarator init_declarator constant initializer
+%type <arr> postfix_expression unary_expression cast_expression
+
+%type <bp> M
+%type <stmt> N
 
 
 // Some NON terminal symbols to be defined 
 
-
-// ----------------------x------------------
 
 
 %%
@@ -1015,10 +1019,12 @@ selection_statement
     ;
 
 iteration_statement
-    : WHILE ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE statement { printf("iteration-statement -> while ( expression ) statement\n"); }
-    | DO statement WHILE ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE SEMICOLON { printf("iteration-statement -> do statement while ( expression ) ;\n"); }
-    | FOR ROUND_BRACKET_OPEN expression_opt SEMICOLON expression_opt SEMICOLON expression_opt ROUND_BRACKET_CLOSE statement { printf("iteration-statement -> for ( expression-opt ; expression-opt ; expression-opt ) statement\n"); }
-    | FOR ROUND_BRACKET_OPEN declaration expression_opt SEMICOLON expression_opt ROUND_BRACKET_CLOSE statement { printf("iteration-statement -> for ( declaration expression-opt ; expression-opt ) statement\n"); }
+    :
+    // : WHILE ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE statement { printf("iteration-statement -> while ( expression ) statement\n"); }
+    // | DO statement WHILE ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE SEMICOLON { printf("iteration-statement -> do statement while ( expression ) ;\n"); }
+    // | FOR ROUND_BRACKET_OPEN expression_opt SEMICOLON expression_opt SEMICOLON expression_opt ROUND_BRACKET_CLOSE statement { printf("iteration-statement -> for ( expression-opt ; expression-opt ; expression-opt ) statement\n"); }
+    // | FOR ROUND_BRACKET_OPEN declaration expression_opt SEMICOLON expression_opt ROUND_BRACKET_CLOSE statement { printf("iteration-statement -> for ( declaration expression-opt ; expression-opt ) statement\n"); }
+    // ;
     ;
 
 F
