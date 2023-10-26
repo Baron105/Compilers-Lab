@@ -62,7 +62,7 @@
 // ----------------------x------------------
 
 
-
+%%
 
 primary_expression
     : IDENTIFIER { $$ = new expression(); $$->loc = $1 ; $$->type = "non_bool"; }
