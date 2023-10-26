@@ -147,7 +147,8 @@ postfix_expression
 
 argument_expression_list_opt
     : argument_expression_list {$$ = $1;}
-    | { $$ = 0; }
+    | %empty
+    { $$ = 0; }
     ;
 
 argument_expression_list 
@@ -576,14 +577,16 @@ conditional_expression
     }
     ;
 
-M:  {
+M:  %empty
+    {
         // keeps track of the next instruction and is useful in backpatching
 
         $$ = nextinstr();
     }
     ;
 
-N:  {
+N:  %empty
+    {
         // helps in the handling control flow
 
         $$ = new statement();
@@ -657,7 +660,8 @@ declaration
 
 init_declarator_list_opt
     : init_declarator_list { /* No Action Taken */ }
-    | { /* No Action Taken */ }
+    | %empty
+    { /* No Action Taken */ }
     ;
 
 declaration_specifiers
@@ -669,7 +673,8 @@ declaration_specifiers
 
 declaration_specifiers_opt
     : declaration_specifiers { /* No Action Taken */ }
-    | { /* No Action Taken */ }
+    | %empty
+    { /* No Action Taken */ }
     ;
 
 init_declarator_list 
@@ -721,7 +726,8 @@ specifier_qualifier_list
 
 specifier_qualifier_list_opt
     : specifier_qualifier_list { /* No Action Taken */ }
-    | { /* No Action Taken */ }
+    | %empty
+    { /* No Action Taken */ }
     ;
 
 enum_specifier
@@ -732,7 +738,7 @@ enum_specifier
 
 identifier_opt 
     : IDENTIFIER { /* No Action Taken */ }
-    | { /* No Action Taken */ }
+    | %empty { /* No Action Taken */ }
     ;
 
 enumerator_list
@@ -858,7 +864,7 @@ direct_declarator
 
 type_qualifier_list_opt
     : type_qualifier_list { /* No Action Taken */ }
-    | { /* No Action Taken */ }
+    | %empty { /* No Action Taken */ }
     ;
 
 pointer 
@@ -908,7 +914,8 @@ initializer_list
 
 designation_opt
     : designation { /* No Action Taken */ }
-    | { /* No Action Taken */ }
+    | %empty
+    { /* No Action Taken */ }
     ;
 
 designation
@@ -969,7 +976,8 @@ compound_statement
 
 block_item_list_opt
     : block_item_list { $$ = $1; }
-    | { $$ = new statement(); }
+    | %empty
+    { $$ = new statement(); }
     ;
 
 block_item_list
@@ -1118,19 +1126,19 @@ iteration_statement
     ;
 
 F
-    : { block_name = "for"; }
+    : %empty { block_name = "for"; }
     ;
 
 W
-    : { block_name = "while"; }
+    : %empty { block_name = "while"; }
     ;
 
 D
-    : { block_name = "do_while"; }
+    : %empty { block_name = "do_while"; }
     ;
 
-X
-    : 
+X   
+    : %empty
     {
         string new_ST = curent_symbol_table->name + "_" + block_name + "_" + to_string(symbol_table_counter++);
         symbol* new_symbol = curent_symbol_table->lookup(new_ST);
@@ -1142,7 +1150,7 @@ X
     }
 
 change_table
-    :
+    : %empty
     {
         if (current_symbol->nested_table != NULL)
         {
@@ -1195,7 +1203,8 @@ function_definition
 
 declaration_list_opt
     : declaration_list { /* No Action Taken */ }
-    | { /* No Action Taken */ }
+    | %empty 
+    { /* No Action Taken */ }
     ;
 
 declaration_list
