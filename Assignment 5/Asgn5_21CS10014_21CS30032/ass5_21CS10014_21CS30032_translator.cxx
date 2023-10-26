@@ -15,26 +15,28 @@ string current_block_name;
 // string last_var_type;
 string typevar;
 
-symbol::symbol(string name, string t, symbol_type* st, int size):
-    name(name), type(st), value("x"), size(size), offset(0), nested_table(NULL) {
-    type = new symbol_type(t, st, size);
+symbol::symbol(string name, string t, symbol_type* st, int width):
+    name(name), type(st), value("x"), offset(0), nested_table(NULL) {
+    type = new symbol_type(t, st, width);
+    size = getsize(type);
 }
 
-symbol_type::symbol_type(string type,symbol_type* ptr,int size):
-    type(type), size(getsize(ptr)), ptr(ptr) {}
+symbol_type::symbol_type(string type,symbol_type* ptr,int width):
+    type(type), width(width), ptr(ptr) {}
 
 symbol* symbol::update(symbol_type* t) {
     type = t;
+    size = getsize(t);
     return this;
 }
 
-symbol_table::symbol_table(string name, symbol_table* parent):
+symbol_table::symbol_table(string name):
     name(name), count(0), parent(parent) {}
 
-symbol *symbol_table::lookup(string name) {
-    for (vector<symbol*>::iterator it = symbols.begin(); it != symbols.end(); it++) {
-        if ((*it)->name == name) {
-            return *it;
+symbol* symbol_table::lookup(string name) {
+    for (list<symbol>::iterator it = symbols.begin(); it != symbols.end(); it++) {
+        if ((it)->name == name) {
+            return &(*it);
         }
     }
 
@@ -44,8 +46,8 @@ symbol *symbol_table::lookup(string name) {
     }
     if (current_symbol_table == this && s == NULL) {
         s = new symbol(name, "int");
-        symbols.push_back(s);
-        return &(*symbols.back());
+        symbols.push_back(*s);
+        return &(symbols.back());
     }
     return s;
 }
@@ -57,8 +59,8 @@ symbol* symbol_table::gentemp(symbol_type* type, string value) {
     s->value = value;
     s->size = getsize(type);
 
-    current_symbol_table->symbols.push_back(s);
-    return &(*current_symbol_table->symbols.back());
+    current_symbol_table->symbols.push_back(*s);
+    return &(current_symbol_table->symbols.back());
 }
 
 void symbol_table::print_st() {
@@ -69,14 +71,11 @@ void symbol_table::print_st() {
     cout << "----------------------------------------------------------------------------------------------------" << endl;
     vector <symbol_table*> tables;
 
-    for(int i = 0; i < symbols.size(); i++) {
-        cout << symbols[i]->name << "\t" << symbols[i]->value << "\t" << symbols[i]->type->type << "\t" << symbols[i]->size << "\t" << symbols[i]->offset << "\t";
-        if(symbols[i]->nested_table != NULL) {
-            cout << symbols[i]->nested_table->name << endl;
-            tables.push_back(symbols[i]->nested_table);
-        }
-        else {
-            cout << "NULL" << endl;
+    for(list<symbol>::iterator it = symbols.begin(); it != symbols.end(); it++) {
+        cout << it->name << "\t" << it->value << "\t" << gettype(it->type) << "\t" << it->size << "\t" << it->offset << "\t";
+        if (it->nested_table != NULL) {
+            cout << it->nested_table->name;
+            tables.push_back(it->nested_table);
         }
         cout << endl;
     }
@@ -91,18 +90,18 @@ void symbol_table::update() {
     vector<symbol_table*> tables;
     int offset_new = 0;
 
-    for(vector<symbol*>::iterator it = symbols.begin(); it != symbols.end(); it++) {
+    for(list<symbol>::iterator it = symbols.begin(); it != symbols.end(); it++) {
         if (it == symbols.begin()) {
-            (*it)->offset = 0;
-            offset_new = (*it)->size;
+            it->offset = 0;
+            offset_new = it->size;
         }
         else {
-            (*it)->offset = offset_new;
-            offset_new += (*it)->size;
+            it->offset = offset_new;
+            offset_new = it->offset + it->size;
         }
 
-        if ((*it)->nested_table != NULL) {
-            tables.push_back((*it)->nested_table);
+        if (it->nested_table != NULL) {
+            tables.push_back(it->nested_table);
         }
     }
 }
@@ -325,7 +324,7 @@ int getsize(symbol_type * x)
     else if(x->type == "int") return __SIZE_OF_INT ;
     else if(x->type == "float") return __SIZE_OF_FLOAT ;
     else if(x->type == "ptr") return __SIZE_OF_PTR ;
-    else if(x->type == "arr") return x->size * getsize(x->ptr) ;
+    else if(x->type == "arr") return x->width * getsize(x->ptr) ;
     else if(x->type == "func") return __SIZE_OF_FUNC ;
 
     else 
@@ -340,7 +339,7 @@ string gettype(symbol_type * x)
         return "null";
     if(x->type == "void" || x->type == "char" || x->type == "int" || x->type == "float" || x->type == "block" || x->type == "func") return x->type ;
     else if(x->type == "ptr") return "ptr(" + gettype(x->ptr) + ")" ;
-    else if(x->type == "arr") return "arr(" + int2string(x->size) + ", " + gettype(x->ptr) + ")" ;
+    else if(x->type == "arr") return "arr(" + int2string(x->width) + ", " + gettype(x->ptr) + ")" ;
     else 
         return "invalid";
     

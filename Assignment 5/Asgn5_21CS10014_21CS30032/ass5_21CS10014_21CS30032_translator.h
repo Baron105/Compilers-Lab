@@ -37,7 +37,7 @@ extern int yyparse();
 class symbol_type {
 public:
     string type;
-    int size;
+    int width;
     symbol_type* ptr;
     symbol_type(string type,  symbol_type* ptr = NULL, int size = 1);
 };
@@ -50,7 +50,7 @@ public:
     int size;
     int offset;
     symbol_table* nested_table;
-    symbol(string name, string type, symbol_type* t = NULL, int size = 0);
+    symbol(string name, string type, symbol_type* t = NULL, int width = 0);
     symbol* update(symbol_type* type);
 };
 
@@ -59,10 +59,10 @@ public:
     string name;
     int count;
     symbol_table* parent;
-    vector<symbol*> symbols;
+    list<symbol> symbols;
 
 
-    symbol_table(string name = "", symbol_table* parent = NULL);
+    symbol_table(string name = "NULL");
     symbol* lookup(string name);
     static symbol* gentemp(symbol_type* type, string init = "");
 
