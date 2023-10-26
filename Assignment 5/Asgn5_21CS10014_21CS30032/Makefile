@@ -27,6 +27,9 @@ test :a.out
 	./a.out < test_codes/ass5_21CS10014_21CS30032_test1.c > output_test_codes/ass5_21CS10014_21CS30032_quads1.out
 	./a.out < test_codes/ass5_21CS10014_21CS30032_test2.c > output_test_codes/ass5_21CS10014_21CS30032_quads2.out
 	./a.out < test_codes/ass5_21CS10014_21CS30032_test3.c > output_test_codes/ass5_21CS10014_21CS30032_quads3.out
+	./a.out < test_codes/ass5_21CS10014_21CS30032_test4.c > output_test_codes/ass5_21CS10014_21CS30032_quads4.out
+	./a.out < test_codes/ass5_21CS10014_21CS30032_test5.c > output_test_codes/ass5_21CS10014_21CS30032_quads5.out
+
 
 
 
