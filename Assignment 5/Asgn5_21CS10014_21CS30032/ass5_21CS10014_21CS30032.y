@@ -638,261 +638,380 @@ assignment_operator
     { /* nothin */}
     ;
 
+// my part
+
 expression
-    : assignment_expression { printf("expression -> assignment-expression\n"); }
-    | expression COMMA assignment_expression { printf("expression -> expression , assignment-expression\n"); }
+    : assignment_expression { $$ = $1; }
+    | expression COMMA assignment_expression { /* No Action Taken */ }
     ;
 
 constant_expression
-    : conditional_expression { printf("constant-expression -> conditional-expression\n"); }
+    : conditional_expression { /* No Action Taken */ }
     ;
 
 
-//Declarations
-
 declaration
-    : declaration_specifiers init_declarator_list_opt SEMICOLON { printf("declaration -> declaration-specifiers init-declarator-list-opt ;\n"); }
+    : declaration_specifiers init_declarator_list_opt SEMICOLON { /* No Action Taken */ }
     ;
 
 init_declarator_list_opt
-    : init_declarator_list { printf("init-declarator-list-opt -> init-declarator-list\n"); }
-    | { printf("init-declarator-list-opt -> epsilon\n"); }
+    : init_declarator_list { /* No Action Taken */ }
+    | { /* No Action Taken */ }
     ;
 
 declaration_specifiers
-    : storage_class_specifier declaration_specifiers_opt { printf("declaration-specifiers -> storage-class-specifier declaration-specifiers-opt\n"); }
-    | type_specifier declaration_specifiers_opt { printf("declaration-specifiers -> type-specifier declaration-specifiers-opt\n"); }
-    | type_qualifier declaration_specifiers_opt { printf("declaration-specifiers -> type-qualifier declaration-specifiers-opt\n"); }
-    | function_specifier declaration_specifiers_opt { printf("declaration-specifiers -> function-specifier declaration-specifiers-opt\n"); }
+    : storage_class_specifier declaration_specifiers_opt { /* No Action Taken */ }
+    | type_specifier declaration_specifiers_opt { /* No Action Taken */ }
+    | type_qualifier declaration_specifiers_opt { /* No Action Taken */ }
+    | function_specifier declaration_specifiers_opt { /* No Action Taken */ }
     ;
 
 declaration_specifiers_opt
-    : declaration_specifiers { printf("declaration-specifiers-opt -> declaration-specifiers\n"); }
-    | { printf("declaration-specifiers-opt -> epsilon\n"); }
+    : declaration_specifiers { /* No Action Taken */ }
+    | { /* No Action Taken */ }
     ;
 
 init_declarator_list 
-    : init_declarator { printf("init-declarator-list -> init-declarator\n"); }
-    | init_declarator_list COMMA init_declarator { printf("init-declarator-list -> init-declarator-list , init-declarator\n"); }
+    : init_declarator { /* No Action Taken */ }
+    | init_declarator_list COMMA init_declarator { /* No Action Taken */ }
     ;
 
 init_declarator
-    : declarator { printf("init-declarator -> declarator\n"); }
-    | declarator ASSIGN initializer { printf("init-declarator -> declarator = initializer\n"); }
+    : declarator { $$ = $1; }
+    | declarator ASSIGN initializer
+    {
+        if ($3->value != "")
+        {
+            $1->value = $3->value;
+        }
+        emit("=", $1->name, $3->name);
+    }
     ;
 
 storage_class_specifier
-    : EXTERN { printf("storage-class-specifier -> extern\n"); }
-    | STATIC { printf("storage-class-specifier -> static\n"); }
-    | AUTO { printf("storage-class-specifier -> auto\n"); }
-    | REGISTER { printf("storage-class-specifier -> register\n"); }
+    : EXTERN { /* No Action Taken */ }
+    | STATIC { /* No Action Taken */ }
+    | AUTO { /* No Action Taken */ }
+    | REGISTER { /* No Action Taken */ }
     ;
 
+// store the type of the variable for void char int and float
+// No Action Taken for the rest
 type_specifier
-    : VOID { printf("type-specifier -> void\n"); }
-    | CHAR { printf("type-specifier -> char\n"); }
-    | SHORT { printf("type-specifier -> short\n"); }
-    | INT { printf("type-specifier -> int\n"); }
-    | LONG { printf("type-specifier -> long\n"); }
-    | FLOAT { printf("type-specifier -> float\n"); }
-    | DOUBLE { printf("type-specifier -> double\n"); }
-    | SIGNED { printf("type-specifier -> signed\n"); }
-    | UNSIGNED { printf("type-specifier -> unsigned\n"); }
-    | BOOL { printf("type-specifier -> _Bool\n"); }
-    | COMPLEX { printf("type-specifier -> _Complex\n"); }
-    | IMAGINARY { printf("type-specifier -> _Imaginary\n"); }
-    | enum_specifier { printf("type-specifier -> enum-specifier\n"); }
+    : VOID { typevar = "void"; }
+    | CHAR { typevar = "char"; }
+    | SHORT { /* No Action Taken */ }
+    | INT { typevar = "int"; }
+    | LONG { /* No Action Taken */ }
+    | FLOAT { typevar = "float"; }
+    | DOUBLE { /* No Action Taken */ }
+    | SIGNED { /* No Action Taken */ }
+    | UNSIGNED { /* No Action Taken */ }
+    | BOOL { /* No Action Taken */ }
+    | COMPLEX { /* No Action Taken */ }
+    | IMAGINARY { /* No Action Taken */ }
+    | enum_specifier { /* No Action Taken */ }
     ;
 
 specifier_qualifier_list
-    : type_specifier specifier_qualifier_list_opt { printf("specifier-qualifier-list -> type-specifier specifier-qualifier-list-opt\n"); }
-    | type_qualifier specifier_qualifier_list_opt { printf("specifier-qualifier-list -> type-qualifier specifier-qualifier-list-opt\n"); }
+    : type_specifier specifier_qualifier_list_opt { /* No Action Taken */ }
+    | type_qualifier specifier_qualifier_list_opt { /* No Action Taken */ }
     ;
 
 specifier_qualifier_list_opt
-    : specifier_qualifier_list { printf("specifier-qualifier-list-opt -> specifier-qualifier-list\n"); }
-    | { printf("specifier-qualifier-list-opt -> epsilon\n"); }
+    : specifier_qualifier_list { /* No Action Taken */ }
+    | { /* No Action Taken */ }
     ;
 
 enum_specifier
-    : ENUM identifier_opt CURLY_BRACKET_OPEN enumerator_list CURLY_BRACKET_CLOSE { printf("enum-specifier -> enum identifier-opt { enumerator-list-opt }\n"); }
-    | ENUM identifier_opt CURLY_BRACKET_OPEN enumerator_list COMMA CURLY_BRACKET_CLOSE { printf("enum-specifier -> enum identifier-opt { enumerator-list , }\n"); }
-    | ENUM IDENTIFIER { printf("enum-specifier -> enum identifier\n"); }
+    : ENUM identifier_opt CURLY_BRACKET_OPEN enumerator_list CURLY_BRACKET_CLOSE { /* No Action Taken */ }
+    | ENUM identifier_opt CURLY_BRACKET_OPEN enumerator_list COMMA CURLY_BRACKET_CLOSE { /* No Action Taken */ }
+    | ENUM IDENTIFIER { /* No Action Taken */ }
     ;
 
 identifier_opt 
-    : IDENTIFIER { printf("identifier-opt -> identifier\n"); }
-    | { printf("identifier-opt -> epsilon\n"); }
+    : IDENTIFIER { /* No Action Taken */ }
+    | { /* No Action Taken */ }
     ;
 
 enumerator_list
-    : enumerator { printf("enumerator-list -> enumerator\n"); }
-    | enumerator_list COMMA enumerator { printf("enumerator-list -> enumerator-list , enumerator\n"); }
+    : enumerator { /* No Action Taken */ }
+    | enumerator_list COMMA enumerator { /* No Action Taken */ }
     ;
 
 enumerator
-    : IDENTIFIER { printf("enumerator -> enumeration-constant\n"); }
-    | IDENTIFIER ASSIGN constant_expression { printf("enumerator -> enumeration-constant = constant-expression\n"); }
+    : IDENTIFIER { /* No Action Taken */ }
+    | IDENTIFIER ASSIGN constant_expression { /* No Action Taken */ }
     ;
 
 type_qualifier
-    : CONST { printf("type-qualifier -> const\n"); }
-    | RESTRICT { printf("type-qualifier -> restrict\n"); }
-    | VOLATILE { printf("type-qualifier -> volatile\n"); }
+    : CONST { /* No Action Taken */ }
+    | RESTRICT { /* No Action Taken */ }
+    | VOLATILE { /* No Action Taken */ }
     ;
 
 function_specifier
-    : INLINE { printf("function-specifier -> inline\n"); }
+    : INLINE { /* No Action Taken */ }
     ;
 
+// **
 declarator
-    : pointer_opt direct_declarator { printf("declarator -> pointer-opt direct-declarator\n"); }
-    ;
-
-pointer_opt
-    : pointer { printf("pointer-opt -> pointer\n"); }
-    | { printf("pointer-opt -> epsilon\n"); }
+    : pointer direct_declarator
+    {
+        symbol_type* t = $1;
+        while(t->ptr != NULL)
+        {
+            t = t->ptr;
+        }
+        t->ptr = $2->type;
+        $$ = $2->update($1);
+    }
+    | direct_declarator { /* No Action Taken */ }
     ;
 
 direct_declarator
-    : IDENTIFIER { printf("direct-declarator -> identifier\n"); }
-    | ROUND_BRACKET_OPEN declarator ROUND_BRACKET_CLOSE { printf("direct-declarator -> ( declarator )\n"); }
-    | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list_opt assignment_expression_opt SQUARE_BRACKET_CLOSE { printf("direct-declarator -> direct-declarator [ type-qualifier-list-opt assignment-expression-opt ]\n"); }
-    | direct_declarator SQUARE_BRACKET_OPEN STATIC type_qualifier_list_opt assignment_expression SQUARE_BRACKET_CLOSE { printf("direct-declarator -> direct-declarator [ static type-qualifier-list-opt assignment-expression ]\n"); }
-    | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list STATIC assignment_expression SQUARE_BRACKET_CLOSE { printf("direct-declarator -> direct-declarator [ type-qualifier-list static assignment-expression ]\n"); }
-    | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list_opt MULTIPLY SQUARE_BRACKET_CLOSE { printf("direct-declarator -> direct-declarator [ type-qualifier-list-opt * ]\n"); }
-    | direct_declarator ROUND_BRACKET_OPEN parameter_type_list ROUND_BRACKET_CLOSE { printf("direct-declarator -> direct-declarator ( parameter-type-list )\n"); }
-    | direct_declarator ROUND_BRACKET_OPEN identifier_list_opt ROUND_BRACKET_CLOSE { printf("direct-declarator -> direct-declarator ( identifier-list-opt )\n"); }
+    : IDENTIFIER
+    { 
+        $$ = $1->update(new symbol_type(typevar));
+        current_symbol = $$;
+    }
+    | ROUND_BRACKET_OPEN declarator ROUND_BRACKET_CLOSE { $$ = $2; }
+    | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list assignment_expression SQUARE_BRACKET_CLOSE { /* No Action Taken */ }
+    | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list SQUARE_BRACKET_CLOSE { /* No Action Taken */ }
+    | direct_declarator SQUARE_BRACKET_OPEN assignment_expression SQUARE_BRACKET_CLOSE
+    {
+        symbol_type* t = $1->type;
+        symbol_type* new = NULL;
+        while(t->type == "arr")
+        {
+            new = t;
+            t = t->ptr;
+        }
+        if (new == NULL)
+        {
+            int temp = atoi($3->loc->value.c_str());
+            symbol_type* new_type = new symbol_type("arr", $1->type, temp);
+            $$ = $1->update(new_type);
+        }
+        else
+        {
+            int temp = atoi($3->loc->value.c_str());
+            new->ptr = new symbol_type("arr", t, temp);
+            $$ = $1->update($1->type);
+        }
+    }
+    | direct_declarator SQUARE_BRACKET_OPEN SQUARE_BRACKET_CLOSE
+    {
+        symbol_type* t = $1->type;
+        symbol_type* new = NULL;
+        while(t->type == "arr")
+        {
+            new = t;
+            t = t->ptr;
+        }
+        if (new == NULL)
+        {
+            symbol_type* new_type = new symbol_type("arr", $1->type, 0);
+            $$ = $1->update(new_type);
+        }
+        else
+        {
+            new->ptr = new symbol_type("arr", t, 0);
+            $$ = $1->update($1->type);
+        }
+    }
+    | direct_declarator ROUND_BRACKET_OPEN change_table parameter_type_list ROUND_BRACKET_CLOSE
+    {
+        current_symbol_table->name = $1->name;
+        if ($1->type->type != "void")
+        {
+            symbol* new = current_symbol_table->lookup("return");
+            new->update($1->type);
+        }
+        $1->nested_table = current_symbol_table;
+        current_symbol_table->parent = global_symbol_table;
+        switchTable(global_symbol_table);
+        current_symbol = $$;
+    }
+    | direct_declarator ROUND_BRACKET_OPEN change_table ROUND_BRACKET_CLOSE
+    {
+        current_symbol_table->name = $1->name;
+        if ($1->type->type != "void")
+        {
+            symbol* new = current_symbol_table->lookup("return");
+            new->update($1->type);
+        }
+        $1->nested_table = current_symbol_table;
+        current_symbol_table->parent = global_symbol_table;
+        switchTable(global_symbol_table);
+        current_symbol = $$;
+    }
+    | direct_declarator ROUND_BRACKET_OPEN identifier_list ROUND_BRACKET_CLOSE { /* No Action Taken */ }
+    | direct_declarator SQUARE_BRACKET_OPEN STATIC type_qualifier_list assignment_expression SQUARE_BRACKET_CLOSE { /* No Action Taken */ }
+    | direct_declarator SQUARE_BRACKET_OPEN STATIC assignment_expression SQUARE_BRACKET_CLOSE { /* No Action Taken */ }
+    | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list STATIC assignment_expression SQUARE_BRACKET_CLOSE { /* No Action Taken */ }
+    | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list MULTIPLY SQUARE_BRACKET_CLOSE { /* No Action Taken */ }
+    | direct_declarator SQUARE_BRACKET_OPEN MULTIPLY SQUARE_BRACKET_CLOSE { /* No Action Taken */ }
     ;
 
-identifier_list_opt
-    : identifier_list { printf("identifier-list-opt -> identifier-list\n"); }
-    | { printf("identifier-list-opt -> epsilon\n"); }
-    ;
-
-assignment_expression_opt
-    : assignment_expression { printf("assignment-expression-opt -> assignment-expression\n"); }
-    | { printf("assignment-expression-opt -> epsilon\n"); }
-    ;
 
 type_qualifier_list_opt
-    : type_qualifier_list { printf("type-qualifier-list-opt -> type-qualifier-list\n"); }
-    | { printf("type-qualifier-list-opt -> epsilon\n"); }
+    : type_qualifier_list { /* No Action Taken */ }
+    | { /* No Action Taken */ }
     ;
 
 pointer 
-    : MULTIPLY type_qualifier_list_opt { printf("pointer -> * type-qualifier-list-opt\n"); }
-    | MULTIPLY type_qualifier_list_opt pointer { printf("pointer -> * type-qualifier-list-opt pointer\n"); }
+    : MULTIPLY type_qualifier_list_opt { $$ = new symbol_type("ptr"); }
+    | MULTIPLY type_qualifier_list_opt pointer { $$ = new symbol_type("ptr", $3); }
     ;
 
 type_qualifier_list
-    : type_qualifier { printf("type-qualifier-list -> type-qualifier\n"); }
-    | type_qualifier_list type_qualifier { printf("type-qualifier-list -> type-qualifier-list type-qualifier\n"); }
+    : type_qualifier { /* No Action Taken */ }
+    | type_qualifier_list type_qualifier { /* No Action Taken */ }
     ;
 
 parameter_type_list
-    : parameter_list { printf("parameter-type-list -> parameter-list\n"); }
-    | parameter_list COMMA ELLIPSIS { printf("parameter-type-list -> parameter-list , ...\n"); }
+    : parameter_list { /* No Action Taken */ }
+    | parameter_list COMMA ELLIPSIS { /* No Action Taken */ }
     ;
 
 parameter_list
-    : parameter_declaration { printf("parameter-list -> parameter-declaration\n"); }
-    | parameter_list COMMA parameter_declaration { printf("parameter-list -> parameter-list , parameter-declaration\n"); }
+    : parameter_declaration { /* No Action Taken */ }
+    | parameter_list COMMA parameter_declaration { /* No Action Taken */ }
     ;
 
 parameter_declaration
-    : declaration_specifiers declarator { printf("parameter-declaration -> declaration-specifiers declarator\n"); }
-    | declaration_specifiers { printf("parameter-declaration -> declaration-specifiers\n"); }
+    : declaration_specifiers declarator { /* No Action Taken */ }
+    | declaration_specifiers { /* No Action Taken */ }
     ;
 
 identifier_list
-    : IDENTIFIER { printf("identifier-list -> identifier\n"); }
-    | identifier_list COMMA IDENTIFIER { printf("identifier-list -> identifier-list , identifier\n"); }
+    : IDENTIFIER { /* No Action Taken */ }
+    | identifier_list COMMA IDENTIFIER { /* No Action Taken */ }
     ;
 
 type_name
-    : specifier_qualifier_list { printf("type-name -> specifier-qualifier-list\n"); }
+    : specifier_qualifier_list { /* No Action Taken */ }
     ;
 
 initializer
-    : assignment_expression { printf("initializer -> assignment-expression\n"); }
-    | CURLY_BRACKET_OPEN initializer_list CURLY_BRACKET_CLOSE { printf("initializer -> { initializer-list }\n"); }
-    | CURLY_BRACKET_OPEN initializer_list COMMA CURLY_BRACKET_CLOSE { printf("initializer -> { initializer-list , }\n"); }
+    : assignment_expression { $$ = $1->loc; }
+    | CURLY_BRACKET_OPEN initializer_list CURLY_BRACKET_CLOSE { /* No Action Taken */ }
+    | CURLY_BRACKET_OPEN initializer_list COMMA CURLY_BRACKET_CLOSE { /* No Action Taken */ }
     ;
 
 initializer_list
-    : designation_opt initializer { printf("initializer-list -> designation-opt initializer\n"); }
-    | initializer_list COMMA designation_opt initializer { printf("initializer-list -> initializer-list , designation-opt initializer\n"); }
+    : designation_opt initializer { /* No Action Taken */ }
+    | initializer_list COMMA designation_opt initializer { /* No Action Taken */ }
     ;
 
 designation_opt
-    : designation { printf("designation-opt -> designation\n"); }
-    | { printf("designation-opt -> epsilon\n"); }
+    : designation { /* No Action Taken */ }
+    | { /* No Action Taken */ }
     ;
 
 designation
-    : designator_list ASSIGN { printf("designation -> designator-list =\n"); }
+    : designator_list ASSIGN { /* No Action Taken */ }
     ;
 
 designator_list
-    : designator { printf("designator-list -> designator\n"); }
-    | designator_list designator { printf("designator-list -> designator-list designator\n"); }
+    : designator { /* No Action Taken */ }
+    | designator_list designator { /* No Action Taken */ }
     ;
 
 designator
-    : SQUARE_BRACKET_OPEN constant_expression SQUARE_BRACKET_CLOSE { printf("designator -> [ constant-expression ]\n"); }
-    | DOT IDENTIFIER { printf("designator -> . identifier\n"); }
+    : SQUARE_BRACKET_OPEN constant_expression SQUARE_BRACKET_CLOSE { /* No Action Taken */ }
+    | DOT IDENTIFIER { /* No Action Taken */ }
     ;
 
 // new
 // part 3
 statement 
-    : labeled_statement { printf("statement -> labeled-statement\n"); }
-    | compound_statement { printf("statement -> compound-statement\n"); }
-    | expression_statement { printf("statement -> expression-statement\n"); }
-    | selection_statement { printf("statement -> selection-statement\n"); }
-    | iteration_statement { printf("statement -> iteration-statement\n"); }
-    | jump_statement { printf("statement -> jump-statement\n"); }
+    : labeled_statement { /* No Action Taken */ }
+    | compound_statement { $$ = $1; }
+    | expression_statement
+    { 
+        $$ = new statement();
+        $$->nextlist = $1->nextlist;
+    }
+    | selection_statement { $$ = $1; }
+    | iteration_statement { $$ = $1; }
+    | jump_statement { $$ = $1; }
+    ;
+
+loop_statement
+    : labeled_statement { /* No Action Taken */ }
+    | compound_statement { $$ = $1; }
+    | expression_statement
+    {
+        $$ = new statement();
+        $$->nextlist = $1->nextlist;
+    }
+    | selection_statement { $$ = $1; }
+    | iteration_statement { $$ = $1; }
+    | jump_statement { $$ = $1; }
     ;
 
 labeled_statement
-    : IDENTIFIER COLON statement { printf("labeled-statement -> identifier : statement\n"); }
-    | CASE constant_expression COLON statement { printf("labeled-statement -> case constant-expression : statement\n"); }
-    | DEFAULT COLON statement { printf("labeled-statement -> default : statement\n"); }
+    : IDENTIFIER COLON statement { /* No Action Taken */ }
+    | CASE constant_expression COLON statement { /* No Action Taken */ }
+    | DEFAULT COLON statement { /* No Action Taken */ }
     ;
 
 compound_statement
-    : CURLY_BRACKET_OPEN block_item_list_opt CURLY_BRACKET_CLOSE { printf("compound-statement -> { block-item-list-opt }\n"); }
+    : CURLY_BRACKET_OPEN X change_table block_item_list_opt CURLY_BRACKET_CLOSE
+    {
+        $$ = $4;
+        switchTable(current_symbol_table->parent);
+    }
     ;
 
 block_item_list_opt
-    : block_item_list { printf("block-item-list-opt -> block-item-list\n"); }
-    | { printf("block-item-list-opt -> epsilon\n"); }
+    : block_item_list { $$ = $1; }
+    | { $$ = new statement(); }
     ;
 
 block_item_list
-    : block_item { printf("block-item-list -> block-item\n"); }
-    | block_item_list block_item { printf("block-item-list -> block-item-list block-item\n"); }
+    : block_item { $$ = $1; }
+    | block_item_list M block_item
+    {
+        $$ = $3;
+        backpatch($1->nextlist, $2);
+    }
     ;
 
 block_item
-    : declaration { printf("block-item -> declaration\n"); }
-    | statement { printf("block-item -> statement\n"); }
+    : declaration { $$ = new statement(); }
+    | statement { $$ = $1; }
     ;
 
 expression_statement
-    : expression_opt SEMICOLON { printf("expression-statement -> expression-opt ;\n"); }
-    ;
-
-expression_opt
-    : expression { printf("expression-opt -> expression\n"); }
-    | { printf("expression-opt -> epsilon\n"); }
-    ;
+    : expression SEMICOLON { $$ = $1; }
+    | SEMICOLON { $$ = new expression(); }
 
 selection_statement
-    : IF ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE statement { printf("selection-statement -> if ( expression ) statement\n"); }
-    | IF ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE statement ELSE statement { printf("selection-statement -> if ( expression ) statement else statement\n"); }
-    | SWITCH ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE statement { printf("selection-statement -> switch ( expression ) statement\n"); }
+    : IF ROUND_BRACKET_OPEN expression N ROUND_BRACKET_CLOSE M statement N THEN
+    {
+        backpatch($4->nextlist, nextinstr());
+        convertInt2Bool($3);
+        $$ = new statement();
+        backpatch($3->truelist, $6);
+
+        list<int> temp = merge ($3->falselist, $7->nextlist);
+        $$->nextlist = merge($8->nextlist, temp);
+    }
+    | IF ROUND_BRACKET_OPEN expression N ROUND_BRACKET_CLOSE M statement N ELSE M statement
+    {
+        backpatch($4->nextlist, nextinstr());
+        convertInt2Bool($3);
+        $$ = new statement();
+        backpatch($3->truelist, $6);
+        backpatch($3->falselist, $10);
+
+        list<int> temp = merge ($3->falselist, $8->nextlist);
+        $$->nextlist = merge($11->nextlist, temp);
+    }
+    | SWITCH ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE statement { /* No Action Taken */ }
     ;
 
 iteration_statement
@@ -902,42 +1021,96 @@ iteration_statement
     | FOR ROUND_BRACKET_OPEN declaration expression_opt SEMICOLON expression_opt ROUND_BRACKET_CLOSE statement { printf("iteration-statement -> for ( declaration expression-opt ; expression-opt ) statement\n"); }
     ;
 
+F
+    : { block_name = "for"; }
+    ;
+
+W
+    : { block_name = "while"; }
+    ;
+
+D
+    : { block_name = "do_while"; }
+    ;
+
+X
+    : 
+    {
+        string new_ST = curent_symbol_table->name + "_" + block_name + "_" + to_string(symbol_table_counter++);
+        symbol* new_symbol = curent_symbol_table->lookup(new_ST);
+        new_symbol->nested_table = new symbol_table(new_ST);
+        new_symbol->name = new_ST;
+        new_symbol->nested_table->parent = curent_symbol_table;
+        new_symbol->type = new symbol_type("block");
+        current_symbol = new_symbol;
+    }
+
+change_table
+    :
+    {
+        if (current_symbol->nested_table != NULL)
+        {
+            switchTable(current_symbol->nested_table);
+            emit("change", current_symbol_table->name);
+        }
+        else 
+        {
+            switchTable(new symbol_table(""));
+        }
+    }
+    ;
+
 jump_statement
-    : GOTO IDENTIFIER SEMICOLON { printf("jump-statement -> goto identifier ;\n"); }
-    | CONTINUE SEMICOLON { printf("jump-statement -> continue ;\n"); }
-    | BREAK SEMICOLON { printf("jump-statement -> break ;\n"); }
-    | RETURN expression_opt SEMICOLON { printf("jump-statement -> return expression-opt ;\n"); }
+    : GOTO IDENTIFIER SEMICOLON { /* No Action Taken */ }
+    | CONTINUE SEMICOLON { $$ = new statement(); }
+    | BREAK SEMICOLON { $$ = new statement(); }
+    | RETURN expression SEMICOLON
+    {
+        $$ = new statement();
+        emit("return", $2->loc->name);
+    }
+    | RETURN SEMICOLON
+    {
+        $$ = new statement();
+        emit("return", "");
+    }
     ;
 
 
-// part 4
 translation_unit
-    : external_declaration { printf("translation-unit -> external-declaration\n"); }
-    | translation_unit external_declaration { printf("translation-unit -> translation-unit external-declaration\n"); }
+    : external_declaration { /* No Action Taken */ }
+    | translation_unit external_declaration { /* No Action Taken */ }
     ;
 
 external_declaration
-    : function_definition { printf("external-declaration -> function-definition\n"); }
-    | declaration { printf("external-declaration -> declaration\n"); }
+    : function_definition { /* No Action Taken */ }
+    | declaration { /* No Action Taken */ }
     ;
 
+
 function_definition
-    : declaration_specifiers declarator declaration_list_opt compound_statement { printf("function-definition --> declaration-specifiers declarator declaration-list-opt compound-statement\n"); }
+    : declaration_specifiers declarator declaration_list_opt change_table CURLY_BRACKET_OPEN block_item_list_opt CURLY_BRACKET_CLOSE
+    {
+        curent_symbol_table->parent = global_symbol_table;
+        symbol_table_counter = 0;
+        switchTable(global_symbol_table);
+    }
     ;
 
 declaration_list_opt
-    : declaration_list { printf("declaration-list-opt -> declaration-list\n"); }
-    | { printf("declaration-list-opt -> epsilon\n"); }
+    : declaration_list { /* No Action Taken */ }
+    | { /* No Action Taken */ }
     ;
 
 declaration_list
-    : declaration { printf("declaration-list -> declaration\n"); }
-    | declaration_list declaration { printf("declaration-list -> declaration-list declaration\n"); }
+    : declaration { /* No Action Taken */ }
+    | declaration_list declaration { /* No Action Taken */ }
     ;
 
 %%
 
 void yyerror(char* s) {
+    // for error reporting
     printf("Error: %s\n", s);
     printf("Line: %d\n", yylineno);
     printf("Text: %s\n", yytext);
