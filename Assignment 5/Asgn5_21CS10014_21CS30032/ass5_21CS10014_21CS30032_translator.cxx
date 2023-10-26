@@ -64,22 +64,25 @@ symbol* symbol_table::gentemp(symbol_type* type, string value) {
 }
 
 void symbol_table::print_st() {
-    cout << "====================================================================================================" << endl;
+    cout << "========================================================================================================================" << endl;
     cout << "Symbol Table: " << name << endl;
-    cout << "----------------------------------------------------------------------------------------------------" << endl;
-    cout << "Name\tValue\tType\tSize\tOffset\tNested Table" << endl;
-    cout << "----------------------------------------------------------------------------------------------------" << endl;
+    cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
+    // cout << "Name\tValue\tType\tSize\tOffset\tNested Table" << endl;
+    // using setw() to allocate size for better tabular representation
+    cout << setw(20) << "Name" << setw(20) << "Value" << setw(20) << "Type" << setw(20) << "Size" << setw(20) << "Offset" << setw(20) << "Nested Table" << endl;
+    cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
     vector <symbol_table*> tables;
 
     for(list<symbol>::iterator it = symbols.begin(); it != symbols.end(); it++) {
-        cout << it->name << "\t" << it->value << "\t" << gettype(it->type) << "\t" << it->size << "\t" << it->offset << "\t";
+        // cout << it->name << "\t\t\t" << it->value << "\t\t\t" << gettype(it->type) << "\t\t\t" << it->size << "\t\t\t" << it->offset << "\t\t";
+        cout << setw(20) << it->name << setw(20) << it->value << setw(20) << gettype(it->type) << setw(20) << it->size << setw(20) << it->offset << setw(20);
         if (it->nested_table != NULL) {
             cout << it->nested_table->name;
             tables.push_back(it->nested_table);
         }
         cout << endl;
     }
-    cout << "====================================================================================================" << endl;
+    cout << "========================================================================================================================" << endl;
 
     for(int i = 0; i < tables.size(); i++) {
         tables[i]->print_st();
