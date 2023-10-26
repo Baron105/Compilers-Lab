@@ -22,5 +22,13 @@ $(BASE).tab.c: $(BASE).y
 $(BASE).tab.h: $(BASE).y
 	bison -dtv $(BASE).y
 
+test :a.out
+	mkdir -p ./output_test_codes
+
+	./a.out < ./test_codes/ass5_21CS10014_21CS30032_test1.c > output_test_codes/ass5_21CS10014_21CS30032_quads1.out
+
+	@echo "\nTest outputs generated and written to ./test-outputs.\n"
+
+
 clean:
 	rm lex.yy.c $(BASE).tab.c $(BASE).tab.h lex.yy.o $(BASE).tab.o $(BASE)_translator.o $(BASE).tab.o $(BASE).output a.out $(BASE).tab.h.gch $(BASE)_translator.h.gch
