@@ -68,7 +68,7 @@
 primary_expression
     : IDENTIFIER { $$ = new expression(); $$->loc = $1 ; $$->type = "non_bool"; }
     | constant { $$ = new expression(); $$->loc = $1 ; }
-    | STRING_LITERAL { $$ new expression() ; $$->loc = symbol_table :: gentemp(new symbol_type("ptr"),$1); $$->loc->type->ptr = new symbol_type("char"); }
+    | STRING_LITERAL { $$ = new expression() ; $$->loc = symbol_table :: gentemp(new symbol_type("ptr"),$1); $$->loc->type->ptr = new symbol_type("char"); }
     | ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE { $$ = $2 ; }
     ;
 
@@ -106,7 +106,7 @@ postfix_expression
         {
             symbol * symb = symbol_table :: gentemp(new symbol_type("int"));
             int size  = getsize($$->type);
-            emit("+",symb->name,%3->loc->name,int2string(size));
+            emit("+",symb->name,$3->loc->name,int2string(size));
             emit("+",$$->loc->name,$1->loc->name,symb->name);
         }
         else 
@@ -424,8 +424,8 @@ equality_expression
         
         if(typecheck($1->loc,$3->loc))
         {
-            convertBoolToInt($1);
-            convertBoolToInt($3);
+            convertBool2Int($1);
+            convertBool2Int($3);
             $$ = new expression();
             $$->type = "bool";
             $$->truelist = makelist(nextinstr());
@@ -442,8 +442,8 @@ equality_expression
         
         if(typecheck($1->loc,$3->loc))
         {
-            convertBoolToInt($1);
-            convertBoolToInt($3);
+            convertBool2Int($1);
+            convertBool2Int($3);
             $$ = new expression();
             $$->type = "bool";
             $$->truelist = makelist(nextinstr());
@@ -464,8 +464,8 @@ AND_expression
         
         if(typecheck($1->loc,$3->loc))
         {
-            convertBoolToInt($1);
-            convertBoolToInt($3);
+            convertBool2Int($1);
+            convertBool2Int($3);
             $$ = new expression();
             $$->type = "not_bool";
             $$->loc = symbol_table :: gentemp(new symbol_type("int"));
@@ -484,8 +484,8 @@ exclusive_OR_expression
         
         if(typecheck($1->loc,$3->loc))
         {
-            convertBoolToInt($1);
-            convertBoolToInt($3);
+            convertBool2Int($1);
+            convertBool2Int($3);
             $$ = new expression();
             $$->type = "not_bool";
             $$->loc = symbol_table :: gentemp(new symbol_type("int"));
@@ -504,8 +504,8 @@ inclusive_OR_expression
         
         if(typecheck($1->loc,$3->loc))
         {
-            convertBoolToInt($1);
-            convertBoolToInt($3);
+            convertBool2Int($1);
+            convertBool2Int($3);
             $$ = new expression();
             $$->type = "not_bool";
             $$->loc = symbol_table :: gentemp(new symbol_type("int"));
@@ -526,8 +526,8 @@ logical_AND_expression
             here we have made few changes to the grammar to incorporate non terminal M to handle backpatching
         */
 
-        convertBoolToInt($1);
-        convertBoolToInt($4);
+        convertBool2Int($1);
+        convertBool2Int($4);
         $$ = new expression();
         $$->type = "bool";
         backpatch($1->truelist,$3);
@@ -541,8 +541,8 @@ logical_OR_expression
     : logical_AND_expression { $$ = $1; }
     | logical_OR_expression LOGICAL_OR M logical_AND_expression {
         
-        convertBoolToInt($1);
-        convertBoolToInt($4);
+        convertBool2Int($1);
+        convertBool2Int($4);
         $$ = new expression();
         $$->type = "bool";
         backpatch($1->falselist,$3);
@@ -570,7 +570,7 @@ conditional_expression
         l1=merge(l1,l2);
         emit("goto", "");
         backpatch($2->nextlist, nextinstr());
-        convertIntToBool($1);
+        convertInt2Bool($1);
         backpatch($1->truelist,$4);
         backpatch($1->falselist,$8);
         backpatch(l1,nextinstr());
@@ -1034,7 +1034,7 @@ iteration_statement
 
         $$->nextlist = $7->falselist;
         emit("goto", int2string($6));
-        block_name = "";
+        current_block_name = "";
         switchTable(current_symbol_table->parent);
     }
     | WHILE W ROUND_BRACKET_OPEN X change_table M expression ROUND_BRACKET_CLOSE CURLY_BRACKET_OPEN M block_item_list_opt CURLY_BRACKET_CLOSE
@@ -1046,7 +1046,7 @@ iteration_statement
 
         $$->nextlist = $7->falselist;
         emit("goto", int2string($6));
-        block_name = "";
+        current_block_name = "";
         switchTable(current_symbol_table->parent);
     }
     | DO D M loop_statement M WHILE ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE SEMICOLON
@@ -1058,7 +1058,7 @@ iteration_statement
 
         $$->nextlist = $8->falselist;
 
-        block_name = "";
+        current_block_name = "";
     }
     | DO D CURLY_BRACKET_OPEN M block_item_list_opt CURLY_BRACKET_CLOSE M WHILE ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE SEMICOLON
     {
@@ -1069,7 +1069,7 @@ iteration_statement
 
         $$->nextlist = $10->falselist;
 
-        block_name = "";
+        current_block_name = "";
     }
     | FOR F ROUND_BRACKET_OPEN X change_table declaration M expression_statement M expression N ROUND_BRACKET_CLOSE M loop_statement
     {
@@ -1081,7 +1081,7 @@ iteration_statement
 
         $$->nextlist = $8->falselist;
         emit("goto", int2string($9));
-        block_name = "";
+        current_block_name = "";
         switchTable(current_symbol_table->parent);
     }
     | FOR F ROUND_BRACKET_OPEN X change_table expression_statement M expression_statement M expression N ROUND_BRACKET_CLOSE M loop_statement
@@ -1094,7 +1094,7 @@ iteration_statement
 
         $$->nextlist = $8->falselist;
         emit("goto", int2string($9));
-        block_name = "";
+        current_block_name = "";
         switchTable(current_symbol_table->parent);
     }
     | FOR F ROUND_BRACKET_OPEN X change_table expression_statement M expression_statement M expression N ROUND_BRACKET_CLOSE M CURLY_BRACKET_OPEN block_item_list_opt CURLY_BRACKET_CLOSE
@@ -1107,7 +1107,7 @@ iteration_statement
 
         $$->nextlist = $8->falselist;
         emit("goto", int2string($9));
-        block_name = "";
+        current_block_name = "";
         switchTable(current_symbol_table->parent);
     }
     | FOR F ROUND_BRACKET_OPEN X change_table declaration M expression_statement M expression N ROUND_BRACKET_CLOSE M CURLY_BRACKET_OPEN block_item_list_opt CURLY_BRACKET_CLOSE
@@ -1120,27 +1120,27 @@ iteration_statement
 
         $$->nextlist = $8->falselist;
         emit("goto", int2string($9));
-        block_name = "";
+        current_block_name = "";
         switchTable(current_symbol_table->parent);
     }
     ;
 
 F
-    : %empty { block_name = "for"; }
+    : { current_block_name = "for"; }
     ;
 
 W
-    : %empty { block_name = "while"; }
+    : { current_block_name = "while"; }
     ;
 
 D
-    : %empty { block_name = "do_while"; }
+    : { current_block_name = "do_while"; }
     ;
 
 X   
     : %empty
     {
-        string new_ST = curent_symbol_table->name + "_" + block_name + "_" + to_string(symbol_table_counter++);
+        string new_ST = curent_symbol_table->name + "_" + current_block_name + "_" + to_string(symbol_table_counter++);
         symbol* new_symbol = curent_symbol_table->lookup(new_ST);
         new_symbol->nested_table = new symbol_table(new_ST);
         new_symbol->name = new_ST;

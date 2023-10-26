@@ -19,6 +19,9 @@ class symbol_type;          // class to represent the type of a symbol
 class quad;                 // class to represent a quad entry for the quad array
 class quad_array;           // class to represent the quad array
 
+class expression;           // class to represent an expression
+class statement;            // class to represent a statement
+class Array;                // class to represent an array
 
 extern symbol* current_symbol;
 extern symbol_table* current_symbol_table;
@@ -96,11 +99,11 @@ public:
 // class for array
 class Array
 {
-public:
-    string arrtype; // type of array either 'arr' or 'ptr'
-    symbol* loc ;      // location where array is stored
-    symbol* arr ;      // pointer to symbol table entry of array
-    symbol_type* type; // type of array
+    public:
+        string arrtype; // type of array either 'arr' or 'ptr'
+        symbol* loc ;      // location where array is stored
+        symbol* arr ;      // pointer to symbol table entry of array
+        symbol_type* type; // type of array
 
 };
 
@@ -108,20 +111,20 @@ public:
 // class for statement
 class statement
 {
-public:
-    list<int> nextlist; // nextlist for statement
+    public:
+        list<int> nextlist; // nextlist for statement
 };
 
 
 // class for expression
 class expression
 {
-public:
-    string type;         // type of expression
-    symbol* loc;         // ptr to symbol table entry
-    list<int> truelist;  // truelist for expression
-    list<int> falselist; // falselist for expression
-    list <int> nextlist; // nextlist for expression
+    public:
+        string type;         // type of expression
+        symbol* loc;         // ptr to symbol table entry
+        list<int> truelist;  // truelist for expression
+        list<int> falselist; // falselist for expression
+        list<int> nextlist; // nextlist for expression
 };
 
 
