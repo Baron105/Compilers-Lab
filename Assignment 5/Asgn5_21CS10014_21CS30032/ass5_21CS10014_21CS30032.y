@@ -25,7 +25,6 @@
     symbol* sym;
     symbol_type* symtyp;
     Array* arr;
-    int instr;
 }
 
 %token AUTO BREAK CASE CHAR CONST CONTINUE DEFAULT DO DOUBLE ELSE ENUM EXTERN FLOAT FOR GOTO IF INLINE INT LONG REGISTER RESTRICT RETURN SHORT SIGNED SIZEOF STATIC STRUCT SWITCH TYPEDEF UNION UNSIGNED VOID VOLATILE WHILE BOOL COMPLEX IMAGINARY
@@ -62,24 +61,6 @@
 %type <bp> M
 %type <stmt> N
 
-
-// Some NON terminal symbols to be defined 
-
-// The pointer non-terminal is treated with type symbolType
-%type <symtyp> pointer
-
-// Non-terminals of type symp (symbol*)
-%type <sym> constant initializer
-%type <sym> direct_declarator init_declarator declarator
-
-// Non-terminals of type arr
-%type <arr> postfix_expression unary_expression cast_expression
-
-// Auxiliary non-terminal M of type instr to help in backpatching
-%type <instr> M
-
-// Auxiliary non-terminal N of type stmt to help in control flow statements
-%type <stmt> N
 
 
 %%
@@ -1036,11 +1017,104 @@ selection_statement
 
 iteration_statement
     :
-    // : WHILE ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE statement { printf("iteration-statement -> while ( expression ) statement\n"); }
-    // | DO statement WHILE ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE SEMICOLON { printf("iteration-statement -> do statement while ( expression ) ;\n"); }
-    // | FOR ROUND_BRACKET_OPEN expression_opt SEMICOLON expression_opt SEMICOLON expression_opt ROUND_BRACKET_CLOSE statement { printf("iteration-statement -> for ( expression-opt ; expression-opt ; expression-opt ) statement\n"); }
-    // | FOR ROUND_BRACKET_OPEN declaration expression_opt SEMICOLON expression_opt ROUND_BRACKET_CLOSE statement { printf("iteration-statement -> for ( declaration expression-opt ; expression-opt ) statement\n"); }
-    // ;
+    WHILE W ROUND_BRACKET_OPEN X change_table M expression ROUND_BRACKET_CLOSE M loop_statement
+    {
+        $$ = new statement();
+        convertInt2Bool($7);
+        backpatch($7->truelist, $9);
+        backpatch($10->nextlist, $6);
+
+        $$->nextlist = $7->falselist;
+        emit("goto", int2string($6));
+        block_name = "";
+        switchTable(current_symbol_table->parent);
+    }
+    | WHILE W ROUND_BRACKET_OPEN X change_table M expression ROUND_BRACKET_CLOSE CURLY_BRACKET_OPEN M block_item_list_opt CURLY_BRACKET_CLOSE
+    {
+        $$ = new statement();
+        convertInt2Bool($7);
+        backpatch($7->truelist, $10);
+        backpatch($11->nextlist, $6);
+
+        $$->nextlist = $7->falselist;
+        emit("goto", int2string($6));
+        block_name = "";
+        switchTable(current_symbol_table->parent);
+    }
+    | DO D M loop_statement M WHILE ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE SEMICOLON
+    {
+        $$ = new statement();
+        convertInt2Bool($8);
+        backpatch($8->truelist, $3);
+        backpatch($4->nextlist, $5);
+
+        $$->nextlist = $8->falselist;
+
+        block_name = "";
+    }
+    | DO D CURLY_BRACKET_OPEN M block_item_list_opt CURLY_BRACKET_CLOSE M WHILE ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE SEMICOLON
+    {
+        $$ = new statement();
+        convertInt2Bool($10);
+        backpatch($10->truelist, $4);
+        backpatch($5->nextlist, $7);
+
+        $$->nextlist = $10->falselist;
+
+        block_name = "";
+    }
+    | FOR F ROUND_BRACKET_OPEN X change_table declaration M expression_statement M expression N ROUND_BRACKET_CLOSE M loop_statement
+    {
+        $$ = new statement();
+        convertInt2Bool($8);
+        backpatch($8->truelist, $13);
+        backpatch($14->nextlist, $9);
+        backpatch($11->nextlist, $7);
+
+        $$->nextlist = $8->falselist;
+        emit("goto", int2string($9));
+        block_name = "";
+        switchTable(current_symbol_table->parent);
+    }
+    | FOR F ROUND_BRACKET_OPEN X change_table expression_statement M expression_statement M expression N ROUND_BRACKET_CLOSE M loop_statement
+    {
+        $$ = new statement();
+        convertInt2Bool($8);
+        backpatch($8->truelist, $13);
+        backpatch($14->nextlist, $9);
+        backpatch($11->nextlist, $7);
+
+        $$->nextlist = $8->falselist;
+        emit("goto", int2string($9));
+        block_name = "";
+        switchTable(current_symbol_table->parent);
+    }
+    | FOR F ROUND_BRACKET_OPEN X change_table expression_statement M expression_statement M expression N ROUND_BRACKET_CLOSE M CURLY_BRACKET_OPEN block_item_list_opt CURLY_BRACKET_CLOSE
+    {
+        $$ = new statement();
+        convertInt2Bool($8);
+        backpatch($8->truelist, $13);
+        backpatch($15->nextlist, $9);
+        backpatch($11->nextlist, $7);
+
+        $$->nextlist = $8->falselist;
+        emit("goto", int2string($9));
+        block_name = "";
+        switchTable(current_symbol_table->parent);
+    }
+    | FOR F ROUND_BRACKET_OPEN X change_table declaration M expression_statement M expression N ROUND_BRACKET_CLOSE M CURLY_BRACKET_OPEN block_item_list_opt CURLY_BRACKET_CLOSE
+    {
+        $$ = new statement();
+        convertInt2Bool($8);
+        backpatch($8->nextlist, $13);
+        backpatch($15->nextlist, $9);
+        backpatch($11->nextlist, $7);
+
+        $$->nextlist = $8->falselist;
+        emit("goto", int2string($9));
+        block_name = "";
+        switchTable(current_symbol_table->parent);
+    }
     ;
 
 F
