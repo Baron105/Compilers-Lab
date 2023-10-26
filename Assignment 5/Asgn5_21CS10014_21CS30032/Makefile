@@ -37,4 +37,4 @@ test :a.out
 
 
 clean:
-	rm lex.yy.c $(BASE).tab.c $(BASE).tab.h lex.yy.o $(BASE).tab.o $(BASE)_translator.o  $(BASE).output a.out  $(BASE)_translator.h.gch output_test_codes/*_quads*.out
+	rm lex.yy.c $(BASE).tab.c $(BASE).tab.h lex.yy.o $(BASE).tab.o $(BASE)_translator.o  $(BASE).output a.out  $(BASE)_translator.h.gch
