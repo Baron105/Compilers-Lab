@@ -1187,7 +1187,7 @@ external_declaration
 function_definition
     : declaration_specifiers declarator declaration_list_opt change_table CURLY_BRACKET_OPEN block_item_list_opt CURLY_BRACKET_CLOSE
     {
-        curent_symbol_table->parent = global_symbol_table;
+        current_symbol_table->parent = global_symbol_table;
         symbol_table_counter = 0;
         switchTable(global_symbol_table);
     }
