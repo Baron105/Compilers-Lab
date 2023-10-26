@@ -78,7 +78,7 @@ constant
         emit("=",$$->name,$1);
     }
     | FLOATING_CONSTANT { 
-        $$ = symbol_table :: gentemp(new symbol_type("float"),float2string($1));
+        $$ = symbol_table :: gentemp(new symbol_type("float"),string($1));
         emit("=",$$->name,$1);
      }
     | CHAR_CONSTANT {
@@ -194,17 +194,17 @@ unary_expression
                 break;
 
             case '-' :
-                $$->arr = symbol_table :: gentemp($2->arr->type->type);
+                $$->arr = symbol_table :: gentemp($2->arr->type->ptr);
                 emit("= -",$$->arr->name,$2->arr->name);
                 break;
 
             case '~' :
-                $$->arr = symbol_table :: gentemp($2->arr->type->type);
+                $$->arr = symbol_table :: gentemp($2->arr->type->ptr);
                 emit("= ~",$$->arr->name,$2->arr->name);
                 break;
             
             case '!' :
-                $$->arr = symbol_table :: gentemp($2->arr->type->type);
+                $$->arr = symbol_table :: gentemp($2->arr->type->ptr);
                 emit("= !",$$->arr->name,$2->arr->name);
                 break;
         }
@@ -228,7 +228,7 @@ cast_expression
     : unary_expression { $$ = $1; }
     | ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE cast_expression {
         $$ = new Array() ;
-        $$->arr = convertType($4->arr,varType);
+        $$->arr = convertType($4->arr,typevar);
     }
     ;
 
@@ -294,11 +294,11 @@ additive_expression
     : multiplicative_expression { $$=$1; }
     | additive_expression PLUS multiplicative_expression {
 
-        if(typecheck($1->loc,$3->arr))
+        if(typecheck($1->loc,$3->loc))
         {
             $$ = new expression();
             $$->loc = symbol_table :: gentemp(new symbol_type($1->loc->type->type));
-            emit("+",$$->loc->name,$1->loc->name,$3->arr->name);
+            emit("+",$$->loc->name,$1->loc->name,$3->loc->name);
         }
         else 
         {
@@ -307,11 +307,11 @@ additive_expression
     }
     | additive_expression MINUS multiplicative_expression {
         
-        if(typecheck($1->loc,$3->arr))
+        if(typecheck($1->loc,$3->loc))
         {
             $$ = new expression();
             $$->loc = symbol_table :: gentemp(new symbol_type($1->loc->type->type));
-            emit("-",$$->loc->name,$1->loc->name,$3->arr->name);
+            emit("-",$$->loc->name,$1->loc->name,$3->loc->name);
         }
         else 
         {
@@ -788,13 +788,13 @@ direct_declarator
     | direct_declarator SQUARE_BRACKET_OPEN assignment_expression SQUARE_BRACKET_CLOSE
     {
         symbol_type* t = $1->type;
-        symbol_type* new = NULL;
+        symbol_type* new1 = NULL;
         while(t->type == "arr")
         {
-            new = t;
+            new1 = t;
             t = t->ptr;
         }
-        if (new == NULL)
+        if (new1 == NULL)
         {
             int temp = atoi($3->loc->value.c_str());
             symbol_type* new_type = new symbol_type("arr", $1->type, temp);
@@ -803,27 +803,27 @@ direct_declarator
         else
         {
             int temp = atoi($3->loc->value.c_str());
-            new->ptr = new symbol_type("arr", t, temp);
+            new1->ptr = new symbol_type("arr", t, temp);
             $$ = $1->update($1->type);
         }
     }
     | direct_declarator SQUARE_BRACKET_OPEN SQUARE_BRACKET_CLOSE
     {
         symbol_type* t = $1->type;
-        symbol_type* new = NULL;
+        symbol_type* new1 = NULL;
         while(t->type == "arr")
         {
-            new = t;
+            new1 = t;
             t = t->ptr;
         }
-        if (new == NULL)
+        if (new1 == NULL)
         {
             symbol_type* new_type = new symbol_type("arr", $1->type, 0);
             $$ = $1->update(new_type);
         }
         else
         {
-            new->ptr = new symbol_type("arr", t, 0);
+            new1->ptr = new symbol_type("arr", t, 0);
             $$ = $1->update($1->type);
         }
     }
@@ -832,8 +832,8 @@ direct_declarator
         current_symbol_table->name = $1->name;
         if ($1->type->type != "void")
         {
-            symbol* new = current_symbol_table->lookup("return");
-            new->update($1->type);
+            symbol* new1 = current_symbol_table->lookup("return");
+            new1->update($1->type);
         }
         $1->nested_table = current_symbol_table;
         current_symbol_table->parent = global_symbol_table;
@@ -845,8 +845,8 @@ direct_declarator
         current_symbol_table->name = $1->name;
         if ($1->type->type != "void")
         {
-            symbol* new = current_symbol_table->lookup("return");
-            new->update($1->type);
+            symbol* new1 = current_symbol_table->lookup("return");
+            new1->update($1->type);
         }
         $1->nested_table = current_symbol_table;
         current_symbol_table->parent = global_symbol_table;
@@ -1140,11 +1140,11 @@ D
 X   
     : %empty
     {
-        string new_ST = curent_symbol_table->name + "_" + current_block_name + "_" + to_string(symbol_table_counter++);
-        symbol* new_symbol = curent_symbol_table->lookup(new_ST);
+        string new_ST = current_symbol_table->name + "_" + current_block_name + "_" + to_string(symbol_table_counter++);
+        symbol* new_symbol = current_symbol_table->lookup(new_ST);
         new_symbol->nested_table = new symbol_table(new_ST);
         new_symbol->name = new_ST;
-        new_symbol->nested_table->parent = curent_symbol_table;
+        new_symbol->nested_table->parent = current_symbol_table;
         new_symbol->type = new symbol_type("block");
         current_symbol = new_symbol;
     }
@@ -1214,9 +1214,9 @@ declaration_list
 
 %%
 
-void yyerror(char* s) {
+void yyerror(string s) {
     // for error reporting
-    printf("Error: %s\n", s);
-    printf("Line: %d\n", yylineno);
-    printf("Text: %s\n", yytext);
+    cout << "Error: " << s << endl;
+    cout << "Line: " << yylineno << endl;
+    cout << "Text: " << yytext << endl;
 }

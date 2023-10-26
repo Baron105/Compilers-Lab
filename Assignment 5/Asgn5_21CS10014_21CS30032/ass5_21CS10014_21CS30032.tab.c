@@ -1934,7 +1934,7 @@ yyreduce:
 
   case 4:
 #line 71 "ass5_21CS10014_21CS30032.y"
-                     { (yyval.expr) new expression() ; (yyval.expr)->loc = symbol_table :: gentemp(new symbol_type("ptr"),(yyvsp[0].strval)); (yyval.expr)->loc->type->ptr = new symbol_type("char"); }
+                     { (yyval.expr) = new expression() ; (yyval.expr)->loc = symbol_table :: gentemp(new symbol_type("ptr"),(yyvsp[0].strval)); (yyval.expr)->loc->type->ptr = new symbol_type("char"); }
 #line 1939 "ass5_21CS10014_21CS30032.tab.c"
     break;
 
@@ -1956,7 +1956,7 @@ yyreduce:
   case 7:
 #line 80 "ass5_21CS10014_21CS30032.y"
                         { 
-        (yyval.sym) = symbol_table :: gentemp(new symbol_type("float"),float2string((yyvsp[0].strval)));
+        (yyval.sym) = symbol_table :: gentemp(new symbol_type("float"),string((yyvsp[0].strval)));
         emit("=",(yyval.sym)->name,(yyvsp[0].strval));
      }
 #line 1963 "ass5_21CS10014_21CS30032.tab.c"
@@ -1996,7 +1996,7 @@ yyreduce:
         {
             symbol * symb = symbol_table :: gentemp(new symbol_type("int"));
             int size  = getsize((yyval.arr)->type);
-            emit("+",symb->name,%3->loc->name,int2string(size));
+            emit("+",symb->name,(yyvsp[-1].expr)->loc->name,int2string(size));
             emit("+",(yyval.arr)->loc->name,(yyvsp[-3].arr)->loc->name,symb->name);
         }
         else 
@@ -2149,17 +2149,17 @@ yyreduce:
                 break;
 
             case '-' :
-                (yyval.arr)->arr = symbol_table :: gentemp((yyvsp[0].arr)->arr->type->type);
+                (yyval.arr)->arr = symbol_table :: gentemp((yyvsp[0].arr)->arr->type->ptr);
                 emit("= -",(yyval.arr)->arr->name,(yyvsp[0].arr)->arr->name);
                 break;
 
             case '~' :
-                (yyval.arr)->arr = symbol_table :: gentemp((yyvsp[0].arr)->arr->type->type);
+                (yyval.arr)->arr = symbol_table :: gentemp((yyvsp[0].arr)->arr->type->ptr);
                 emit("= ~",(yyval.arr)->arr->name,(yyvsp[0].arr)->arr->name);
                 break;
             
             case '!' :
-                (yyval.arr)->arr = symbol_table :: gentemp((yyvsp[0].arr)->arr->type->type);
+                (yyval.arr)->arr = symbol_table :: gentemp((yyvsp[0].arr)->arr->type->ptr);
                 emit("= !",(yyval.arr)->arr->name,(yyvsp[0].arr)->arr->name);
                 break;
         }
@@ -2225,7 +2225,7 @@ yyreduce:
 #line 229 "ass5_21CS10014_21CS30032.y"
                                                                        {
         (yyval.arr) = new Array() ;
-        (yyval.arr)->arr = convertType((yyvsp[0].arr)->arr,varType);
+        (yyval.arr)->arr = convertType((yyvsp[0].arr)->arr,typevar);
     }
 #line 2231 "ass5_21CS10014_21CS30032.tab.c"
     break;
@@ -2315,11 +2315,11 @@ yyreduce:
 #line 295 "ass5_21CS10014_21CS30032.y"
                                                          {
 
-        if(typecheck((yyvsp[-2].expr)->loc,(yyvsp[0].expr)->arr))
+        if(typecheck((yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc))
         {
             (yyval.expr) = new expression();
             (yyval.expr)->loc = symbol_table :: gentemp(new symbol_type((yyvsp[-2].expr)->loc->type->type));
-            emit("+",(yyval.expr)->loc->name,(yyvsp[-2].expr)->loc->name,(yyvsp[0].expr)->arr->name);
+            emit("+",(yyval.expr)->loc->name,(yyvsp[-2].expr)->loc->name,(yyvsp[0].expr)->loc->name);
         }
         else 
         {
@@ -2333,11 +2333,11 @@ yyreduce:
 #line 308 "ass5_21CS10014_21CS30032.y"
                                                           {
         
-        if(typecheck((yyvsp[-2].expr)->loc,(yyvsp[0].expr)->arr))
+        if(typecheck((yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc))
         {
             (yyval.expr) = new expression();
             (yyval.expr)->loc = symbol_table :: gentemp(new symbol_type((yyvsp[-2].expr)->loc->type->type));
-            emit("-",(yyval.expr)->loc->name,(yyvsp[-2].expr)->loc->name,(yyvsp[0].expr)->arr->name);
+            emit("-",(yyval.expr)->loc->name,(yyvsp[-2].expr)->loc->name,(yyvsp[0].expr)->loc->name);
         }
         else 
         {
@@ -2487,8 +2487,8 @@ yyreduce:
         
         if(typecheck((yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc))
         {
-            convertBoolToInt((yyvsp[-2].expr));
-            convertBoolToInt((yyvsp[0].expr));
+            convertBool2Int((yyvsp[-2].expr));
+            convertBool2Int((yyvsp[0].expr));
             (yyval.expr) = new expression();
             (yyval.expr)->type = "bool";
             (yyval.expr)->truelist = makelist(nextinstr());
@@ -2510,8 +2510,8 @@ yyreduce:
         
         if(typecheck((yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc))
         {
-            convertBoolToInt((yyvsp[-2].expr));
-            convertBoolToInt((yyvsp[0].expr));
+            convertBool2Int((yyvsp[-2].expr));
+            convertBool2Int((yyvsp[0].expr));
             (yyval.expr) = new expression();
             (yyval.expr)->type = "bool";
             (yyval.expr)->truelist = makelist(nextinstr());
@@ -2539,8 +2539,8 @@ yyreduce:
         
         if(typecheck((yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc))
         {
-            convertBoolToInt((yyvsp[-2].expr));
-            convertBoolToInt((yyvsp[0].expr));
+            convertBool2Int((yyvsp[-2].expr));
+            convertBool2Int((yyvsp[0].expr));
             (yyval.expr) = new expression();
             (yyval.expr)->type = "not_bool";
             (yyval.expr)->loc = symbol_table :: gentemp(new symbol_type("int"));
@@ -2566,8 +2566,8 @@ yyreduce:
         
         if(typecheck((yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc))
         {
-            convertBoolToInt((yyvsp[-2].expr));
-            convertBoolToInt((yyvsp[0].expr));
+            convertBool2Int((yyvsp[-2].expr));
+            convertBool2Int((yyvsp[0].expr));
             (yyval.expr) = new expression();
             (yyval.expr)->type = "not_bool";
             (yyval.expr)->loc = symbol_table :: gentemp(new symbol_type("int"));
@@ -2593,8 +2593,8 @@ yyreduce:
         
         if(typecheck((yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc))
         {
-            convertBoolToInt((yyvsp[-2].expr));
-            convertBoolToInt((yyvsp[0].expr));
+            convertBool2Int((yyvsp[-2].expr));
+            convertBool2Int((yyvsp[0].expr));
             (yyval.expr) = new expression();
             (yyval.expr)->type = "not_bool";
             (yyval.expr)->loc = symbol_table :: gentemp(new symbol_type("int"));
@@ -2622,8 +2622,8 @@ yyreduce:
             here we have made few changes to the grammar to incorporate non terminal M to handle backpatching
         */
 
-        convertBoolToInt((yyvsp[-3].expr));
-        convertBoolToInt((yyvsp[0].expr));
+        convertBool2Int((yyvsp[-3].expr));
+        convertBool2Int((yyvsp[0].expr));
         (yyval.expr) = new expression();
         (yyval.expr)->type = "bool";
         backpatch((yyvsp[-3].expr)->truelist,(yyvsp[-1].bp));
@@ -2644,8 +2644,8 @@ yyreduce:
 #line 542 "ass5_21CS10014_21CS30032.y"
                                                                 {
         
-        convertBoolToInt((yyvsp[-3].expr));
-        convertBoolToInt((yyvsp[0].expr));
+        convertBool2Int((yyvsp[-3].expr));
+        convertBool2Int((yyvsp[0].expr));
         (yyval.expr) = new expression();
         (yyval.expr)->type = "bool";
         backpatch((yyvsp[-3].expr)->falselist,(yyvsp[-1].bp));
@@ -2680,7 +2680,7 @@ yyreduce:
         l1=merge(l1,l2);
         emit("goto", "");
         backpatch((yyvsp[-7].stmt)->nextlist, nextinstr());
-        convertIntToBool((yyvsp[-8].expr));
+        convertInt2Bool((yyvsp[-8].expr));
         backpatch((yyvsp[-8].expr)->truelist,(yyvsp[-5].bp));
         backpatch((yyvsp[-8].expr)->falselist,(yyvsp[-1].bp));
         backpatch(l1,nextinstr());
@@ -3162,13 +3162,13 @@ yyreduce:
 #line 789 "ass5_21CS10014_21CS30032.y"
     {
         symbol_type* t = (yyvsp[-3].sym)->type;
-        symbol_type* new = NULL;
+        symbol_type* new1 = NULL;
         while(t->type == "arr")
         {
-            new = t;
+            new1 = t;
             t = t->ptr;
         }
-        if (new == NULL)
+        if (new1 == NULL)
         {
             int temp = atoi((yyvsp[-1].expr)->loc->value.c_str());
             symbol_type* new_type = new symbol_type("arr", (yyvsp[-3].sym)->type, temp);
@@ -3177,7 +3177,7 @@ yyreduce:
         else
         {
             int temp = atoi((yyvsp[-1].expr)->loc->value.c_str());
-            new->ptr = new symbol_type("arr", t, temp);
+            new1->ptr = new symbol_type("arr", t, temp);
             (yyval.sym) = (yyvsp[-3].sym)->update((yyvsp[-3].sym)->type);
         }
     }
@@ -3188,20 +3188,20 @@ yyreduce:
 #line 811 "ass5_21CS10014_21CS30032.y"
     {
         symbol_type* t = (yyvsp[-2].sym)->type;
-        symbol_type* new = NULL;
+        symbol_type* new1 = NULL;
         while(t->type == "arr")
         {
-            new = t;
+            new1 = t;
             t = t->ptr;
         }
-        if (new == NULL)
+        if (new1 == NULL)
         {
             symbol_type* new_type = new symbol_type("arr", (yyvsp[-2].sym)->type, 0);
             (yyval.sym) = (yyvsp[-2].sym)->update(new_type);
         }
         else
         {
-            new->ptr = new symbol_type("arr", t, 0);
+            new1->ptr = new symbol_type("arr", t, 0);
             (yyval.sym) = (yyvsp[-2].sym)->update((yyvsp[-2].sym)->type);
         }
     }
@@ -3214,8 +3214,8 @@ yyreduce:
         current_symbol_table->name = (yyvsp[-4].sym)->name;
         if ((yyvsp[-4].sym)->type->type != "void")
         {
-            symbol* new = current_symbol_table->lookup("return");
-            new->update((yyvsp[-4].sym)->type);
+            symbol* new1 = current_symbol_table->lookup("return");
+            new1->update((yyvsp[-4].sym)->type);
         }
         (yyvsp[-4].sym)->nested_table = current_symbol_table;
         current_symbol_table->parent = global_symbol_table;
@@ -3231,8 +3231,8 @@ yyreduce:
         current_symbol_table->name = (yyvsp[-3].sym)->name;
         if ((yyvsp[-3].sym)->type->type != "void")
         {
-            symbol* new = current_symbol_table->lookup("return");
-            new->update((yyvsp[-3].sym)->type);
+            symbol* new1 = current_symbol_table->lookup("return");
+            new1->update((yyvsp[-3].sym)->type);
         }
         (yyvsp[-3].sym)->nested_table = current_symbol_table;
         current_symbol_table->parent = global_symbol_table;
@@ -3641,7 +3641,7 @@ yyreduce:
 
         (yyval.stmt)->nextlist = (yyvsp[-3].expr)->falselist;
         emit("goto", int2string((yyvsp[-4].bp)));
-        block_name = "";
+        current_block_name = "";
         switchTable(current_symbol_table->parent);
     }
 #line 3648 "ass5_21CS10014_21CS30032.tab.c"
@@ -3657,7 +3657,7 @@ yyreduce:
 
         (yyval.stmt)->nextlist = (yyvsp[-5].expr)->falselist;
         emit("goto", int2string((yyvsp[-6].bp)));
-        block_name = "";
+        current_block_name = "";
         switchTable(current_symbol_table->parent);
     }
 #line 3664 "ass5_21CS10014_21CS30032.tab.c"
@@ -3673,7 +3673,7 @@ yyreduce:
 
         (yyval.stmt)->nextlist = (yyvsp[-2].expr)->falselist;
 
-        block_name = "";
+        current_block_name = "";
     }
 #line 3679 "ass5_21CS10014_21CS30032.tab.c"
     break;
@@ -3688,7 +3688,7 @@ yyreduce:
 
         (yyval.stmt)->nextlist = (yyvsp[-2].expr)->falselist;
 
-        block_name = "";
+        current_block_name = "";
     }
 #line 3694 "ass5_21CS10014_21CS30032.tab.c"
     break;
@@ -3704,7 +3704,7 @@ yyreduce:
 
         (yyval.stmt)->nextlist = (yyvsp[-6].expr)->falselist;
         emit("goto", int2string((yyvsp[-5].bp)));
-        block_name = "";
+        current_block_name = "";
         switchTable(current_symbol_table->parent);
     }
 #line 3711 "ass5_21CS10014_21CS30032.tab.c"
@@ -3721,7 +3721,7 @@ yyreduce:
 
         (yyval.stmt)->nextlist = (yyvsp[-6].expr)->falselist;
         emit("goto", int2string((yyvsp[-5].bp)));
-        block_name = "";
+        current_block_name = "";
         switchTable(current_symbol_table->parent);
     }
 #line 3728 "ass5_21CS10014_21CS30032.tab.c"
@@ -3738,7 +3738,7 @@ yyreduce:
 
         (yyval.stmt)->nextlist = (yyvsp[-8].expr)->falselist;
         emit("goto", int2string((yyvsp[-7].bp)));
-        block_name = "";
+        current_block_name = "";
         switchTable(current_symbol_table->parent);
     }
 #line 3745 "ass5_21CS10014_21CS30032.tab.c"
@@ -3755,7 +3755,7 @@ yyreduce:
 
         (yyval.stmt)->nextlist = (yyvsp[-8].expr)->falselist;
         emit("goto", int2string((yyvsp[-7].bp)));
-        block_name = "";
+        current_block_name = "";
         switchTable(current_symbol_table->parent);
     }
 #line 3762 "ass5_21CS10014_21CS30032.tab.c"
@@ -3763,30 +3763,30 @@ yyreduce:
 
   case 210:
 #line 1129 "ass5_21CS10014_21CS30032.y"
-             { block_name = "for"; }
+      { current_block_name = "for"; }
 #line 3768 "ass5_21CS10014_21CS30032.tab.c"
     break;
 
   case 211:
 #line 1133 "ass5_21CS10014_21CS30032.y"
-             { block_name = "while"; }
+      { current_block_name = "while"; }
 #line 3774 "ass5_21CS10014_21CS30032.tab.c"
     break;
 
   case 212:
 #line 1137 "ass5_21CS10014_21CS30032.y"
-             { block_name = "do_while"; }
+      { current_block_name = "do_while"; }
 #line 3780 "ass5_21CS10014_21CS30032.tab.c"
     break;
 
   case 213:
 #line 1142 "ass5_21CS10014_21CS30032.y"
     {
-        string new_ST = curent_symbol_table->name + "_" + block_name + "_" + to_string(symbol_table_counter++);
-        symbol* new_symbol = curent_symbol_table->lookup(new_ST);
+        string new_ST = current_symbol_table->name + "_" + current_block_name + "_" + to_string(symbol_table_counter++);
+        symbol* new_symbol = current_symbol_table->lookup(new_ST);
         new_symbol->nested_table = new symbol_table(new_ST);
         new_symbol->name = new_ST;
-        new_symbol->nested_table->parent = curent_symbol_table;
+        new_symbol->nested_table->parent = current_symbol_table;
         new_symbol->type = new symbol_type("block");
         current_symbol = new_symbol;
     }
@@ -4139,9 +4139,9 @@ yyreturn:
 #line 1215 "ass5_21CS10014_21CS30032.y"
 
 
-void yyerror(char* s) {
+void yyerror(string s) {
     // for error reporting
-    printf("Error: %s\n", s);
-    printf("Line: %d\n", yylineno);
-    printf("Text: %s\n", yytext);
+    cout << "Error: " << s << endl;
+    cout << "Line: " << yylineno << endl;
+    cout << "Text: " << yytext << endl;
 }

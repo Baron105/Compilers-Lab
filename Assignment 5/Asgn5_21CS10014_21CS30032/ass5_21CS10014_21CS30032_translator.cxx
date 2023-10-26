@@ -3,6 +3,7 @@
 using namespace std;
 
 #include "ass5_21CS10014_21CS30032_translator.h"
+#include <iomanip>
 
 symbol *current_symbol;
 symbol_table *current_symbol_table;
@@ -12,14 +13,14 @@ int symbol_table_counter;
 string current_block_name;
 
 // string last_var_type;
-string var_type;
+string typevar;
 
 symbol::symbol(string name, string t, symbol_type* st, int size):
     name(name), type(st), value("x"), size(size), offset(0), nested_table(NULL) {
-    type = new symbol_type(t, size, st);
+    type = new symbol_type(t, st, size);
 }
 
-symbol_type::symbol_type(string type, int size, symbol_type* ptr):
+symbol_type::symbol_type(string type,symbol_type* ptr,int size):
     type(type), size(getsize(ptr)), ptr(ptr) {}
 
 symbol* symbol::update(symbol_type* t) {

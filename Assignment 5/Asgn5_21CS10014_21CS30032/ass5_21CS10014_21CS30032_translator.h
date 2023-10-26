@@ -39,7 +39,7 @@ public:
     string type;
     int size;
     symbol_type* ptr;
-    symbol_type(string type, int size = 0, symbol_type* ptr = NULL);
+    symbol_type(string type,  symbol_type* ptr = NULL, int size = 1);
 };
 
 class symbol {

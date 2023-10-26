@@ -645,8 +645,8 @@ char *yytext;
 #line 1 "ass5_21CS10014_21CS30032.l"
 #line 2 "ass5_21CS10014_21CS30032.l"
     #include <stdio.h>
-    #include "ass5_21CS10014_21CS30032.tab.h"
     #include "ass5_21CS10014_21CS30032_translator.h"
+    #include "ass5_21CS10014_21CS30032.tab.h"
 #line 651 "lex.yy.c"
 /* comments */
 /* all keywords */
