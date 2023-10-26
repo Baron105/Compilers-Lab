@@ -1126,15 +1126,18 @@ iteration_statement
     ;
 
 F
-    : { current_block_name = "for"; }
+    : %empty
+    { current_block_name = "for"; }
     ;
 
 W
-    : { current_block_name = "while"; }
+    : %empty
+    { current_block_name = "while"; }
     ;
 
 D
-    : { current_block_name = "do_while"; }
+    : %empty
+    { current_block_name = "do_while"; }
     ;
 
 X   
