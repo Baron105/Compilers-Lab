@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "string": "cpp",
-        "xstring": "cpp",
-        "vector": "cpp",
-        "xlocmon": "cpp"
-    },
-    "C_Cpp.errorSquiggles": "enabled"
-}
