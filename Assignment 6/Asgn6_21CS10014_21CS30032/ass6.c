@@ -86,7 +86,7 @@ int printInt(int n)
 }
 
 // function to print a floating point number and return the number of characters printed
-int printFlt(float f)
+int printFlt (float f)
 {
     // declare a buffer to store the floating point number and some other auxiliary variables
     // zero is the ASCII value of '0' to make easier conversions
@@ -161,7 +161,7 @@ int printFlt(float f)
 
 // function to read an integer from the standard input and return whether the read was successful or not
 // OK is returned if the read was successful, ERR otherwise
-int readInt(int *eP)
+int readInt(int *n)
 {
     // declare a buffer to store the integer and some other auxiliary variables
     char buff[BUFF]={'\0'};
@@ -177,20 +177,12 @@ int readInt(int *eP)
         : "S"(buff), "d"(BUFF)
     );
 
-    // if the read was unsuccessful, then set the error pointer and return 0
-    // first check if length of the string is <= 0, if yes, then set the error pointer and return 0
-    if (j <= 0) 
-    {
-        *eP = ERR;
-        return 0;
-    }
+    // if the read was unsuccessful, then return ERR
+    // first check if length of the string is <= 0, if yes, then return ERR
+    if (j <= 0) return ERR;
 
-    // check if the first symbol is a '-', '+' or a digit, if not, then set the error pointer and return 0
-    if (buff[i] != '-' && buff[i] != '+' && (buff[i] < '0' || buff[i] > '9'))
-    {
-        *eP = ERR;
-        return 0;
-    }
+    // check if the first symbol is a '-', '+' or a digit, if not, then return ERR
+    if (buff[i] != '-' && buff[i] != '+' && (buff[i] < '0' || buff[i] > '9')) return ERR;
 
     // if the first symbol is a '-', then set neg to 1 and increment i
     // else if the first symbol is a '+', then increment i
@@ -210,26 +202,14 @@ int readInt(int *eP)
 
     while(buff[i]!=' '&&buff[i]!='\n'&&buff[i]!='\t'&&buff[i]!='\0')
     {
-        // if the character is not a digit, then set the error pointer and return 0
-        if (buff[i] < '0' || buff[i] > '9')
-        {
-            *eP = ERR;
-            return 0;
-        }
+        // if the character is not a digit, then return ERR
+        if (buff[i] < '0' || buff[i] > '9') return ERR;
         
         int dig = buff[i] - '0';
 
-        // check if the number is within bounds, if not, then set the error pointer and return 0
-        if (!neg && (num > 214748364 || (num == 214748364 && dig > 7)))
-        {
-            *eP = ERR;
-            return 0;
-        }
-        else if (neg && (num > 214748364 || (num == 214748364 && dig > 8)))
-        {
-            *eP = ERR;
-            return 0;
-        }
+        // check if the number is within bounds, if not, then return ERR
+        if (!neg && (num > 214748364 || (num == 214748364 && dig > 7))) return ERR;
+        else if (neg && (num > 214748364 || (num == 214748364 && dig > 8))) return ERR;
 
         // update the integer
         num = num * 10 + dig;
@@ -239,14 +219,14 @@ int readInt(int *eP)
     // if the integer was negative, then make it negative
     if (neg) num = -num;
 
-    // set the error pointer and return the integer
-    *eP = OK;
-    return (int)num;
+    // store the integer in the pointer and return OK
+    *n = (int)num;
+    return OK;
 }
 
 // function to read a floating point number from the standard input and return whether the read was successful or not
 // OK is returned if the read was successful, ERR otherwise
-int readFlt(float *eP)
+int readFlt(float *n)
 {
     // declare a buffer to store the integer and some other auxiliary variables
     char buff[BUFF]={'\0'};
@@ -262,20 +242,12 @@ int readFlt(float *eP)
         : "S"(buff), "d"(BUFF)
     );
 
-    // if the read was unsuccessful, then set the error pointer and return 0
-    // first check if length of the string is <= 0, if yes, then set the error pointer and return 0
-    if (j <= 0) 
-    {
-        *eP = ERR;
-        return 0;
-    }
+    // if the read was unsuccessful, then return ERR
+    // first check if length of the string is <= 0, if yes, then return ERR
+    if (j <= 0) return ERR;
 
-    // check if the first symbol is a '-', '+', '.' or a digit, if not, then set the error pointer and return 0
-    if (buff[i] != '-' && buff[i] != '+' && buff[i] != '.' && (buff[i] < '0' || buff[i] > '9'))
-    {
-        *eP = ERR;
-        return 0;
-    }
+    // check if the first symbol is a '-', '+', '.' or a digit, if not, then return ERR
+    if (buff[i] != '-' && buff[i] != '+' && buff[i] != '.' && (buff[i] < '0' || buff[i] > '9')) return ERR;
 
     // if the first symbol is a '-', then set neg to 1 and increment i
     // else if the first symbol is a '+', then increment i
@@ -291,33 +263,21 @@ int readFlt(float *eP)
     double fp = 0.0;
 
     // now iterate over the string till the end of the string or till a non digit character is encountered
-    // if a non digit character (except a single .) is encountered, then set the error pointer and return 0
+    // if a non digit character (except a single .) is encountered, then return ERR
 
     while(buff[i]!=' '&&buff[i]!='\n'&&buff[i]!='\t'&&buff[i]!='\0')
     {
-        // if the character is not a digit or a '.', then set the error pointer and return 0
-        if (buff[i] != '.' && (buff[i] < '0' || buff[i] > '9'))
-        {
-            *eP = ERR;
-            return 0;
-        }
+        // if the character is not a digit or a '.', then return ERR
+        if (buff[i] != '.' && (buff[i] < '0' || buff[i] > '9')) return ERR;
         
         // if a '.', then break the loop
         if (buff[i] == '.') break;
 
         int dig = buff[i] - '0';
 
-        // check if the number is within bounds, if not, then set the error pointer and return 0
-        if (!neg && (ip > 214748364 || (ip == 214748364 && dig > 7)))
-        {
-            *eP = ERR;
-            return 0;
-        }
-        else if (neg && (ip > 214748364 || (ip == 214748364 && dig > 8)))
-        {
-            *eP = ERR;
-            return 0;
-        }
+        // check if the number is within bounds, if not, then return ERR
+        if (!neg && (ip > 214748364 || (ip == 214748364 && dig > 7))) return ERR;
+        else if (neg && (ip > 214748364 || (ip == 214748364 && dig > 8))) return ERR;
 
         // update the integer
         ip = ip * 10 + dig;
@@ -328,18 +288,14 @@ int readFlt(float *eP)
     if (buff[i] == '.') i++;
 
     // now iterate over the string till the end of the string or till a non digit character is encountered
-    // if a non digit character is encountered, then set the error pointer and return 0
+    // if a non digit character is encountered, then return ERR
 
     // ad is the number of digits after the decimal point
     int l = 0, ad = 0;
     while(buff[i]!=' '&&buff[i]!='\n'&&buff[i]!='\t'&&buff[i]!='\0')
     {
         // if the character is not a digit, then return ERR
-        if (buff[i] < '0' || buff[i] > '9')
-        {
-            *eP = ERR;
-            return 0;
-        }
+        if (buff[i] < '0' || buff[i] > '9') return ERR;
         
         int dig = buff[i] - '0';
 
@@ -362,9 +318,7 @@ int readFlt(float *eP)
 
     // store the floating point number in the pointer according to the sign
     // return OK
-    float num = 0.0;
-    if (neg) num = (float)(-ip - fp);
-    else num = (float)(ip + fp);
-    *eP = OK;
-    return num;
+    if (neg) *n = (float)(-ip - fp);
+    else *n = (float)(ip + fp);
+    return OK;
 }

@@ -4,7 +4,7 @@
 #define OK 1
 int printStr(char *);
 int printInt(int);
-int readInt(int *eP); // Usual meaning as specified in Assignment #2
+int readInt(int *); // Usual meaning as specified in Assignment #2
 int printFlt(float);
-int readFlt(float *eP); // Usual meaning as specified in Assignment #2
+int readFlt(float *); // Usual meaning as specified in Assignment #2
 #endif
