@@ -7,6 +7,14 @@ int main()
     int x = 3 ;
     int y = 5;
 
+    if (x)
+    {
+        x = x + 1;
+    }
+    else
+    {
+        y = y + 1;
+    } 
     a = x + y;
     b = x - y;
     c = x * y;
