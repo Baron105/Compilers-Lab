@@ -153,6 +153,8 @@ string quad::print_quad()
     else if (op == CHARtoFLOAT) s += result + " = (float)" + arg1;
     else if (op == REFERENCE) s += result + " = &" + arg1;
     else if (op == DEREFERENCE) s+= result + " = *" + arg1;
+
+    return s;
 }
 
 void quad_array::print_quad_array() {
@@ -337,6 +339,6 @@ string getval(symbol* sym)
         else if (sym->type.type == CHAR) {
             return to_string(sym->initial_value->char_val);
         }
-        return "x";
     }
+    return "x";
 }
