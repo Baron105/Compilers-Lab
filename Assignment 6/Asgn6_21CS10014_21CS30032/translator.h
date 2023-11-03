@@ -102,7 +102,8 @@ public:
 
     symbol_table();
     symbol* lookup(string name ,data_type type = INT,int pc = 0);
-    static symbol* gentemp(data_type type = INT);
+    symbol* search_global_table(string name);
+    string gentemp(data_type);
 
     void print_st(string );
 };
@@ -152,8 +153,8 @@ class expression
         list<int> truelist;  // truelist for expression
         list<int> falselist; // falselist for expression
         list<int> nextlist; // nextlist for expression
-        int fold ;
-        string * folder ;
+        int fold;
+        string* folder;
 
         expression();
 };
@@ -226,7 +227,5 @@ int getsize(data_type );
 
 // function to get the initial value of a symbol
 string getval(symbol* sym);
-
-
 
 #endif
