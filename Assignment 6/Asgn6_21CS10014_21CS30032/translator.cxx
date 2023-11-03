@@ -15,147 +15,190 @@ string current_block_name;
 // string last_var_type;
 string typevar;
 
-// symbol::symbol(string name, string t, symbol_type* st, int width):
-//     name(name), type(st), value("x"), offset(0), nested_table(NULL) {
-//     type = new symbol_type(t, st, width);
-//     size = getsize(type);
-// }
-
-// symbol_type::symbol_type(string type,symbol_type* ptr,int width):
-//     type(type), width(width), ptr(ptr) {}
-
-// symbol* symbol::update(symbol_type* t) {
-//     type = t;
-//     size = getsize(t);
-//     return this;
-// }
-
-// symbol_table::symbol_table(string name):
-//     name(name), count(0), parent(parent) {}
-
-// symbol* symbol_table::lookup(string name) {
-//     for (list<symbol>::iterator it = symbols.begin(); it != symbols.end(); it++) {
-//         if ((it)->name == name) {
-//             return &(*it);
-//         }
-//     }
-
-//     symbol *s = NULL;
-//     if (this->parent != NULL) {
-//         s = this->parent->lookup(name);
-//     }
-//     if (current_symbol_table == this && s == NULL) {
-//         s = new symbol(name, "int");
-//         symbols.push_back(*s);
-//         return &(symbols.back());
-//     }
-//     return s;
-// }
-
-// symbol* symbol_table::gentemp(symbol_type* type, string value) {
-//     string name = "t" + int2string(current_symbol_table->count++);
-//     symbol* s = new symbol(name, type->type);
-//     s->type = type;
-//     s->value = value;
-//     s->size = getsize(type);
-
-//     current_symbol_table->symbols.push_back(*s);
-//     return &(current_symbol_table->symbols.back());
-// }
-
-// void symbol_table::print_st() {
-//     cout << "========================================================================================================================" << endl;
-//     cout << "Symbol Table: " << name << endl;
-//     cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
-//     // cout << "Name\tValue\tType\tSize\tOffset\tNested Table" << endl;
-//     // using setw() to allocate size for better tabular representation
-//     cout << setw(20) << "Name" << setw(20) << "Value" << setw(20) << "Type" << setw(20) << "Size" << setw(20) << "Offset" << setw(20) << "Nested Table" << endl;
-//     cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
-//     vector <symbol_table*> tables;
-
-//     for(list<symbol>::iterator it = symbols.begin(); it != symbols.end(); it++) {
-//         // cout << it->name << "\t\t\t" << it->value << "\t\t\t" << gettype(it->type) << "\t\t\t" << it->size << "\t\t\t" << it->offset << "\t\t";
-//         cout << setw(20) << it->name << setw(20) << it->value << setw(20) << gettype(it->type) << setw(20) << it->size << setw(20) << it->offset << setw(20);
-//         if (it->nested_table != NULL) {
-//             cout << it->nested_table->name;
-//             tables.push_back(it->nested_table);
-//         }
-//         cout << endl;
-//     }
-//     cout << "========================================================================================================================" << endl;
-
-//     for(int i = 0; i < tables.size(); i++) {
-//         tables[i]->print_st();
-//     }
-// }
-
-// void symbol_table::update() {
-//     vector<symbol_table*> tables;
-//     int offset_new = 0;
-
-//     for(list<symbol>::iterator it = symbols.begin(); it != symbols.end(); it++) {
-//         if (it == symbols.begin()) {
-//             it->offset = 0;
-//             offset_new = it->size;
-//         }
-//         else {
-//             it->offset = offset_new;
-//             offset_new = it->offset + it->size;
-//         }
-
-//         if (it->nested_table != NULL) {
-//             tables.push_back(it->nested_table);
-//         }
-//     }
-// }
-
-
-// quad::quad(string result , string arg1 , string op, string arg2) : result(result) , arg1(arg1) , op(op) , arg2(arg2) {}
-
-// quad::quad(string result, int arg1, string op, string arg2 ) : result(result) , arg2(arg2) , op(op) {
-//     this->arg1 = int2string(arg1);
-// }
-// quad::quad(string result, float arg1, string op , string arg2) : result(result) , arg2(arg2) , op(op) {
-//     this->arg1 = float2string(arg1);
-// }
-
-
-// void quad :: print_quad()
-// {
-//     if (op == "=") cout << result << "=" << arg1;
-//     else if (op == "*=") cout << "*" << result << "=" << arg1;
-//     else if (op == "[]=") cout << result << "[" << arg1 << "]" << " = " << arg2;
-//     else if (op == "=[]") cout << result << " = " << arg1 << "[" << arg2 << "]";
-//     else if (op == "goto" || op == "param" || op == "return") cout << op << " " << result;
-//     else if (op == "call") cout << result << " = " << "call " << arg1 << ", " << arg2;
-//     else if (op == "label") cout << result << ": ";
-
-
-//     else if(op == "+" || op == "-" || op == "*" || op == "/" || op == "%" || op == "^" || op == "|" || op == "&" || op == "<<" || op == ">>") cout << result << " = " << arg1 << " " << op << " " << arg2;
-//     else if(op == "==" || op == "!=" || op == "<" || op == ">" || op == "<=" || op == ">=") cout << "if " << arg1 << " " << op << " " << arg2 << " goto " << result;
-//     else if(op == "= &" || op == "= *" || op == "= -" || op == "= ~" || op == "= !") cout << result << " " << op << arg1;
-
-//     else cout << "Invalid Operator";
-// }
-
-void quad_array :: print_quad_array()
-{
-        cout << "====================================================================================================" << endl;
-        cout << "List of Quads" << endl;
-        cout << "----------------------------------------------------------------------------------------------------" << endl;
-
-        for(int i = 0; i < arr.size(); i++)
-        {
-            cout << i << ":\t";
-            arr[i].print_quad();
-            cout << endl;
-        }
-        cout << "====================================================================================================" << endl;
+void symbol_value::set_value(int val) {
+    int_val = val;
 }
 
+void symbol_value::set_value(float val) {
+    float_val = val;
+}
+
+void symbol_value::set_value(char val) {
+    char_val = val;
+}
+
+symbol::symbol(): initial_value(NULL), size(0), offset(0), nested_table(NULL) {}
+
+symbol_table::symbol_table() : offset(0) {}
+
+symbol* symbol_table::lookup(string name, data_type type, int pc) {
+    map<string, symbol*>::iterator it = table.find(name);
+    if (it != table.end()) {
+        return it->second;
+    }
+    else {
+        symbol* sym = new symbol();
+        sym->name = name;
+        sym->type.type = type;
+        sym->offset = offset;
+        sym->initial_value = NULL;
+        if (pc == 0) {
+            sym->size = getsize(type);
+            offset += sym->size;
+        }
+        else {
+            sym->size = SIZE_OF_PTR;
+            sym->type.ptr = pc;
+            sym->type.nextType = type;
+            sym->type.type = ARR;
+        }
+        symbol_list.push_back(sym);
+        table[name] = sym;
+        return sym;
+    }
+}
+
+string symbol_table::gentemp(data_type type) {
+    string name = "t" + to_string(count++);
+    symbol* sym = new symbol();
+    sym->name = name;
+    sym->type.type = type;
+    sym->offset = offset;
+    sym->initial_value = NULL;
+    sym->size = getsize(type);
+
+    offset += sym->size;
+    symbol_list.push_back(sym);
+    table[name] = sym;
+    return name;
+}
+
+void symbol_table::print_st(string name) {
+    cout << "Symbol Table: " << name << endl;
+    cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
+    cout << setw(20) << "Name" << setw(20) << "Type" << setw(20) << "Initial Value" << setw(20) << "Size" << setw(20) << "Offset" << setw(20) << "Nested Table" << endl;
+
+    vector<pair<string, symbol_table*>> v;
+
+    for (int i = 0; i < symbol_list.size(); i++) {
+        cout << setw(20) << symbol_list[i]->name << setw(20) << gettype(symbol_list[i]->type) << setw(20) << getval(symbol_list[i]) << setw(20) << symbol_list[i]->size << setw(20) << symbol_list[i]->offset << setw(20) << symbol_list[i]->nested_table << endl;
+
+        if (symbol_list[i]->nested_table != NULL) {
+            string s = name + "_" + symbol_list[i]->name;
+            cout << s << endl;
+            v.push_back(make_pair(s, symbol_list[i]->nested_table));
+        }
+    }
+    cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
+
+    for (int i = 0; i < v.size(); i++) {
+        v[i].second->print_st(v[i].first);
+    }
+}
+
+symbol* symbol_table::search_global_table(string name) {
+    map<string, symbol*>::iterator it = table.find(name);
+    if (it != table.end()) {
+        return it->second;
+    }
+    else {
+        return NULL;
+    }
+}
+
+string quad::print_quad()
+{
+    string s = "";
+    if (op == ADD) s += result + " = " + arg1 + " + " + arg2;
+    else if (op == SUB) s += result + " = " + arg1 + " - " + arg2;
+    else if (op == MULT) s += result + " = " + arg1 + " * " + arg2;
+    else if (op == DIV) s += result + " = " + arg1 + " / " + arg2;
+    else if (op == MOD) s += result + " = " + arg1 + " % " + arg2;
+    else if (op == BITWISE_XOR) s += result + " = " + arg1 + " ^ " + arg2;
+    else if (op == BITWISE_OR) s += result + " = " + arg1 + " | " + arg2;
+    else if (op == BITWISE_AND) s += result + " = " + arg1 + " & " + arg2;
+    else if (op == SL) s += result + " = " + arg1 + " << " + arg2;
+    else if (op == SR) s += result + " = " + arg1 + " >> " + arg2;
+    else if (op == ASSIGN) s += result + " = " + arg1;
+    else if (op == BITWISE_UNARY_NOT) s += result + " = ~" + arg1;
+    else if (op == UNARY_NEG) s += result + " = !" + arg1;
+    else if (op == UNARY_MINUS) s += result + " = -" + arg1;
+    else if (op == UNARY_PLUS) s += result + " = +" + arg1;
+    else if (op == GOTO) s += "goto " + result;
+    else if (op == GOTO_LT) s += "if " + arg1 + " < " + arg2 + " goto " + result;
+    else if (op == GOTO_GT) s += "if " + arg1 + " > " + arg2 + " goto " + result;
+    else if (op == GOTO_LTE) s += "if " + arg1 + " <= " + arg2 + " goto " + result;
+    else if (op == GOTO_GTE) s += "if " + arg1 + " >= " + arg2 + " goto " + result;
+    else if (op == GOTO_EQ) s += "if " + arg1 + " == " + arg2 + " goto " + result;
+    else if (op == GOTO_NEQ) s += "if " + arg1 + " != " + arg2 + " goto " + result;
+    else if (op == IF_GOTO) s += "if " + arg1 + "!= 0 goto " + result + " ";
+    else if (op == IF_FALSE_GOTO) s += "if " + arg1 + "== 0 goto " + result + " ";
+    else if (op == PARAM) s += "param " + result;
+    else if (op == CALL) 
+    {
+        if (arg2.size() > 0) s += arg2 + " = ";
+        s += "call " + arg1 + ", " + result; 
+    }
+    else if (op == RETURN) s += "return " + result;
+    else if (op == ARR_IDX_ARG) s += result + " = " + arg1 + "[" + arg2 + "]";
+    else if (op == ARR_IDX_RES) s += result + "[" + arg2 + "]" + " = " + arg2;
+    else if (op == FUNC_BEG) s += result + ":";
+    else if (op == FUNC_END) s += "function " + result + " ends";
+    else if (op == L_DEREF) s += result + " = *" + arg1;
+    else if (op == CHARtoINT) s += result + " = (int)" + arg1;
+    else if (op == INTtoCHAR) s += result + " = (char)" + arg1;
+    else if (op == FLOATtoINT) s += result + " = (int)" + arg1;
+    else if (op == INTtoFLOAT) s += result + " = (float)" + arg1;
+    else if (op == FLOATtoCHAR) s += result + " = (char)" + arg1;
+    else if (op == CHARtoFLOAT) s += result + " = (float)" + arg1;
+    else if (op == REFERENCE) s += result + " = &" + arg1;
+    else if (op == DEREFERENCE) s+= result + " = *" + arg1;
+}
+
+void quad_array::print_quad_array() {
+    cout << "Three Address Codes:" << endl;
+    cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
+    for (int i = 0; i < arr.size(); i++) {
+        if (arr[i].op == FUNC_BEG)
+        {
+            cout << endl;
+            cout << setw(20) << i << setw(20) << arr[i].print_quad() << endl;
+        }
+        else if (arr[i].op == FUNC_END)
+        {
+            cout << arr[i].print_quad() << endl;
+            cout << endl;
+        }
+        else
+        {
+            cout << setw(20) << i << setw(20) << arr[i].print_quad() << endl;
+        }
+
+    }
+}
+
+quad::quad(string result, string arg1, opcode op, string arg2) : result(result), arg1(arg1), op(op), arg2(arg2) {}
+
+expression::expression() : fold(0), folder(NULL) {}
 
 void emit(string result, string arg1, opcode op, string arg2) {
     quad_table.arr.push_back(quad(result, arg1, op, arg2));
+    next_instr++;
+}
+
+void emit(string result, int constant, opcode op) {
+    quad_table.arr.push_back(quad(result, to_string(constant), op, ""));
+    next_instr++;
+}
+
+void emit(string result, float constant, opcode op) {
+    quad_table.arr.push_back(quad(result, to_string(constant), op, ""));
+    next_instr++;
+}
+
+void emit(string result, char constant, opcode op) {
+    quad_table.arr.push_back(quad(result, to_string(constant), op, ""));
+    next_instr++;
 }
 
 list<int> makelist(int i)
@@ -218,8 +261,6 @@ void converttype(string o, data_type otype, string n, data_type ntype)
         else if (ntype == FLOAT) emit(n, o, "", FLOATtoCHAR);
     }
 }
-
-
 
 void inttobool(expression* e)
 {
