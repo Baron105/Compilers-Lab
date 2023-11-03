@@ -1,7 +1,3 @@
-// Name - Barun Parua
-// Roll Number - 21CS10014
-// Assignment - 2
-
 #include "myl.h"
 #define BUFF 200
 
