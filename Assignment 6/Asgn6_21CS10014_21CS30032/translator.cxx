@@ -12,6 +12,8 @@ quad_array quad_table;
 int symbol_table_counter;
 string current_block_name;
 
+int symbol_table::count = 0;
+
 // string last_var_type;
 string typevar;
 
