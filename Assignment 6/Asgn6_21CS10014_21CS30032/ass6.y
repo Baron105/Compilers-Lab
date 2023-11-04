@@ -6,14 +6,14 @@
     extern int yylex();         
     void yyerror(string s);     
     extern char* yytext;        
-    extern int yylineno;        
-    extern int next_instr;
+    extern int yylineno;
 
+    extern int next_instr;
     extern symbol_table* global_symbol_table;
     extern symbol_table* current_symbol_table;
-
-
-
+    extern vector<string> consts;
+    extern quad_array quad_list;
+    int string_count = 0;
     //    
 %}
 
@@ -55,6 +55,7 @@
 %token <str> STRING_LITERAL
 %token <str> IDENTIFIER
 
+%expect 1
 %nonassoc ELSE
 
 %token WS
@@ -64,7 +65,9 @@
 %type <intval> pointer
 %type <types> type_specifier declaration_specifiers
 %type <dec> direct_declarator declarator init_declarator
-
+%type <dec_list> init_declarator_list
+%type <p> parameter_declaration
+%type <p_list> parameter_list parameter_type_list parameter_type_list_opt argument_expression_list argument_expression_list_opt
 
 %start translation_unit
 
