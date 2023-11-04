@@ -76,7 +76,6 @@ public:
     int offset;
     symbol_table* nested_table;
     symbol();
-    symbol* update(symbol_type* type);
 };
 
 class symbol_value {
@@ -181,7 +180,7 @@ public :
 
 // it is overloaded for different types of arguments
 
-void emit(string result, string arg1, string arg2, opcode op);
+void emit(string result, string arg1, opcode op,string arg2);
 void emit(string result, int constant, opcode op);
 void emit(string result, float constant, opcode op);
 void emit(string result, char constant, opcode op);
@@ -204,20 +203,12 @@ void backpatch(list<int> , int );
 
 // function the convert types
 // it takes a symbol and converts it to the type given by the string
-void converttype(expression* arg, expression* res, data_type toType);
+void converttype(expression* arg, expression* res, data_type type);
 void converttype(string o, data_type otype, string n, data_type ntype);
 
 
 
 void inttobool(expression* e);
-
-
-
-// function to switch tables
-// it takes a symbol table and switches the current table to the given table
-void switchTable(symbol_table* );
-
-int nextinstr();    // returns the next instruction count
 
 // function to get the type of a symbol
 string gettype(symbol_type );
