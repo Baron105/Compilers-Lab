@@ -1,12 +1,4 @@
 %{
-    /**
-    * Vanshita Garg | 19CS10064
-    * Ashutosh Kumar Singh | 19CS30008
-    * Compilers Laboratory
-    * Assignment 6
-    *
-    * Bison specifications
-    */
 
     #include <iostream>
     #include "ass6_19CS10064_19CS30008_translator.h"
