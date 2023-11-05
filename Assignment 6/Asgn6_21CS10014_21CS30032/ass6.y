@@ -1127,6 +1127,85 @@ declarator
     ;
 
 direct_declarator
+    : IDENTIFIER
+    {
+        $$ = new declaration();
+        $$->name = *($1);
+    }
+    | ROUND_BRACKET_OPEN declarator ROUND_BRACKET_CLOSE
+    {
+        /* No Action Taken */
+    }
+    | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list_opt SQUARE_BRACKET_CLOSE
+    {
+        $$ = $1;
+        $1->type = ARR;
+        $1->next_type = INT;
+        $$->instr_list.push_back(0); 
+    }
+    | direct_declarator SQUARE_BRACKET_OPEN STATIC type_qualifier_list_opt assignment_expression SQUARE_BRACKET_CLOSE
+    {
+        /* No Action Taken */
+    }
+    | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list STATIC assignment_expression SQUARE_BRACKET_CLOSE
+    {
+        /* No Action Taken */
+    }
+    | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list_opt assignment_expression SQUARE_BRACKET_CLOSE
+    {
+        $$ = $1;
+        $1->type = ARR;
+        $1->next_type = INT;
+        $$->instr_list.push_back(current_symbol_table->lookup($4->loc)->initial_value);
+        // check
+    }
+    | direct_declarator ROUND_BRACKET_OPEN parameter_type_list ROUND_BRACKET_CLOSE
+    {
+        $$ = $1;
+        $$->type = FUNCTION;
+        symbol* s1 = current_symbol_table->lookup($1->name, $1->type);
+        symbol_table* st = new symbol_table();
+        s1->nested_table = st;
+
+        vector<param*> param_list = *($3);
+        for (int i = 0; i < param_list.size(); i++)
+        {
+            param* curr_param = param_list[i];
+            
+            if (curr_param->type.type == ARR)
+            {
+                st->lookup(curr_param->name, curr_param->type.type);
+                st->lookup(curr_param->name)->type.next_type = INT;
+                st->lookup(curr_param->name)->type.dimensions.push_back(0);
+            }
+            
+            else if (curr_param->type.type == PTR)
+            {
+                st->lookup(curr_param->name, curr_param->type.type);
+                st->lookup(curr_param->name)->type.next_type = INT;
+                st->lookup(curr_param->name)->type.ptr = curr_param->type.ptr;
+            }
+            
+            else
+            {
+                st->lookup(curr_param->name, curr_param->type.type);
+            }
+        }
+
+        current_symbol_table = st;
+        emit($1->name, "", "", FUNC_BEGIN);
+    }
+    | direct_declarator ROUND_BRACKET_OPEN identifier_list ROUND_BRACKET_CLOSE
+    {
+        /* No Action Taken */
+    }
+    | direct_declarator SQUARE_BRACE_OPEN type_qualifier_list_opt MULTIPLY SQUARE_BRACE_CLOSE
+    {
+        $$ = $1;
+        $$->type = PTR;
+        $$->next_type = INT;
+    }
+    ;
     
 
 
