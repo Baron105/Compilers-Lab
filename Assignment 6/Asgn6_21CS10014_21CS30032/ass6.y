@@ -14,11 +14,7 @@
     extern vector<string> consts;
     extern quad_array quad_list;
     int string_count = 0;
-    //    
 %}
-
-
-
 
 %union {
     int intval;
@@ -38,7 +34,7 @@
     
 }
 
-%token AUTO BREAK CASE CHAR_T CONST CONTINUE DEFAULT DO DOUBLE ELSE ENUM EXTERN FLOAT_T FOR GOTO IF INLINE INT_T LONG REGISTER RESTRICT RETURN_T SHORT SIGNED SIZEOF STATIC STRUCT SWITCH TYPEDEF UNION UNSIGNED VOID_T VOLATILE WHILE BOOL_T COMPLEX IMAGINARY
+%token AUTO BREAK CASE CHAR_T CONST CONTINUE DEFAULT DO DOUBLE ELSE ENUM EXTERN FLOAT_T FOR GOTO_T IF INLINE INT_T LONG REGISTER RESTRICT RETURN_T SHORT SIGNED SIZEOF STATIC STRUCT SWITCH TYPEDEF UNION UNSIGNED VOID_T VOLATILE WHILE BOOL_T COMPLEX IMAGINARY
 
 %token SQUARE_BRACKET_OPEN SQUARE_BRACKET_CLOSE ROUND_BRACKET_OPEN ROUND_BRACKET_CLOSE CURLY_BRACKET_OPEN CURLY_BRACKET_CLOSE
 %token DOT ARROW INCREMENT DECREMENT
@@ -46,7 +42,7 @@
 %token LOGICAL_AND LOGICAL_OR LOGICAL_NOT
 %token MULTIPLY DIVIDE MODULO PLUS MINUS
 %token LEFT_SHIFT RIGHT_SHIFT LESS_THAN GREATER_THAN LESS_THAN_EQUAL GREATER_THAN_EQUAL EQUAL NOT_EQUAL
-%token ASSIGN PLUS_ASSIGN MINUS_ASSIGN MULTIPLY_ASSIGN DIVIDE_ASSIGN MODULO_ASSIGN LEFT_SHIFT_ASSIGN RIGHT_SHIFT_ASSIGN BITWISE_AND_ASSIGN BITWISE_XOR_ASSIGN BITWISE_OR_ASSIGN
+%token ASSIGN_T PLUS_ASSIGN MINUS_ASSIGN MULTIPLY_ASSIGN DIVIDE_ASSIGN MODULO_ASSIGN LEFT_SHIFT_ASSIGN RIGHT_SHIFT_ASSIGN BITWISE_AND_ASSIGN BITWISE_XOR_ASSIGN BITWISE_OR_ASSIGN
 %token COMMA COLON SEMICOLON ELLIPSIS QUESTION_MARK HASH
 
 %token <intval> INTEGER_CONSTANT
@@ -164,9 +160,9 @@ postfix_expression
         }
     }
     | postfix_expression DOT IDENTIFIER 
-    { /* nothin */}
+    { /* No Action Taken */}
     | postfix_expression ARROW IDENTIFIER 
-    { /* nothin */}
+    { /* No Action Taken */}
     | postfix_expression INCREMENT {
         $$ = new expression();
         symbol_type* t = current_symbol_table->lookup($1->loc)->type;
@@ -209,9 +205,9 @@ postfix_expression
         }
     }
     | ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE CURLY_BRACKET_OPEN initializer_list CURLY_BRACKET_CLOSE 
-    { /* nothin */}
+    { /* No Action Taken */}
     | ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE CURLY_BRACKET_OPEN initializer_list COMMA CURLY_BRACKET_CLOSE 
-    { /* nothin */}
+    { /* No Action Taken */}
     ;
 
 argument_expression_list_opt
@@ -314,9 +310,9 @@ unary_expression
         }
     }
     | SIZEOF unary_expression 
-    { /* nothin */}
+    { /* No Action Taken */}
     | SIZEOF ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE 
-    { /* nothin */}
+    { /* No Action Taken */}
     ;
 
 unary_operator
@@ -861,7 +857,24 @@ logical_OR_expression
 conditional_expression
     : logical_OR_expression { /* No Action Taken */ }
     | logical_OR_expression N QUESTION_MARK M expression N COLON M conditional_expression {
-        // add here
+        symbol* s1 = current_symbol_table->lookup($5->loc);
+        $$->loc = current_symbol_table->gentemp(s1->type.type);
+        $$->type = s1->type.type;
+
+        emit($$->loc, $9->loc, "", ASSIGN);
+        list<int> templist = makelist(next_instr);
+        emit("", "", "", GOTO);
+        backpatch($6->nextlist, next_instr);
+        emit($$->loc, $5->loc, "", ASSIGN);
+        templist = merge(templist, makelist(next_instr));
+        emit("", "", "", GOTO);
+
+        backpatch($2->nextlist, next_instr);
+        inttobool($1);
+        backpatch($1->truelist, $4->instruction);
+        backpatch($1->falselist, $8->instruction);
+        backpatch($2->nextlist, next_instr);
+
     }
     ;
 
@@ -883,39 +896,48 @@ N:  %empty
 assignment_expression
     : conditional_expression { /* No Action Taken */ }
     | unary_expression assignment_operator assignment_expression {
-        symbol* s1 = sy
+        symbol* s1 = current_symbol_table->lookup($1->loc);
+        symbol* s2 = current_symbol_table->lookup($3->loc);
+        if ($1->fold == 0)
+        {
+            if (s1->type.type != ARR) emit($1->loc, $3->loc, "", ASSIGN);
+            else emit($1->loc, $3->loc, *($1->folder), ARR_IDX_RES);
+        }
+        else emit(*($1->folder), $3->loc, "", ASSIGN);
+
+        $$ = $1;
     }
     ;
 
 assignment_operator
-    : ASSIGN 
-    { /* nothin */}
+    : ASSIGN_T
+    { /* No Action Taken */}
     | MULTIPLY_ASSIGN 
-    { /* nothin */}
+    { /* No Action Taken */}
     | DIVIDE_ASSIGN 
-    { /* nothin */}
+    { /* No Action Taken */}
     | MODULO_ASSIGN 
-    { /* nothin */}
+    { /* No Action Taken */}
     | PLUS_ASSIGN 
-    { /* nothin */}
+    { /* No Action Taken */}
     | MINUS_ASSIGN 
-    { /* nothin */}
+    { /* No Action Taken */}
     | LEFT_SHIFT_ASSIGN 
-    { /* nothin */}
+    { /* No Action Taken */}
     | RIGHT_SHIFT_ASSIGN 
-    { /* nothin */}
+    { /* No Action Taken */}
     | BITWISE_AND_ASSIGN 
-    { /* nothin */}
+    { /* No Action Taken */}
     | BITWISE_XOR_ASSIGN 
-    { /* nothin */}
+    { /* No Action Taken */}
     | BITWISE_OR_ASSIGN 
-    { /* nothin */}
+    { /* No Action Taken */}
     ;
 
 // my part
 
 expression
-    : assignment_expression { $$ = $1; }
+    : assignment_expression { /* No Action Taken */ }
     | expression COMMA assignment_expression { /* No Action Taken */ }
     ;
 
@@ -925,13 +947,71 @@ constant_expression
 
 
 declaration
-    : declaration_specifiers init_declarator_list_opt SEMICOLON { /* No Action Taken */ }
-    ;
+    : declaration_specifiers SEMICOLON { /* No Action Taken */ }
+    | declaration_specifiers init_declarator_list SEMICOLON 
+    {
+        data_type curr_type = $1;
+        int curr_size = 0;
+        if (curr_type == INT) curr_size = SIZE_OF_INT;
+        else if (curr_type == FLOAT) curr_size = SIZE_OF_FLOAT;
+        else if (curr_type == CHAR) curr_size = SIZE_OF_CHAR;
 
-init_declarator_list_opt
-    : init_declarator_list { /* No Action Taken */ }
-    | %empty
-    { /* No Action Taken */ }
+        vector<declaration*> decl_list = *($2);
+        for (int i = 0; i < decl_list.size(); i++)
+        {
+            declaration* curr_decl = decl_list[i];
+            if (curr_decl->type == FUNCTION)
+            {
+                current_symbol_table = &global_symbol_table;
+                emit(curr_decl->name, "", "", FUNC_END);
+                symbol* s1 = current_symbol_table->lookup(curr_decl->name);
+                symbol* s2 = s1->nested_table->lookup("RETVAL", curr_type, curr_decl->ptr);
+                s1->size = 0;
+                s1->initial_value = NULL;
+            }
+
+            symbol* s3 = current_symbol_table->lookup(curr_decl->name, curr_type);
+            s3->nested_table = NULL;
+
+            if(curr_decl->instr_list == vector<int>() && curr_decl->ptr == 0)
+            {
+                s3->size = curr_size;
+                s3->type.type = curr_type;
+                if (curr_decl->initial_value)
+                {
+                    emit(s3->name, curr_decl->initial_value->loc, "", ASSIGN);
+                    s3->initial_value = current_symbol_table->lookup(curr_decl->initial_value->loc)->initial_value;
+                }
+                else s3->initial_value = NULL;
+            }
+
+            else if (curr_decl->instr_list != vector<int>())
+            {
+                s3->type.type = ARR;
+                s3->type.next_type = curr_type;
+                s3->type.dimensions = curr_decl->instr_list;
+                vector<int> temp = s3->type.dimensions;
+
+                int temp_size = curr_size;
+                for (int i = 0; i < temp.size(); i++)
+                {
+                    temp_size *= temp[i];
+                }
+                current_symbol_table->offset += temp_size;
+                s3->size = temp_size;
+                current_symbol_table->offset -= SIZE_OF_INT;
+            }
+
+            else if (curr_decl->ptr != 0)
+            {
+                s3->type.type = PTR;
+                s3->type.next_type = curr_type;
+                s3->type.ptr = curr_decl->ptr;
+                current_symbol_table->offset += (SIZE_OF_PTR - curr_size);
+                s3->size = SIZE_OF_PTR;
+            }
+        }
+    }
     ;
 
 declaration_specifiers
@@ -953,14 +1033,15 @@ init_declarator_list
     ;
 
 init_declarator
-    : declarator { $$ = $1; }
-    | declarator ASSIGN initializer
+    : declarator 
+    { 
+        $$ = $1;
+        $$->initial_value = NULL;
+    }
+    | declarator ASSIGN_T initializer
     {
-        if ($3->value != "")
-        {
-            $1->value = $3->value;
-        }
-        emit("=", $1->name, $3->name);
+        $$ = $1;
+        $$->initial_value = $3;
     }
     ;
 
@@ -974,12 +1055,12 @@ storage_class_specifier
 // store the type of the variable for void char int and float
 // No Action Taken for the rest
 type_specifier
-    : VOID { typevar = "void"; }
-    | CHAR { typevar = "char"; }
+    : VOID_T { $$ = VOID; }
+    | CHAR_T { $$ = CHAR; }
     | SHORT { /* No Action Taken */ }
-    | INT { typevar = "int"; }
+    | INT_T { $$ = INT; }
     | LONG { /* No Action Taken */ }
-    | FLOAT { typevar = "float"; }
+    | FLOAT_T { $$ = FLOAT; }
     | DOUBLE { /* No Action Taken */ }
     | SIGNED { /* No Action Taken */ }
     | UNSIGNED { /* No Action Taken */ }
@@ -1035,101 +1116,18 @@ function_specifier
 declarator
     : pointer direct_declarator
     {
-        symbol_type* t = $1;
-        while(t->ptr != NULL)
-        {
-            t = t->ptr;
-        }
-        t->ptr = $2->type;
-        $$ = $2->update($1);
+        $$ = $2;
+        $$->ptr = $1;
     }
-    | direct_declarator { /* No Action Taken */ }
+    | direct_declarator
+    {
+        $$ = $1;
+        $$->ptr = 0;
+    }
     ;
 
 direct_declarator
-    : IDENTIFIER
-    { 
-        $$ = $1->update(new symbol_type(typevar));
-        current_symbol = $$;
-    }
-    | ROUND_BRACKET_OPEN declarator ROUND_BRACKET_CLOSE { $$ = $2; }
-    | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list assignment_expression SQUARE_BRACKET_CLOSE { /* No Action Taken */ }
-    | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list SQUARE_BRACKET_CLOSE { /* No Action Taken */ }
-    | direct_declarator SQUARE_BRACKET_OPEN assignment_expression SQUARE_BRACKET_CLOSE
-    {
-        symbol_type* t = $1->type;
-        symbol_type* new1 = NULL;
-        while(t->type == "arr")
-        {
-            new1 = t;
-            t = t->ptr;
-        }
-        if (new1 == NULL)
-        {
-            int temp = atoi($3->loc->value.c_str());
-            symbol_type* new_type = new symbol_type("arr", $1->type, temp);
-            $$ = $1->update(new_type);
-        }
-        else
-        {
-            int temp = atoi($3->loc->value.c_str());
-            new1->ptr = new symbol_type("arr", t, temp);
-            $$ = $1->update($1->type);
-        }
-    }
-    | direct_declarator SQUARE_BRACKET_OPEN SQUARE_BRACKET_CLOSE
-    {
-        symbol_type* t = $1->type;
-        symbol_type* new1 = NULL;
-        while(t->type == "arr")
-        {
-            new1 = t;
-            t = t->ptr;
-        }
-        if (new1 == NULL)
-        {
-            symbol_type* new_type = new symbol_type("arr", $1->type, 0);
-            $$ = $1->update(new_type);
-        }
-        else
-        {
-            new1->ptr = new symbol_type("arr", t, 0);
-            $$ = $1->update($1->type);
-        }
-    }
-    | direct_declarator ROUND_BRACKET_OPEN change_table parameter_type_list ROUND_BRACKET_CLOSE
-    {
-        current_symbol_table->name = $1->name;
-        if ($1->type->type != "void")
-        {
-            symbol* new1 = current_symbol_table->lookup("return");
-            new1->update($1->type);
-        }
-        $1->nested_table = current_symbol_table;
-        current_symbol_table->parent = global_symbol_table;
-        switchTable(global_symbol_table);
-        current_symbol = $$;
-    }
-    | direct_declarator ROUND_BRACKET_OPEN change_table ROUND_BRACKET_CLOSE
-    {
-        current_symbol_table->name = $1->name;
-        if ($1->type->type != "void")
-        {
-            symbol* new1 = current_symbol_table->lookup("return");
-            new1->update($1->type);
-        }
-        $1->nested_table = current_symbol_table;
-        current_symbol_table->parent = global_symbol_table;
-        switchTable(global_symbol_table);
-        current_symbol = $$;
-    }
-    | direct_declarator ROUND_BRACKET_OPEN identifier_list ROUND_BRACKET_CLOSE { /* No Action Taken */ }
-    | direct_declarator SQUARE_BRACKET_OPEN STATIC type_qualifier_list assignment_expression SQUARE_BRACKET_CLOSE { /* No Action Taken */ }
-    | direct_declarator SQUARE_BRACKET_OPEN STATIC assignment_expression SQUARE_BRACKET_CLOSE { /* No Action Taken */ }
-    | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list STATIC assignment_expression SQUARE_BRACKET_CLOSE { /* No Action Taken */ }
-    | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list MULTIPLY SQUARE_BRACKET_CLOSE { /* No Action Taken */ }
-    | direct_declarator SQUARE_BRACKET_OPEN MULTIPLY SQUARE_BRACKET_CLOSE { /* No Action Taken */ }
-    ;
+    
 
 
 type_qualifier_list_opt
@@ -1138,13 +1136,20 @@ type_qualifier_list_opt
     ;
 
 pointer 
-    : MULTIPLY type_qualifier_list_opt { $$ = new symbol_type("ptr"); }
-    | MULTIPLY type_qualifier_list_opt pointer { $$ = new symbol_type("ptr", $3); }
+    : MULTIPLY type_qualifier_list { /* No Action Taken */ }
+    | MULTIPLY type_qualifier_list pointer { /* No Action Taken */ }
+    | MULTIPLY pointer { $$ = $1+$2; }
+    | MULTIPLY { /* No Action Taken */ }
     ;
 
 type_qualifier_list
     : type_qualifier { /* No Action Taken */ }
     | type_qualifier_list type_qualifier { /* No Action Taken */ }
+    ;
+
+parameter_type_list_opt
+    : parameter_type_list { /* No Action Taken */ }
+    | %empty { $$ = new vector<param*>(); }
     ;
 
 parameter_type_list
@@ -1153,12 +1158,38 @@ parameter_type_list
     ;
 
 parameter_list
-    : parameter_declaration { /* No Action Taken */ }
-    | parameter_list COMMA parameter_declaration { /* No Action Taken */ }
+    : parameter_declaration 
+    {
+        $$ = new vector<param*>();
+        $$->push_back($1);
+    }
+    | parameter_list COMMA parameter_declaration
+    {
+        $1->push_back($3);  
+        $$ = $1;
+    }
     ;
 
 parameter_declaration
-    : declaration_specifiers declarator { /* No Action Taken */ }
+    : declaration_specifiers declarator 
+    {
+        $$ = new param();
+        $$->name = $2->name;
+        if ($2->type == ARR)
+        {
+            $$->type.type = ARR;
+            $$->type.next_type = $1;
+        }
+        else if ($2->pc)
+        {
+            $$->type.type = PTR;
+            $$->type.next_type = $1;
+        }
+        else
+        {
+            $$->type.type = $1;
+        }
+    }
     | declaration_specifiers { /* No Action Taken */ }
     ;
 
@@ -1172,7 +1203,7 @@ type_name
     ;
 
 initializer
-    : assignment_expression { $$ = $1->loc; }
+    : assignment_expression { /* No Action Taken */ }
     | CURLY_BRACKET_OPEN initializer_list CURLY_BRACKET_CLOSE { /* No Action Taken */ }
     | CURLY_BRACKET_OPEN initializer_list COMMA CURLY_BRACKET_CLOSE { /* No Action Taken */ }
     ;
@@ -1184,12 +1215,11 @@ initializer_list
 
 designation_opt
     : designation { /* No Action Taken */ }
-    | %empty
-    { /* No Action Taken */ }
+    | %empty { /* No Action Taken */ }
     ;
 
 designation
-    : designator_list ASSIGN { /* No Action Taken */ }
+    : designator_list ASSIGN_T { /* No Action Taken */ }
     ;
 
 designator_list
@@ -1202,32 +1232,13 @@ designator
     | DOT IDENTIFIER { /* No Action Taken */ }
     ;
 
-// new
-// part 3
-statement 
+statement
     : labeled_statement { /* No Action Taken */ }
-    | compound_statement { $$ = $1; }
-    | expression_statement
-    { 
-        $$ = new statement();
-        $$->nextlist = $1->nextlist;
-    }
-    | selection_statement { $$ = $1; }
-    | iteration_statement { $$ = $1; }
-    | jump_statement { $$ = $1; }
-    ;
-
-loop_statement
-    : labeled_statement { /* No Action Taken */ }
-    | compound_statement { $$ = $1; }
-    | expression_statement
-    {
-        $$ = new statement();
-        $$->nextlist = $1->nextlist;
-    }
-    | selection_statement { $$ = $1; }
-    | iteration_statement { $$ = $1; }
-    | jump_statement { $$ = $1; }
+    | compound_statement { /* No Action Taken */ }
+    | expression_statement { /* No Action Taken */ }
+    | selection_statement { /* No Action Taken */ }
+    | iteration_statement { /* No Action Taken */ }
+    | jump_statement { /* No Action Taken */ }
     ;
 
 labeled_statement
@@ -1237,219 +1248,104 @@ labeled_statement
     ;
 
 compound_statement
-    : CURLY_BRACKET_OPEN X change_table block_item_list_opt CURLY_BRACKET_CLOSE
-    {
-        $$ = $4;
-        switchTable(current_symbol_table->parent);
-    }
-    ;
-
-block_item_list_opt
-    : block_item_list { $$ = $1; }
-    | %empty
-    { $$ = new statement(); }
+    : CURLY_BRACKET_OPEN CURLY_BRACE_CLOSE { /* No Action Taken */ }
+    | CURLY_BRACKET_OPEN block_item_list CURLY_BRACE_CLOSE { $$ = $2; }
     ;
 
 block_item_list
-    : block_item { $$ = $1; }
+    : block_item 
+    { 
+        $$ = $1; 
+        backpatch($1->nextlist, next_instr);
+    }
     | block_item_list M block_item
     {
-        $$ = $3;
-        backpatch($1->nextlist, $2);
+        $$ = new expression();
+        backpatch($1->nextlist, $2->instruction);
+        $$->nextlist = $3->nextlist;
     }
     ;
 
 block_item
-    : declaration { $$ = new statement(); }
-    | statement { $$ = $1; }
+    : declaration { $$ = new expression(); }
+    | statement { /* No Action Taken */ }
     ;
 
 expression_statement
-    : expression SEMICOLON { $$ = $1; }
+    : expression SEMICOLON { /* No Action Taken */ }
     | SEMICOLON { $$ = new expression(); }
 
 selection_statement
     : IF ROUND_BRACKET_OPEN expression N ROUND_BRACKET_CLOSE M statement N THEN
     {
-        backpatch($4->nextlist, nextinstr());
-        convertInt2Bool($3);
-        $$ = new statement();
+        backpatch($4->nextlist, next_instr);
+        inttobool($3);
+        $$ = new expression();
         backpatch($3->truelist, $6);
 
-        list<int> temp = merge ($3->falselist, $7->nextlist);
-        $$->nextlist = merge($8->nextlist, temp);
+        $$->nextlist = merge($3->falselist, merge($7->nextlist, $8->nextlist));
     }
-    | IF ROUND_BRACKET_OPEN expression N ROUND_BRACKET_CLOSE M statement N ELSE M statement
+    | IF ROUND_BRACKET_OPEN expression N ROUND_BRACKET_CLOSE M statement N ELSE M statement N
     {
-        backpatch($4->nextlist, nextinstr());
-        convertInt2Bool($3);
-        $$ = new statement();
-        backpatch($3->truelist, $6);
-        backpatch($3->falselist, $10);
+        backpatch($4->nextlist, next_instr);
+        inttobool($3);
+        $$ = new expression();
+        backpatch($3->truelist, $6->instruction);
+        backpatch($3->falselist, $10->instruction);
 
-        list<int> temp = merge ($3->falselist, $8->nextlist);
-        $$->nextlist = merge($11->nextlist, temp);
+        $$->nextlist = merge(merge(merge($7->nextlist, $8->nextlist), $11->nextlist), $12->nextlist);
     }
     | SWITCH ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE statement { /* No Action Taken */ }
     ;
 
 iteration_statement
-    :
-    WHILE W ROUND_BRACKET_OPEN X change_table M expression ROUND_BRACKET_CLOSE M loop_statement
+    : WHILE M ROUND_BRACKET_OPEN expression N ROUND_BRACKET_CLOSE M statement
     {
-        $$ = new statement();
-        convertInt2Bool($7);
-        backpatch($7->truelist, $9);
-        backpatch($10->nextlist, $6);
-
+        $$ = new expression();
+        emit("", "", "", GOTO);
+        backpatch(makelist(next_instr-1), $2->instruction);
+        backpatch($5->nextlist, next_instr);
+        inttobool($4);
+        $$->nextlist = $4->falselist;
+        backpatch($4->truelist, $7->instruction);
+        backpatch($8->nextlist, $2->instruction);
+    }
+    | DO M statement M WHILE ROUND_BRACKET_OPEN expression N ROUND_BRACKET_CLOSE SEMICOLON
+    {
+        $$ = new expression();
+        backpatch($8->nextlist, next_instr);
+        inttobool($7);
         $$->nextlist = $7->falselist;
-        emit("goto", int2string($6));
-        current_block_name = "";
-        switchTable(current_symbol_table->parent);
+        backpatch($7->truelist, $2->instruction);
+        backpatch($3->nextlist, $4->instruction);
     }
-    | WHILE W ROUND_BRACKET_OPEN X change_table M expression ROUND_BRACKET_CLOSE CURLY_BRACKET_OPEN M block_item_list_opt CURLY_BRACKET_CLOSE
+    | FOR ROUND_BRACKET_OPEN expression_statement M expression_statement N M expression N ROUND_BRACKET_CLOSE M statement
     {
-        $$ = new statement();
-        convertInt2Bool($7);
-        backpatch($7->truelist, $10);
-        backpatch($11->nextlist, $6);
-
-        $$->nextlist = $7->falselist;
-        emit("goto", int2string($6));
-        current_block_name = "";
-        switchTable(current_symbol_table->parent);
-    }
-    | DO D M loop_statement M WHILE ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE SEMICOLON
-    {
-        $$ = new statement();
-        convertInt2Bool($8);
-        backpatch($8->truelist, $3);
-        backpatch($4->nextlist, $5);
-
-        $$->nextlist = $8->falselist;
-
-        current_block_name = "";
-    }
-    | DO D CURLY_BRACKET_OPEN M block_item_list_opt CURLY_BRACKET_CLOSE M WHILE ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE SEMICOLON
-    {
-        $$ = new statement();
-        convertInt2Bool($10);
-        backpatch($10->truelist, $4);
-        backpatch($5->nextlist, $7);
-
-        $$->nextlist = $10->falselist;
-
-        current_block_name = "";
-    }
-    | FOR F ROUND_BRACKET_OPEN X change_table declaration M expression_statement M expression N ROUND_BRACKET_CLOSE M loop_statement
-    {
-        $$ = new statement();
-        convertInt2Bool($8);
-        backpatch($8->truelist, $13);
-        backpatch($14->nextlist, $9);
-        backpatch($11->nextlist, $7);
-
-        $$->nextlist = $8->falselist;
-        emit("goto", int2string($9));
-        current_block_name = "";
-        switchTable(current_symbol_table->parent);
-    }
-    | FOR F ROUND_BRACKET_OPEN X change_table expression_statement M expression_statement M expression N ROUND_BRACKET_CLOSE M loop_statement
-    {
-        $$ = new statement();
-        convertInt2Bool($8);
-        backpatch($8->truelist, $13);
-        backpatch($14->nextlist, $9);
-        backpatch($11->nextlist, $7);
-
-        $$->nextlist = $8->falselist;
-        emit("goto", int2string($9));
-        current_block_name = "";
-        switchTable(current_symbol_table->parent);
-    }
-    | FOR F ROUND_BRACKET_OPEN X change_table expression_statement M expression_statement M expression N ROUND_BRACKET_CLOSE M CURLY_BRACKET_OPEN block_item_list_opt CURLY_BRACKET_CLOSE
-    {
-        $$ = new statement();
-        convertInt2Bool($8);
-        backpatch($8->truelist, $13);
-        backpatch($15->nextlist, $9);
-        backpatch($11->nextlist, $7);
-
-        $$->nextlist = $8->falselist;
-        emit("goto", int2string($9));
-        current_block_name = "";
-        switchTable(current_symbol_table->parent);
-    }
-    | FOR F ROUND_BRACKET_OPEN X change_table declaration M expression_statement M expression N ROUND_BRACKET_CLOSE M CURLY_BRACKET_OPEN block_item_list_opt CURLY_BRACKET_CLOSE
-    {
-        $$ = new statement();
-        convertInt2Bool($8);
-        backpatch($8->nextlist, $13);
-        backpatch($15->nextlist, $9);
-        backpatch($11->nextlist, $7);
-
-        $$->nextlist = $8->falselist;
-        emit("goto", int2string($9));
-        current_block_name = "";
-        switchTable(current_symbol_table->parent);
-    }
-    ;
-
-F
-    : %empty
-    { current_block_name = "for"; }
-    ;
-
-W
-    : %empty
-    { current_block_name = "while"; }
-    ;
-
-D
-    : %empty
-    { current_block_name = "do_while"; }
-    ;
-
-X   
-    : %empty
-    {
-        string new_ST = current_symbol_table->name + "_" + current_block_name + "_" + to_string(symbol_table_counter++);
-        symbol* new_symbol = current_symbol_table->lookup(new_ST);
-        new_symbol->nested_table = new symbol_table(new_ST);
-        new_symbol->name = new_ST;
-        new_symbol->nested_table->parent = current_symbol_table;
-        new_symbol->type = new symbol_type("block");
-        current_symbol = new_symbol;
-    }
-
-change_table
-    : %empty
-    {
-        if (current_symbol->nested_table != NULL)
-        {
-            switchTable(current_symbol->nested_table);
-            emit("change", current_symbol_table->name);
-        }
-        else 
-        {
-            switchTable(new symbol_table(""));
-        }
+        $$ = new expression();
+        emit("", "", "", GOTO);
+        $12->nextlist = merge($12->nextlist, makelist(next_instr-1));
+        backpatch($12->nextlist, $7->instruction);
+        backpatch($6->nextlist, next_instr);
+        backpatch($9->nextlist, $4->instruction);
+        inttobool($5);
+        backpatch($5->truelist, $11->instruction);
+        $$->nextlist = $5->falselist;
     }
     ;
 
 jump_statement
-    : GOTO IDENTIFIER SEMICOLON { /* No Action Taken */ }
-    | CONTINUE SEMICOLON { $$ = new statement(); }
-    | BREAK SEMICOLON { $$ = new statement(); }
-    | RETURN expression SEMICOLON
+    : GOTO_T IDENTIFIER SEMICOLON { /* No Action Taken */ }
+    | CONTINUE SEMICOLON { /* No Action Taken */ }
+    | BREAK SEMICOLON { /* No Action Taken */ }
+    | RETURN_T expression SEMICOLON
     {
+        if (current_symbol_table->lookup("RETVAL")->type.type == VOID) emit("", "", "", RETURN);
         $$ = new statement();
-        emit("return", $2->loc->name);
     }
-    | RETURN SEMICOLON
+    | RETURN_T expression SEMICOLON
     {
+        if (current_symbol_table->lookup("RETVAL")->type.type == current_symbol_table->lookup($2->loc)->type.type) emit($2->loc, "", "", RETURN);
         $$ = new statement();
-        emit("return", "");
     }
     ;
 
@@ -1466,19 +1362,32 @@ external_declaration
 
 
 function_definition
-    : declaration_specifiers declarator declaration_list_opt change_table CURLY_BRACKET_OPEN block_item_list_opt CURLY_BRACKET_CLOSE
+    : declaration_specifiers declarator declaration_list compound_statement { /* No Action Taken */ }
+    | function_prototype compound_statement
     {
-        current_symbol_table->parent = global_symbol_table;
-        symbol_table_counter = 0;
-        switchTable(global_symbol_table);
+        current_symbol_table = &global_symbol_table;
+        emit($1->name, "", "", FUNC_END);
     }
     ;
 
-declaration_list_opt
-    : declaration_list { /* No Action Taken */ }
-    | %empty 
-    { /* No Action Taken */ }
-    ;
+function_prototype
+    : declaration_specifiers declarator
+    {
+        data_type temp = $1;
+        int size = 0;
+        if (temp == CHAR) size = SIZE_OF_CHAR;
+        else if (temp == INT) size = SIZE_OF_INT;
+        else if (temp == FLOAT) size = SIZE_OF_FLOAT;
+        declaration* new1 = $2;
+        symbol* new2 = current_symbol_table->lookup(new1->name);
+        if (new2->type == FUNCTION)
+        {
+            symbol* return_value = new2->nested_table->lookup("RETVAL", temp, new2->ptr);
+            new2->size = 0;
+            new2->initial_value = NULL;
+        }
+        $$ = $2;
+    }
 
 declaration_list
     : declaration { /* No Action Taken */ }
