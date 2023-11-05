@@ -9,7 +9,7 @@
     extern int yylineno;
 
     extern int next_instr;
-    extern symbol_table* global_symbol_table;
+    extern symbol_table global_symbol_table;
     extern symbol_table* current_symbol_table;
     extern vector<string> consts;
     extern quad_array quad_list;
@@ -74,72 +74,139 @@
 %%
 
 primary_expression
-    : IDENTIFIER { $$ = new expression(); $$->loc = $1 ; $$->type = "non_bool"; }
-    | constant { $$ = new expression(); $$->loc = $1 ; }
-    | STRING_LITERAL { $$ = new expression() ; $$->loc = symbol_table :: gentemp(new symbol_type("ptr"),$1); $$->loc->type->ptr = new symbol_type("char"); }
+    : IDENTIFIER {
+        $$ = new expression(); 
+        string s = *($1);
+        current_symbol_table->lookup(s);
+        $$->loc = s;
+    }
+    | constant {
+        $$ = new expression() ; 
+        $$->$1 ;
+    }
+    | STRING_LITERAL { 
+        $$ = new expression() ; 
+        $$->loc = ".LC" + to_string(string_count++) ;
+        consts.push_back(*($1));
+    }
     | ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE { $$ = $2 ; }
     ;
 
 constant
     : INTEGER_CONSTANT {
-        $$ = symbol_table :: gentemp(new symbol_type("int"),int2string($1));
-        emit("=",$$->name,$1);
+        $$ = new expression() ;
+        $$->loc = current_symbol_table->gentemp(INT);
+        emit($$->loc,$1,ASSIGN);
+        symbol_value* val = new symbol_value();
+        val->set_value($1);
+        current_symbol_table-lookup($$->loc)->initial_value = val;
     }
     | FLOATING_CONSTANT { 
-        $$ = symbol_table :: gentemp(new symbol_type("float"),string($1));
-        emit("=",$$->name,$1);
+        $$ = new expression() ;
+        $$->loc = current_symbol_table->gentemp(FLOAT);
+        emit($$->loc,$1,ASSIGN);
+        symbol_value* val = new symbol_value();
+        val->set_value($1);
+        current_symbol_table-lookup($$->loc)->initial_value = val;
      }
     | CHAR_CONSTANT {
-        $$ = symbol_table :: gentemp(new symbol_type("char"),string($1));
-        emit("=",$$->name,$1);
+        $$ = new expression() ;
+        $$->loc = current_symbol_table->gentemp(CHAR);
+        emit($$->loc,$1,ASSIGN);
+        symbol_value* val = new symbol_value();
+        val->set_value($1);
+        current_symbol_table-lookup($$->loc)->initial_value = val;
     }
     ;
 
 postfix_expression
     : primary_expression {/* No Action Taken */}
     | postfix_expression SQUARE_BRACKET_OPEN expression SQUARE_BRACKET_CLOSE {
-        $$ = new Array();
-        $$->type = $1->type->ptr;
-        $$->arr = $1->arr;
-        $$->loc = symbol_table :: gentemp(new symbol_type("int"));
-        $$->arrtype = "arr";
+        symbol_type* t = current_symbol_table->lookup($1->loc)->type;
+        string str = "" ;
+        if(!($1->fold))
+        {
+            str = current_symbol_table->gentemp(INT);
+            emit(str,0,ASSIGN);
+            $1->folder = new string(str);
+        }
+        string temp = current_symbol_table->gentemp(INT);
 
-        if($1->arrtype == "arr")
-        {
-            symbol * symb = symbol_table :: gentemp(new symbol_type("int"));
-            int size  = getsize($$->type);
-            emit("+",symb->name,$3->loc->name,int2string(size));
-            emit("+",$$->loc->name,$1->loc->name,symb->name);
-        }
-        else 
-        {
-            int size = getsize($$->type);
-            emit("+",$$->loc->name,$3->loc->name,int2string(size));
-        }
+        emit(temp,$3->loc,"",ASSIGN);
+        emit(temp,temp,"4",MULTIPLY);
+        emit(str,temp,"",ASSIGN);
+        $$=$1;
     }
     | postfix_expression ROUND_BRACKET_OPEN ROUND_BRACKET_CLOSE 
-    { /* nothin */}
+    {
+        // is for calling a function with no parameters
+        symbol_table* table = global_symbol_table.lookup($1->loc)->nested_table;
+        emit($1->loc,"0","",CALL);
+    }
     | postfix_expression ROUND_BRACKET_OPEN argument_expression_list_opt ROUND_BRACKET_CLOSE { 
         // Corresponds to calling a function with the  function name and the appropriate number of parameters
-        $$ = new Array();
-        $$->arr = symbol_table :: gentemp($1->type);
-        emit("call",$$->arr->name,$1->arr->name,int2string($3));
+        symbol_table* table = global_symbol_table.lookup($1->loc)->nested_table;
+        vector<p> params = *($3);
+        vector<symbol*> param_list = table->symbol_list;
+
+        for(int i =0 ;i<(int)params.size();i++)
+        {
+            emit(params[i]->name,"","",PARAM);
+        }
+
+        data_type return_type = table->lookup("RETVAL")->type.type;       // making an entry to symbol table for the return value of the function
+        if(return_type == VOID) emit($1->loc,(int)params.size(),CALL);
+        else{
+            string return_value = current_symbol_table->gentemp(return_type);
+            emit($1->loc,to_string(params.size()),return_value,CALL);
+            $$ = new expression();
+            $$->loc = return_value;
+        }
     }
     | postfix_expression DOT IDENTIFIER 
     { /* nothin */}
     | postfix_expression ARROW IDENTIFIER 
     { /* nothin */}
     | postfix_expression INCREMENT {
-        $$ = new Array();
-        $$->arr = symbol_table :: gentemp($1->arr->type);
-        emit("=",$$->arr->name,$1->arr->name);
-        emit("+",$1->arr->name,$1->arr->name,"1");
+        $$ = new expression();
+        symbol_type* t = current_symbol_table->lookup($1->loc)->type;
+        if(t.type == ARR)
+        {
+            $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($1->loc)->type.nextType);
+            emit($$->loc,$1->loc,*($1->folder),ARR_IDX_ARG);
+            string temp = current_symbol_table->gentemp(t.nextType);
+            emit(temp,$1->loc,*(1->folder),ARR_IDX_ARG);
+            emit(temp,temp,"1",PLUS);
+            emit($1->loc,temp,*(1->folder),ARR_IDX_RES);
+        }
+        else 
+        {
+            $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($1->loc)->type.type);
+            emit($$->loc,$1->loc,"",ASSIGN);
+            emit($1->loc,$1->loc,"1",PLUS);
+        }
+
     }
     | postfix_expression DECREMENT {
-        $$ = new Array();
-        $$->arr = symbol_table :: gentemp($1->arr->type);
-        emit("=",$$->arr->name,$1->arr->name);
-        emit("-",$1->arr->name,$1->arr->name,"1");
+        $$ = new expression();
+        $$->loc = ST->gentemp(ST->lookup($1->loc)->type.type);          // Generate a new temporary variable
+        symbol_type* t = current_symbol_table->lookup($1->loc)->type;
+        if(t.type == ARR)
+        {
+            $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($1->loc)->type.nextType);
+            emit($$->loc,$1->loc,*($1->folder),ARR_IDX_ARG);
+            string temp = current_symbol_table->gentemp(t.nextType);
+            emit(temp,$1->loc,*(1->folder),ARR_IDX_ARG);
+            emit($$->loc,temp,"",ASSIGN)
+            emit(temp,temp,"1",MINUS);
+            emit($1->loc,temp,*(1->folder),ARR_IDX_RES);
+        }
+        else 
+        {
+            $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($1->loc)->type.type);
+            emit($$->loc,$1->loc,"",ASSIGN);
+            emit($1->loc,$1->loc,"1",MINUS);
+        }
     }
     | ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE CURLY_BRACKET_OPEN initializer_list CURLY_BRACKET_CLOSE 
     { /* nothin */}
@@ -155,59 +222,94 @@ argument_expression_list_opt
 
 argument_expression_list 
     : assignment_expression {
-        $$ = 1;
-        emit("param",$1->loc->name);
+        param* p = new param();
+        p->name = $1->loc;
+        p->type = current_symbol_table->lookup($1->loc)->type;
+        $$ = new vector<param*>;
+        $$->push_back(p);
     }
     | argument_expression_list COMMA assignment_expression { 
-        $$ = $1 + 1;
-        emit("param",$3->loc->name);
+        param* p = new param();
+        p->name = $3->loc;
+        p->type = current_symbol_table->lookup(p->name)->type;
+        $$ = $1;
+        $$->push_back(p);
     }
     ;
 
 unary_expression
-    : postfix_expression {$$ = $1;}
+    : postfix_expression {}
     | INCREMENT unary_expression {
-        emit("+",$2->arr->name,$2->arr->name,"1");
-        $$ = $2;
+        $$ = new expression();  
+        symbol_type t = current_symbol_table->lookup($2->loc)->type;
+        if(type.type == ARR)
+        {
+            string temp = current_symbol_table->gentemp(t.nextType);
+            emit(temp,$2->loc,*($2->folder),ARR_IDX_ARG);
+            emit(temp,temp,"1",PLUS);
+            emit($2->loc,temp,*(2->folder),ARR_IDX_RES);
+            $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($2->loc)->type.nextType);
+        }
+        else{
+            emit($2->loc,$2->loc,"1",PLUS);
+            $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($2->loc)->type.type);
+        }
+        $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($2->loc)->type.type);
+        emit($$->loc,$2->loc,"",ASSIGN);
     }
     | DECREMENT unary_expression {
-        emit("-",$2->arr->name,$2->arr->name,"1");
-        $$ = $2;
+        $$ = new expression();
+        symbol_type t = current_symbol_table->lookup($2->loc)->type;
+        if(tyoe.type == ARR)
+        {
+            string temp = current_symbol_table->gentemp(t.nextType);
+            emit(temp,$2->loc,*($2->folder),ARR_IDX_ARG);
+            emit(temp,temp,"1",MINUS);
+            emit($2->loc,temp,*(2->folder),ARR_IDX_RES);
+            $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($2->loc)->type.nextType);
+        }
+        else 
+        {
+            emit($2->loc,$2->loc,"1",MINUS);
+            $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($2->loc)->type.type);
+        }
+        emit($$->loc,$2->loc,"",ASSIGN);
     }
     | unary_operator cast_expression {
-        $$ = new Array();
         switch($1)
         {
-            case '&' : 
-                $$->arr = symbol_table :: gentemp(new symbol_type("ptr"));
-                $$->arr->type->ptr = $2->arr->type;
-                emit("= &",$$->arr->name,$2->arr->name);
+            case '&' :          // address 
+                $$ = new expression();
+                $$->loc = current_symbol_table->gentemp(PTR);
+                emit($$->loc,$2->loc,"",REFERENCE);
                 break;
             
-            case '*' :
-                $$->arrtype = "ptr" ;
-                $$->loc = symbol_table :: gentemp($2->arr->type->ptr);
-                $$->arr = $2->arr;
-                emit("= *",$$->loc->name,$2->arr->name);
+            case '*' :          // dereference
+                $$ = new expression();
+                $$->loc = current_symbol_table->gentemp(INT);
+                $$->fold = 1;
+                $$->folder = new string($2->loc);
+                emit($$->loc,$2->loc,"",DEREFERENCE);
                 break;
             
-            case '+' :
-                $$ = $2;
-                break;
-
             case '-' :
-                $$->arr = symbol_table :: gentemp($2->arr->type->ptr);
-                emit("= -",$$->arr->name,$2->arr->name);
+                $$= new expression();
+                $$->loc = current_symbol_table->gentemp();
+                emit($$->loc,$2->loc,"",UMINUS);
                 break;
 
-            case '~' :
-                $$->arr = symbol_table :: gentemp($2->arr->type->ptr);
-                emit("= ~",$$->arr->name,$2->arr->name);
-                break;
             
             case '!' :
-                $$->arr = symbol_table :: gentemp($2->arr->type->ptr);
-                emit("= !",$$->arr->name,$2->arr->name);
+                $$ = new expression();
+                $$->loc = current_symbol_table->gentemp(INT);
+                int temp = nextinstr + 2;
+                emit(to_string(temp),$2->loc,"0",GOTO_EQ);
+                temp = nextinstr + 3;
+                emit(to_string(temp),"","",GOTO);
+                emit($$->loc,"1","",ASSIGN);
+                temp = nextinstr + 2;
+                emit(to_string(temp),"","",GOTO);
+                emit($$->loc,"0","",ASSIGN);
                 break;
         }
     }
@@ -234,58 +336,105 @@ cast_expression
 multiplicative_expression
     : cast_expression {
         $$ = new expression();
-        if($1->arrtype == "arr")
+        symbol_type t = current_symbol_table->lookup($1->loc)->type;
+        if(t.type = ARR)
         {
-            $$->loc = symbol_table :: gentemp($1->loc->type);
-            emit("=[]",$$->loc->name,$1->arr->name,$1->loc->name);
-        }
-        else if($1->arrtype == "ptr")
-        {
-            $$->loc = $1->arr;
+            string temp = current_symbol_table->gentemp(t.nextType);
+            if($1->folder != NULL)
+            {
+                emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+                $1->loc = temp;
+                $1->type = t.nextType;
+                $$ = $1;
+            }
+            else 
+            {
+                $$ = $1;
+            }
         }
         else 
         {
-            $$->loc = $1->arr;
+            $$ = $1;
         }
     }
     | multiplicative_expression MULTIPLY cast_expression {
         
-        if(typecheck($1->loc,$3->arr))
+        $$ = new expression();
+        symbol * s1 = current_symbol_table->lookup($1->loc);
+        symbol * s2 = current_symbol_table->lookup($3->loc);
+
+        if(s2->type.type == ARR)
         {
-            $$ = new expression();
-            $$->loc = symbol_table :: gentemp(new symbol_type($1->loc->type->type));
-            emit("*",$$->loc->name,$1->loc->name,$3->arr->name);
+            string temp = current_symbol_table->gentemp(s2->type.nextType);
+            emit(temp,$3->loc,*($3->folder),ARR_IDX_ARG);
+            $3->loc = temp;
+            $3->type = s2->type.nextType;
         }
-        else 
+        if(s1->type.type == ARR)
         {
-            yyerror("Type mismatch");
+            string temp = current_symbol_table->gentemp(s1->type.nextType);
+            emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+            $1->loc = temp;
+            $1->type = s1->type.nextType;
         }
+
+        // assign the result of the multiplication to a new temporary variable in the higher data type
+
+        data_type result = ((s1.type.type > s2.type.type) ? s1.type.type : s2.type.type);
+        $$->loc = current_symbol_table->gentemp(result);
+        emit($$->loc,$1->loc,$3->loc,MULTIPLY);
     }
     | multiplicative_expression DIVIDE cast_expression {
         
-        if(typecheck($1->loc,$3->arr))
+        $$ = new expression();
+        symbol * s1 = current_symbol_table->lookup($1->loc);
+        symbol * s2 = current_symbol_table->lookup($3->loc);
+
+        if(s2->type.type == ARR)
         {
-            $$ = new expression();
-            $$->loc = symbol_table :: gentemp(new symbol_type($1->loc->type->type));
-            emit("/",$$->loc->name,$1->loc->name,$3->arr->name);
+            string temp = current_symbol_table->gentemp(s2->type.nextType);
+            emit(temp,$3->loc,*($3->folder),ARR_IDX_ARG);
+            $3->loc = temp;
+            $3->type = s2->type.nextType;
         }
-        else 
+        if(s1->type.type == ARR)
         {
-            yyerror("Type mismatch");
+            string temp = current_symbol_table->gentemp(s1->type.nextType);
+            emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+            $1->loc = temp;
+            $1->type = s1->type.nextType;
         }
+
+        // assign the result of the division to a new temporary variable in the higher data type
+        data_type result = ((s1.type.type > s2.type.type) ? s1.type.type : s2.type.type);
+        $$->loc = current_symbol_table->gentemp(result);
+        emit($$->loc,$1->loc,$3->loc,DIVIDE);
     }
     | multiplicative_expression MODULO cast_expression {
         
-        if(typecheck($1->loc,$3->arr))
+        $$ = new expression();
+        symbol * s1 = current_symbol_table->lookup($1->loc);
+        symbol * s2 = current_symbol_table->lookup($3->loc);
+
+        if(s2->type.type == ARR)
         {
-            $$ = new expression();
-            $$->loc = symbol_table :: gentemp(new symbol_type($1->loc->type->type));
-            emit("%",$$->loc->name,$1->loc->name,$3->arr->name);
+            string temp = current_symbol_table->gentemp(s2->type.nextType);
+            emit(temp,$3->loc,*($3->folder),ARR_IDX_ARG);
+            $3->loc = temp;
+            $3->type = s2->type.nextType;
         }
-        else 
+        if(s1->type.type == ARR)
         {
-            yyerror("Type mismatch");
+            string temp = current_symbol_table->gentemp(s1->type.nextType);
+            emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+            $1->loc = temp;
+            $1->type = s1->type.nextType;
         }
+
+        // assign the result of the modulo to a new temporary variable in the higher data type
+        data_type result = ((s1.type.type > s2.type.type) ? s1.type.type : s2.type.type);
+        $$->loc = current_symbol_table->gentemp(result);
+        emit($$->loc,$1->loc,$3->loc,MODULO);
     }
     ;
 
@@ -293,29 +442,56 @@ additive_expression
     : multiplicative_expression { /* No Action Taken */ }
     | additive_expression PLUS multiplicative_expression {
 
-        if(typecheck($1->loc,$3->loc))
+        $$ = new expression();
+        symbol * s1 = current_symbol_table->lookup($1->loc);
+        symbol * s2 = current_symbol_table->lookup($3->loc);
+
+        if(s2->type.type == ARR)
         {
-            $$ = new expression();
-            $$->loc = symbol_table :: gentemp(new symbol_type($1->loc->type->type));
-            emit("+",$$->loc->name,$1->loc->name,$3->loc->name);
+            string temp = current_symbol_table->gentemp(s2->type.nextType);
+            emit(temp,$3->loc,*($3->folder),ARR_IDX_ARG);
+            $3->loc = temp;
+            $3->type = s2->type.nextType;
         }
-        else 
+        if(s1->type.type == ARR)
         {
-            yyerror("Type mismatch");
+            string temp = current_symbol_table->gentemp(s1->type.nextType);
+            emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+            $1->loc = temp;
+            $1->type = s1->type.nextType;
         }
+
+        // assign the result of the addition to a new temporary variable in the higher data type
+        data_type result = ((s1.type.type > s2.type.type) ? s1.type.type : s2.type.type);
+        $$->loc = current_symbol_table->gentemp(result);
+        emit($$->loc,$1->loc,$3->loc,PLUS);
     }
     | additive_expression MINUS multiplicative_expression {
         
-        if(typecheck($1->loc,$3->loc))
+        
+        $$ = new expression();
+        symbol * s1 = current_symbol_table->lookup($1->loc);
+        symbol * s2 = current_symbol_table->lookup($3->loc);
+
+        if(s2->type.type == ARR)
         {
-            $$ = new expression();
-            $$->loc = symbol_table :: gentemp(new symbol_type($1->loc->type->type));
-            emit("-",$$->loc->name,$1->loc->name,$3->loc->name);
+            string temp = current_symbol_table->gentemp(s2->type.nextType);
+            emit(temp,$3->loc,*($3->folder),ARR_IDX_ARG);
+            $3->loc = temp;
+            $3->type = s2->type.nextType;
         }
-        else 
+        if(s1->type.type == ARR)
         {
-            yyerror("Type mismatch");
+            string temp = current_symbol_table->gentemp(s1->type.nextType);
+            emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+            $1->loc = temp;
+            $1->type = s1->type.nextType;
         }
+
+        // assign the result of the subtraction to a new temporary variable in the higher data type
+        data_type result = ((s1.type.type > s2.type.type) ? s1.type.type : s2.type.type);
+        $$->loc = current_symbol_table->gentemp(result);
+        emit($$->loc,$1->loc,$3->loc,MINUS);
     }
     ;
 
@@ -323,29 +499,51 @@ shift_expression
     : additive_expression { /* No Action Taken */ }
     | shift_expression LEFT_SHIFT additive_expression {
         
-        if($3->loc->type->type == "int")
+        $$ = new expression();
+        symbol * s1 = current_symbol_table->lookup($1->loc);
+        symbol * s2 = current_symbol_table->lookup($3->loc);
+
+        if(s2->type.type == ARR)
         {
-            $$ = new expression();
-            $$->loc = symbol_table :: gentemp(new symbol_type("int"));
-            emit("<<",$$->loc->name,$1->loc->name,$3->loc->name);
+            string temp = current_symbol_table->gentemp(s2->type.nextType);
+            emit(temp,$3->loc,*($3->folder),ARR_IDX_ARG);
+            $3->loc = temp;
+            $3->type = s2->type.nextType;
         }
-        else 
+        if(s1->type.type == ARR)
         {
-            yyerror("Type mismatch");
+            string temp = current_symbol_table->gentemp(s1->type.nextType);
+            emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+            $1->loc = temp;
+            $1->type = s1->type.nextType;
         }
+
+        $$->loc = current_symbol_table->gentemp(s1.type.type);
+        emit($$->loc,$1->loc,$3->loc,LEFT_SHIFT);
     }
     | shift_expression RIGHT_SHIFT additive_expression {
         
-        if($3->loc->type->type == "int")
+        $$ = new expression();
+        symbol * s1 = current_symbol_table->lookup($1->loc);
+        symbol * s2 = current_symbol_table->lookup($3->loc);
+
+        if(s2->type.type == ARR)
         {
-            $$ = new expression();
-            $$->loc = symbol_table :: gentemp(new symbol_type("int"));
-            emit(">>",$$->loc->name,$1->loc->name,$3->loc->name);
+            string temp = current_symbol_table->gentemp(s2->type.nextType);
+            emit(temp,$3->loc,*($3->folder),ARR_IDX_ARG);
+            $3->loc = temp;
+            $3->type = s2->type.nextType;
         }
-        else 
+        if(s1->type.type == ARR)
         {
-            yyerror("Type mismatch");
+            string temp = current_symbol_table->gentemp(s1->type.nextType);
+            emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+            $1->loc = temp;
+            $1->type = s1->type.nextType;
         }
+
+        $$->loc = current_symbol_table->gentemp(s1.type.type);
+        emit($$->loc,$1->loc,$3->loc,RIGHT_SHIFT);
     }
     ;
 
@@ -353,127 +551,224 @@ relational_expression
     : shift_expression { /* No Action Taken */ }
     | relational_expression LESS_THAN shift_expression
     {
-        if(typecheck($1->loc ,$3->loc))
+        $$ = new expression();
+        symbol * s1 = current_symbol_table->lookup($1->loc);
+        symbol * s2 = current_symbol_table->lookup($3->loc);
+
+        if(s2->type.type == ARR)
         {
-            $$ = new expression();
-            $$->type = "bool";
-            $$->truelist = makelist(nextinstr());
-            $$->falselist = makelist(nextinstr()+1);
-            emit("<","",$1->loc->name,$3->loc->name);
-            emit("goto","");
+            string temp = current_symbol_table->gentemp(s2->type.nextType);
+            emit(temp,$3->loc,*($3->folder),ARR_IDX_ARG);
+            $3->loc = temp;
+            $3->type = s2->type.nextType;
         }
-        else 
+        if(s1->type.type == ARR)
         {
-            yyerror("Type mismatch");
+            string temp = current_symbol_table->gentemp(s1->type.nextType);
+            emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+            $1->loc = temp;
+            $1->type = s1->type.nextType;
         }
+
+        $$ = new expression();
+        $$->loc = current_symbol_table->gentemp();
+        $$->type = BOOL;
+        emit($$->loc,"1","",ASSIGN);
+        $$->truelist = makelist(nextinstr);
+        emit("",$1->loc,$3->loc,GOTO_LT);
+        emit($$->loc,"0","",ASSIGN);
+        $$->falselist = makelist(nextinstr);
+        emit("", "", "", GOTO);
+
     }
     | relational_expression GREATER_THAN shift_expression { 
-        if(typecheck($1->loc ,$3->loc))
+        $$ = new expression();
+        symbol * s1 = current_symbol_table->lookup($1->loc);
+        symbol * s2 = current_symbol_table->lookup($3->loc);
+
+        if(s2->type.type == ARR)
         {
-            $$ = new expression();
-            $$->type = "bool";
-            $$->truelist = makelist(nextinstr());
-            $$->falselist = makelist(nextinstr()+1);
-            emit(">","",$1->loc->name,$3->loc->name);
-            emit("goto","");
+            string temp = current_symbol_table->gentemp(s2->type.nextType);
+            emit(temp,$3->loc,*($3->folder),ARR_IDX_ARG);
+            $3->loc = temp;
+            $3->type = s2->type.nextType;
         }
-        else 
+        if(s1->type.type == ARR)
         {
-            yyerror("Type mismatch");
+            string temp = current_symbol_table->gentemp(s1->type.nextType);
+            emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+            $1->loc = temp;
+            $1->type = s1->type.nextType;
         }
-     }
+
+        $$ = new expression();
+        $$->loc = current_symbol_table->gentemp();
+        $$->type = BOOL;
+        emit($$->loc,"1","",ASSIGN);
+        $$->truelist = makelist(nextinstr);
+        emit("",$1->loc,$3->loc,GOTO_GT);
+        emit($$->loc,"0","",ASSIGN);
+        $$->falselist = makelist(nextinstr);
+        emit("", "", "", GOTO);
+    }
     | relational_expression LESS_THAN_EQUAL shift_expression {
-        if(typecheck($1->loc ,$3->loc))
+        $$ = new expression();
+        symbol * s1 = current_symbol_table->lookup($1->loc);
+        symbol * s2 = current_symbol_table->lookup($3->loc);
+
+        if(s2->type.type == ARR)
         {
-            $$ = new expression();
-            $$->type = "bool";
-            $$->truelist = makelist(nextinstr());
-            $$->falselist = makelist(nextinstr()+1);
-            emit("<=","",$1->loc->name,$3->loc->name);
-            emit("goto","");
+            string temp = current_symbol_table->gentemp(s2->type.nextType);
+            emit(temp,$3->loc,*($3->folder),ARR_IDX_ARG);
+            $3->loc = temp;
+            $3->type = s2->type.nextType;
         }
-        else 
+        if(s1->type.type == ARR)
         {
-            yyerror("Type mismatch");
+            string temp = current_symbol_table->gentemp(s1->type.nextType);
+            emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+            $1->loc = temp;
+            $1->type = s1->type.nextType;
         }
+
+        $$ = new expression();
+        $$->loc = current_symbol_table->gentemp();
+        $$->type = BOOL;
+        emit($$->loc,"1","",ASSIGN);
+        $$->truelist = makelist(nextinstr);
+        emit("",$1->loc,$3->loc,GOTO_LTE);
+        emit($$->loc,"0","",ASSIGN);
+        $$->falselist = makelist(nextinstr);
+        emit("", "", "", GOTO);
+
     }
     
     | relational_expression GREATER_THAN_EQUAL shift_expression 
     {
-        if(typecheck($1->loc ,$3->loc))
+        $$ = new expression();
+        symbol * s1 = current_symbol_table->lookup($1->loc);
+        symbol * s2 = current_symbol_table->lookup($3->loc);
+
+        if(s2->type.type == ARR)
         {
-            $$ = new expression();
-            $$->type = "bool";
-            $$->truelist = makelist(nextinstr());
-            $$->falselist = makelist(nextinstr()+1);
-            emit(">=","",$1->loc->name,$3->loc->name);
-            emit("goto","");
+            string temp = current_symbol_table->gentemp(s2->type.nextType);
+            emit(temp,$3->loc,*($3->folder),ARR_IDX_ARG);
+            $3->loc = temp;
+            $3->type = s2->type.nextType;
         }
-        else 
+        if(s1->type.type == ARR)
         {
-            yyerror("Type mismatch");
+            string temp = current_symbol_table->gentemp(s1->type.nextType);
+            emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+            $1->loc = temp;
+            $1->type = s1->type.nextType;
         }
+
+        $$ = new expression();
+        $$->loc = current_symbol_table->gentemp();
+        $$->type = BOOL;
+        emit($$->loc,"1","",ASSIGN);
+        $$->truelist = makelist(nextinstr);
+        emit("",$1->loc,$3->loc,GOTO_GTE);
+        emit($$->loc,"0","",ASSIGN);
+        $$->falselist = makelist(nextinstr);
+        emit("", "", "", GOTO);
     }
     
     ;
 
 equality_expression
-    : relational_expression { $$ = $1; }
+    : relational_expression { $$ = new expression() ;$$ = $1; }
     | equality_expression EQUAL relational_expression {
         
-        if(typecheck($1->loc,$3->loc))
+        $$ = new expression();
+        symbol * s1 = current_symbol_table->lookup($1->loc);
+        symbol * s2 = current_symbol_table->lookup($3->loc);
+
+        if(s2->type.type == ARR)
         {
-            convertBool2Int($1);
-            convertBool2Int($3);
-            $$ = new expression();
-            $$->type = "bool";
-            $$->truelist = makelist(nextinstr());
-            $$->falselist = makelist(nextinstr()+1);
-            emit("==","",$1->loc->name,$3->loc->name);
-            emit("goto","");
+            string temp = current_symbol_table->gentemp(s2->type.nextType);
+            emit(temp,$3->loc,*($3->folder),ARR_IDX_ARG);
+            $3->loc = temp;
+            $3->type = s2->type.nextType;
         }
-        else 
+        if(s1->type.type == ARR)
         {
-            yyerror("Type mismatch");
+            string temp = current_symbol_table->gentemp(s1->type.nextType);
+            emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+            $1->loc = temp;
+            $1->type = s1->type.nextType;
         }
+
+        $$ = new expression();
+        $$->loc = current_symbol_table->gentemp();
+        $$->type = BOOL;
+        emit($$->loc,"1","",ASSIGN);
+        $$->truelist = makelist(nextinstr);
+        emit("",$1->loc,$3->loc,GOTO_EQ);
+        emit($$->loc,"0","",ASSIGN);
+        $$->falselist = makelist(nextinstr);
+        emit("", "", "", GOTO);
     }
     | equality_expression NOT_EQUAL relational_expression {
         
-        if(typecheck($1->loc,$3->loc))
+        $$ = new expression();
+        symbol * s1 = current_symbol_table->lookup($1->loc);
+        symbol * s2 = current_symbol_table->lookup($3->loc);
+
+        if(s2->type.type == ARR)
         {
-            convertBool2Int($1);
-            convertBool2Int($3);
-            $$ = new expression();
-            $$->type = "bool";
-            $$->truelist = makelist(nextinstr());
-            $$->falselist = makelist(nextinstr()+1);
-            emit("!=","",$1->loc->name,$3->loc->name);
-            emit("goto","");
+            string temp = current_symbol_table->gentemp(s2->type.nextType);
+            emit(temp,$3->loc,*($3->folder),ARR_IDX_ARG);
+            $3->loc = temp;
+            $3->type = s2->type.nextType;
         }
-        else 
+        if(s1->type.type == ARR)
         {
-            yyerror("Type mismatch");
+            string temp = current_symbol_table->gentemp(s1->type.nextType);
+            emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+            $1->loc = temp;
+            $1->type = s1->type.nextType;
         }
+
+        $$ = new expression();
+        $$->loc = current_symbol_table->gentemp();
+        $$->type = BOOL;
+        emit($$->loc,"1","",ASSIGN);
+        $$->truelist = makelist(nextinstr);
+        emit("",$1->loc,$3->loc,GOTO_NEQ);
+        emit($$->loc,"0","",ASSIGN);
+        $$->falselist = makelist(nextinstr);
+        emit("", "", "", GOTO);
     }
     ;
 
 AND_expression
-    : equality_expression { $$ = $1; }
+    : equality_expression {}
     | AND_expression BITWISE_AND equality_expression { 
         
-        if(typecheck($1->loc,$3->loc))
+        $$ = new expression();
+        symbol * s1 = current_symbol_table->lookup($1->loc);
+        symbol * s2 = current_symbol_table->lookup($3->loc);
+
+        if(s2->type.type == ARR) 
         {
-            convertBool2Int($1);
-            convertBool2Int($3);
-            $$ = new expression();
-            $$->type = "not_bool";
-            $$->loc = symbol_table :: gentemp(new symbol_type("int"));
-            emit("&",$$->loc->name,$1->loc->name,$3->loc->name);
+            string temp = current_symbol_table->gentemp(s2->type.nextType);
+            emit(temp,$3->loc,*($3->folder),ARR_IDX_ARG);
+            $3->loc = temp;
+            $3->type = s2->type.nextType;
         }
-        else 
+        if(s1->type.type == ARR) 
         {
-            yyerror("Type mismatch");
+            string temp = current_symbol_table->gentemp(s1->type.nextType);
+            emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+            $1->loc = temp;
+            $1->type = s1->type.nextType;
         }
+
+        $$ = new expression();
+        $$->loc = current_symbol_table->gentemp();
+        emit($$->loc,$1->loc,$3->loc,BITWISE_AND);
     }
     ;
 
@@ -481,72 +776,83 @@ exclusive_OR_expression
     : AND_expression { $$ = $1; }
     | exclusive_OR_expression BITWISE_XOR AND_expression {
         
-        if(typecheck($1->loc,$3->loc))
+        $$ = new expression();
+        symbol * s1 = current_symbol_table->lookup($1->loc);
+        symbol * s2 = current_symbol_table->lookup($3->loc);
+
+        if(s2->type.type == ARR) 
         {
-            convertBool2Int($1);
-            convertBool2Int($3);
-            $$ = new expression();
-            $$->type = "not_bool";
-            $$->loc = symbol_table :: gentemp(new symbol_type("int"));
-            emit("^",$$->loc->name,$1->loc->name,$3->loc->name);
+            string temp = current_symbol_table->gentemp(s2->type.nextType);
+            emit(temp,$3->loc,*($3->folder),ARR_IDX_ARG);
+            $3->loc = temp;
+            $3->type = s2->type.nextType;
         }
-        else 
+        if(s1->type.type == ARR) 
         {
-            yyerror("Type mismatch");
+            string temp = current_symbol_table->gentemp(s1->type.nextType);
+            emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+            $1->loc = temp;
+            $1->type = s1->type.nextType;
         }
+
+        $$ = new expression();
+        $$->loc = current_symbol_table->gentemp();
+        emit($$->loc,$1->loc,$3->loc,BITWISE_XOR);
     }
     ;
 
 inclusive_OR_expression
-    : exclusive_OR_expression {$$ = $1;}
+    : exclusive_OR_expression {new expression() ;$$ = $1;}
     | inclusive_OR_expression BITWISE_OR exclusive_OR_expression {
         
-        if(typecheck($1->loc,$3->loc))
+        $$ = new expression();
+        symbol * s1 = current_symbol_table->lookup($1->loc);
+        symbol * s2 = current_symbol_table->lookup($3->loc);
+
+        if(s2->type.type == ARR) 
         {
-            convertBool2Int($1);
-            convertBool2Int($3);
-            $$ = new expression();
-            $$->type = "not_bool";
-            $$->loc = symbol_table :: gentemp(new symbol_type("int"));
-            emit("|",$$->loc->name,$1->loc->name,$3->loc->name);
+            string temp = current_symbol_table->gentemp(s2->type.nextType);
+            emit(temp,$3->loc,*($3->folder),ARR_IDX_ARG);
+            $3->loc = temp;
+            $3->type = s2->type.nextType;
         }
-        else 
+        if(s1->type.type == ARR) 
         {
-            yyerror("Type mismatch");
+            string temp = current_symbol_table->gentemp(s1->type.nextType);
+            emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+            $1->loc = temp;
+            $1->type = s1->type.nextType;
         }
+
+        $$ = new expression();
+        $$->loc = current_symbol_table->gentemp();
+        emit($$->loc,$1->loc,$3->loc,BITWISE_OR);
     }
     ;
 
 logical_AND_expression
-    : inclusive_OR_expression { $$ = $1; }
+    : inclusive_OR_expression {}
     | logical_AND_expression LOGICAL_AND M inclusive_OR_expression {
         
         /* 
             here we have made few changes to the grammar to incorporate non terminal M to handle backpatching
         */
 
-        convertBool2Int($1);
-        convertBool2Int($4);
-        $$ = new expression();
-        $$->type = "bool";
-        backpatch($1->truelist,$3);
-        $$->truelist = $4->truelist;
+        backpatch($1->truelist,$3->instruction);
         $$->falselist = merge($1->falselist,$4->falselist);
-
+        $$->truelist = $4->truelist;
+        $$->type = BOOL;
     }
     ;
 
 logical_OR_expression
-    : logical_AND_expression { $$ = $1; }
+    : logical_AND_expression {}
     | logical_OR_expression LOGICAL_OR M logical_AND_expression {
         
-        convertBool2Int($1);
-        convertBool2Int($4);
-        $$ = new expression();
-        $$->type = "bool";
-        backpatch($1->falselist,$3);
+        backpatch($1->falselist,$3->instruction);
         $$->truelist = merge($1->truelist,$4->truelist);
         $$->falselist = $4->falselist;
+        $$->type = BOOL;
     }
     ;
 
