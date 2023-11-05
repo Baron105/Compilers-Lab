@@ -61,9 +61,9 @@ extern int yyparse();
 
 class symbol_type {
 public:
-    int  ptr;
+    int ptr;
     data_type type;
-    data_type nextType ;
+    data_type nextType;
     vector <int> dimensions;
 };
 
@@ -134,14 +134,6 @@ public :
     symbol_type type ;
 };
 
-
-
-
-
-
-
-
-
 // class for expression
 class expression
 {
@@ -167,7 +159,7 @@ public :
     data_type next_type ;               
     vector <int> instr_list ;           // list of instructions
     expression* initial_value ;         // initial value of the declaration
-    int pc ;
+    int pc;
 };
 
 
