@@ -31,12 +31,12 @@ void gen_ass_from_quad(quad q , ofstream& sfile)
     symbol* loc1 = current_symbol_table->lookup(q.arg1);
     symbol* loc2 = current_symbol_table->lookup(q.arg2);
     symbol* loc3 = current_symbol_table->lookup(q.result);
-    symbol* global1 = global_symbol_table.search_global_table(q.arg1);
-    symbol* global2 = global_symbol_table.search_global_table(q.arg2);
-    symbol* global3 = global_symbol_table.search_global_table(q.result);
+    symbol* global1 = global_symbol_table->search_global_table(q.arg1);
+    symbol* global2 = global_symbol_table->search_global_table(q.arg2);
+    symbol* global3 = global_symbol_table->search_global_table(q.result);
 
 
-    if(current_symbol_table != &global_symbol_table)
+    if(current_symbol_table != global_symbol_table)
     {
         if(global1 == NULL) offset1 = loc1->offset;
         if(global2 == NULL) offset2 = loc2->offset;
