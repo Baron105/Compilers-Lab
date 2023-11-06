@@ -7,10 +7,11 @@ using namespace std;
 
 symbol *current_symbol;
 symbol_table *current_symbol_table;
-symbol_table *global_symbol_table;
-quad_array quad_table;
+symbol_table global_symbol_table;
+quad_array quad_list;
 int symbol_table_counter;
-string current_block_name;
+
+int next_instr = 0;
 
 int symbol_table::count = 0;
 
