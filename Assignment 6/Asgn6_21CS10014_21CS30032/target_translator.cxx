@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <stack>
+#define endl '\n'
 
 using namespace std;
 
@@ -17,6 +18,56 @@ stack<pair<string,int>> parameters ;
 int label_count = 0;
 string function_running = "";
 string asmFileName ;
+
+void print_global(ofstream& sfile)
+{
+    for (auto it = global_symbol_table->symbol_list.begin(); it != global_symbol_table->symbol_list.end(); it++)
+    {
+        symbol* s = *it;
+        
+        // if int AND not a temporary variable
+        if (s->type.type == INT && s->name[0] != 't')
+        {
+            if (s->initial_value)
+            {
+                sfile << "\t.globl\t" << s->name << endl;
+                sfile << "\t.data" << endl;
+                sfile << "\t.align\t4" << endl;
+                sfile << "\t.type\t" << s->name << ", @object" << endl;
+                sfile << "\t.size\t" << s->name << ", 4" << endl;
+                sfile << s->name << ":" << endl;
+                sfile << "\t.long\t" << s->initial_value->int_val << endl;
+            }
+            else sfile << "\t.comm\t" << s->name << ",4,4" << endl;
+        }
+
+        // if char AND not a temporary variable
+        else if (s->type.type == CHAR && s->name[0] != 't')
+        {
+            if (s->initial_value)
+            {
+                sfile << "\t.globl\t" << s->name << endl;
+                sfile << "\t.data" << endl;
+                sfile << "\t.align\t4" << endl;
+                sfile << "\t.type\t" << s->name << ", @object" << endl;
+                sfile << "\t.size\t" << s->name << ", 1" << endl;
+                sfile << s->name << ":" << endl;
+                sfile << "\t.byte\t" << s->initial_value->char_val << endl;
+            }
+            else sfile << "\t.comm\t" << s->name << ",1,1" << endl;
+        }
+    }
+}
+
+void print_strings(ofstream& sfile)
+{
+    sfile << ".section\t.rodata" << endl;
+    for (auto it = consts.begin(); it != consts.end(); it++)
+    {
+        sfile << ".LC" << it - consts.begin() << ":" << endl;
+        sfile << "\t.string\t" << *it << endl;
+    }
+}
 
 
 
