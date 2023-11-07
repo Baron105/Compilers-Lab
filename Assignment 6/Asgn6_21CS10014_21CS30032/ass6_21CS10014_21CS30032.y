@@ -76,16 +76,30 @@ primary_expression
         current_symbol_table->lookup(s);
         $$->loc = s;
     }
+    | CHAR_CONSTANT
+    {
+        $$ = new expression() ;
+        $$->loc = current_symbol_table->gentemp(CHAR);
+        emit($$->loc,$1,ASSIGN);
+        symbol_value* val = new symbol_value();
+        val->set_value($1);
+        current_symbol_table-lookup($$->loc)->initial_value = val;
+    }
     | STRING_LITERAL { 
         $$ = new expression() ; 
         $$->loc = ".LC" + to_string(string_count++) ;
         consts.push_back(*($1));
     }
-    | ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE { $$ = $2 ; }
-    ;
-
-constant
-    : INTEGER_CONSTANT {
+    | FLOATING_CONSTANT 
+    { 
+        $$ = new expression() ;
+        $$->loc = current_symbol_table->gentemp(FLOAT);
+        emit($$->loc,$1,ASSIGN);
+        symbol_value* val = new symbol_value();
+        val->set_value($1);
+        current_symbol_table-lookup($$->loc)->initial_value = val;
+    }
+    | INTEGER_CONSTANT {
         $$ = new expression() ;
         $$->loc = current_symbol_table->gentemp(INT);
         emit($$->loc,$1,ASSIGN);
@@ -93,17 +107,7 @@ constant
         val->set_value($1);
         current_symbol_table-lookup($$->loc)->initial_value = val;
     }
-    | FLOATING_CONSTANT { 
-        $$ = new expression() ;
-        $$->loc = current_symbol_table->gentemp(FLOAT);
-        emit($$->loc,$1,ASSIGN);
-        symbol_value* val = new symbol_value();
-        val->set_value($1);
-        current_symbol_table-lookup($$->loc)->initial_value = val;
-     }
-    | CHAR_CONSTANT {
-        
-    }
+    | ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE { $$ = $2 ; }
     ;
 
 postfix_expression
@@ -1190,7 +1194,7 @@ direct_declarator
     {
         /* No Action Taken */
     }
-    | direct_declarator SQUARE_BRACKET type_qualifier_list_opt MULTIPLY SQUARE_BRACKET_CLOSE
+    | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list_opt MULTIPLY SQUARE_BRACKET_CLOSE
     {
         $$ = $1;
         $$->type = PTR;
@@ -1215,11 +1219,6 @@ pointer
 type_qualifier_list
     : type_qualifier { /* No Action Taken */ }
     | type_qualifier_list type_qualifier { /* No Action Taken */ }
-    ;
-
-parameter_type_list_opt
-    : parameter_type_list { /* No Action Taken */ }
-    | %empty { $$ = new vector<param*>(); }
     ;
 
 parameter_type_list
@@ -1346,7 +1345,7 @@ expression_statement
     | SEMICOLON { $$ = new expression(); }
 
 selection_statement
-    : IF ROUND_BRACKET_OPEN expression N ROUND_BRACKET_CLOSE M statement N THEN
+    : IF ROUND_BRACKET_OPEN expression N ROUND_BRACKET_CLOSE M statement N
     {
         backpatch($4->nextlist, next_instr);
         inttobool($3);
