@@ -1,3 +1,9 @@
+/*
+    Made by Barun Parua and Navaneeth Shaji
+    Roll Numbers: 21CS10014 and 21CS30032
+    Assignment 6
+*/
+
 #ifndef __TRANSLATOR_H
 #define __TRANSLATOR_H
 
@@ -6,6 +12,7 @@
 #include <list>
 #include <iostream>
 #include <map>
+
 using namespace std;
 
 #define SIZE_OF_VOID 0

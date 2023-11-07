@@ -1142,9 +1142,9 @@ direct_declarator
     }
     | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list_opt SQUARE_BRACKET_CLOSE
     {
-        $$ = $1;
         $1->type = ARR;
         $1->next_type = INT;
+        $$ = $1;
         $$->instr_list.push_back(0); 
     }
     | direct_declarator SQUARE_BRACKET_OPEN STATIC type_qualifier_list_opt assignment_expression SQUARE_BRACKET_CLOSE
@@ -1157,18 +1157,18 @@ direct_declarator
     }
     | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list_opt assignment_expression SQUARE_BRACKET_CLOSE
     {
-        $$ = $1;
         $1->type = ARR;
         $1->next_type = INT;
+        $$ = $1;
         int id = current_symbol_table->lookup($4->loc)->initial_value->int_val;
         $$->instr_list.push_back(id);
         // check
     }
-    | direct_declarator ROUND_BRACKET_OPEN parameter_type_list ROUND_BRACKET_CLOSE
+    | direct_declarator ROUND_BRACKET_OPEN parameter_type_list_opt ROUND_BRACKET_CLOSE
     {
         $$ = $1;
         $$->type = FUNC;
-        symbol* s1 = current_symbol_table->lookup($1->name, $1->type);
+        symbol* s1 = current_symbol_table->lookup($$->name, $$->type);
         symbol_table* st = new symbol_table();
         s1->nested_table = st;
 
@@ -1188,7 +1188,7 @@ direct_declarator
             {
                 st->lookup(curr_param->name, curr_param->type.type);
                 st->lookup(curr_param->name)->type.nextType = INT;
-                st->lookup(curr_param->name)->type.ptr = curr_param->type.ptr;
+                st->lookup(curr_param->name)->type.dimensions.push_back(0);
             }
             
             else
@@ -1206,9 +1206,9 @@ direct_declarator
     }
     | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list_opt MULTIPLY SQUARE_BRACKET_CLOSE
     {
+        $1->type = PTR;
+        $1->next_type = INT;
         $$ = $1;
-        $$->type = PTR;
-        $$->next_type = INT;
     }
     ;
 
