@@ -113,7 +113,7 @@ primary_expression
 postfix_expression
     : primary_expression {/* No Action Taken */}
     | postfix_expression SQUARE_BRACKET_OPEN expression SQUARE_BRACKET_CLOSE {
-        symbol_type* t = current_symbol_table->lookup($1->loc)->type;
+        symbol_type t = current_symbol_table->lookup($1->loc)->type;
         string str = "" ;
         if(!($1->fold))
         {
@@ -137,7 +137,7 @@ postfix_expression
     | postfix_expression ROUND_BRACKET_OPEN argument_expression_list ROUND_BRACKET_CLOSE { 
         // Corresponds to calling a function with the  function name and the appropriate number of parameters
         symbol_table* table = global_symbol_table.lookup($1->loc)->nested_table;
-        vector<p> params = *($3);
+        vector<param*> params = *($3);
         vector<symbol*> param_list = table->symbol_list;
 
         for(int i =0 ;i<params.size();i++)
@@ -160,43 +160,43 @@ postfix_expression
     { /* No Action Taken */}
     | postfix_expression INCREMENT {
         $$ = new expression();
-        symbol_type* t = current_symbol_table->lookup($1->loc)->type;
+        symbol_type t = current_symbol_table->lookup($1->loc)->type;
         if(t.type == ARR)
         {
             $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($1->loc)->type.nextType);
             emit($$->loc,$1->loc,*($1->folder),ARR_IDX_ARG);
             string temp = current_symbol_table->gentemp(t.nextType);
-            emit(temp,$1->loc,*(1->folder),ARR_IDX_ARG);
-            emit(temp,temp,"1",PLUS);
-            emit($1->loc,temp,*(1->folder),ARR_IDX_RES);
+            emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+            emit(temp,temp,"1",ADD);
+            emit($1->loc,temp,*($1->folder),ARR_IDX_RES);
         }
         else 
         {
             $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($1->loc)->type.type);
             emit($$->loc,$1->loc,"",ASSIGN);
-            emit($1->loc,$1->loc,"1",PLUS);
+            emit($1->loc,$1->loc,"1",ADD);
         }
 
     }
     | postfix_expression DECREMENT {
         $$ = new expression();
-        $$->loc = ST->gentemp(ST->lookup($1->loc)->type.type);          // Generate a new temporary variable
-        symbol_type* t = current_symbol_table->lookup($1->loc)->type;
+        $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($1->loc)->type.type);          // Generate a new temporary variable
+        symbol_type t = current_symbol_table->lookup($1->loc)->type;
         if(t.type == ARR)
         {
             $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($1->loc)->type.nextType);
             emit($$->loc,$1->loc,*($1->folder),ARR_IDX_ARG);
             string temp = current_symbol_table->gentemp(t.nextType);
-            emit(temp,$1->loc,*(1->folder),ARR_IDX_ARG);
-            emit($$->loc,temp,"",ASSIGN)
-            emit(temp,temp,"1",MINUS);
-            emit($1->loc,temp,*(1->folder),ARR_IDX_RES);
+            emit(temp,$1->loc,*($1->folder),ARR_IDX_ARG);
+            emit($$->loc,temp,"",ASSIGN);
+            emit(temp,temp,"1",SUB);
+            emit($1->loc,temp,*($1->folder),ARR_IDX_RES);
         }
         else 
         {
             $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($1->loc)->type.type);
             emit($$->loc,$1->loc,"",ASSIGN);
-            emit($1->loc,$1->loc,"1",MINUS);
+            emit($1->loc,$1->loc,"1",SUB);
         }
     }
     | ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE CURLY_BRACKET_OPEN initializer_list CURLY_BRACKET_CLOSE 
@@ -227,16 +227,16 @@ unary_expression
     | INCREMENT unary_expression {
         $$ = new expression();  
         symbol_type t = current_symbol_table->lookup($2->loc)->type;
-        if(type.type == ARR)
+        if(t.type == ARR)
         {
             string temp = current_symbol_table->gentemp(t.nextType);
             emit(temp,$2->loc,*($2->folder),ARR_IDX_ARG);
-            emit(temp,temp,"1",PLUS);
-            emit($2->loc,temp,*(2->folder),ARR_IDX_RES);
+            emit(temp,temp,"1",ADD);
+            emit($2->loc,temp,*($2->folder),ARR_IDX_RES);
             $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($2->loc)->type.nextType);
         }
         else{
-            emit($2->loc,$2->loc,"1",PLUS);
+            emit($2->loc,$2->loc,"1",ADD);
             $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($2->loc)->type.type);
         }
         $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($2->loc)->type.type);
@@ -245,17 +245,17 @@ unary_expression
     | DECREMENT unary_expression {
         $$ = new expression();
         symbol_type t = current_symbol_table->lookup($2->loc)->type;
-        if(tyoe.type == ARR)
+        if(t.type == ARR)
         {
             string temp = current_symbol_table->gentemp(t.nextType);
             emit(temp,$2->loc,*($2->folder),ARR_IDX_ARG);
-            emit(temp,temp,"1",MINUS);
-            emit($2->loc,temp,*(2->folder),ARR_IDX_RES);
+            emit(temp,temp,"1",SUB);
+            emit($2->loc,temp,*($2->folder),ARR_IDX_RES);
             $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($2->loc)->type.nextType);
         }
         else 
         {
-            emit($2->loc,$2->loc,"1",MINUS);
+            emit($2->loc,$2->loc,"1",SUB);
             $$->loc = current_symbol_table->gentemp(current_symbol_table->lookup($2->loc)->type.type);
         }
         emit($$->loc,$2->loc,"",ASSIGN);
@@ -280,19 +280,19 @@ unary_expression
             case '-' :
                 $$= new expression();
                 $$->loc = current_symbol_table->gentemp();
-                emit($$->loc,$2->loc,"",UMINUS);
+                emit($$->loc,$2->loc,"",UNARY_MINUS);
                 break;
 
             
             case '!' :
                 $$ = new expression();
                 $$->loc = current_symbol_table->gentemp(INT);
-                int temp = nextinstr + 2;
+                int temp = next_instr + 2;
                 emit(to_string(temp),$2->loc,"0",GOTO_EQ);
-                temp = nextinstr + 3;
+                temp = next_instr + 3;
                 emit(to_string(temp),"","",GOTO);
                 emit($$->loc,"1","",ASSIGN);
-                temp = nextinstr + 2;
+                temp = next_instr + 2;
                 emit(to_string(temp),"","",GOTO);
                 emit($$->loc,"0","",ASSIGN);
                 break;
@@ -365,9 +365,9 @@ multiplicative_expression
 
         // assign the result of the multiplication to a new temporary variable in the higher data type
 
-        data_type result = ((s1.type.type > s2.type.type) ? s1.type.type : s2.type.type);
+        data_type result = ((s1->type.type > s2->type.type) ? s1->type.type : s2->type.type);
         $$->loc = current_symbol_table->gentemp(result);
-        emit($$->loc,$1->loc,$3->loc,MULTIPLY);
+        emit($$->loc,$1->loc,$3->loc,MULT);
     }
     | multiplicative_expression DIVIDE cast_expression {
         
@@ -391,9 +391,9 @@ multiplicative_expression
         }
 
         // assign the result of the division to a new temporary variable in the higher data type
-        data_type result = ((s1.type.type > s2.type.type) ? s1.type.type : s2.type.type);
+        data_type result = ((s1->type.type > s2->type.type) ? s1->type.type : s2->type.type);
         $$->loc = current_symbol_table->gentemp(result);
-        emit($$->loc,$1->loc,$3->loc,DIVIDE);
+        emit($$->loc,$1->loc,$3->loc,DIV);
     }
     | multiplicative_expression MODULO cast_expression {
         
@@ -417,9 +417,9 @@ multiplicative_expression
         }
 
         // assign the result of the modulo to a new temporary variable in the higher data type
-        data_type result = ((s1.type.type > s2.type.type) ? s1.type.type : s2.type.type);
+        data_type result = ((s1->type.type > s2->type.type) ? s1->type.type : s2->type.type);
         $$->loc = current_symbol_table->gentemp(result);
-        emit($$->loc,$1->loc,$3->loc,MODULO);
+        emit($$->loc,$1->loc,$3->loc,MOD);
     }
     ;
 
@@ -447,9 +447,9 @@ additive_expression
         }
 
         // assign the result of the addition to a new temporary variable in the higher data type
-        data_type result = ((s1.type.type > s2.type.type) ? s1.type.type : s2.type.type);
+        data_type result = ((s1->type.type > s2->type.type) ? s1->type.type : s2->type.type);
         $$->loc = current_symbol_table->gentemp(result);
-        emit($$->loc,$1->loc,$3->loc,PLUS);
+        emit($$->loc,$1->loc,$3->loc,ADD);
     }
     | additive_expression MINUS multiplicative_expression {
         
@@ -474,9 +474,9 @@ additive_expression
         }
 
         // assign the result of the subtraction to a new temporary variable in the higher data type
-        data_type result = ((s1.type.type > s2.type.type) ? s1.type.type : s2.type.type);
+        data_type result = ((s1->type.type > s2->type.type) ? s1->type.type : s2->type.type);
         $$->loc = current_symbol_table->gentemp(result);
-        emit($$->loc,$1->loc,$3->loc,MINUS);
+        emit($$->loc,$1->loc,$3->loc,SUB);
     }
     ;
 
@@ -503,8 +503,8 @@ shift_expression
             $1->type = s1->type.nextType;
         }
 
-        $$->loc = current_symbol_table->gentemp(s1.type.type);
-        emit($$->loc,$1->loc,$3->loc,LEFT_SHIFT);
+        $$->loc = current_symbol_table->gentemp(s1->type.type);
+        emit($$->loc,$1->loc,$3->loc,SL);
     }
     | shift_expression RIGHT_SHIFT additive_expression {
         
@@ -527,8 +527,8 @@ shift_expression
             $1->type = s1->type.nextType;
         }
 
-        $$->loc = current_symbol_table->gentemp(s1.type.type);
-        emit($$->loc,$1->loc,$3->loc,RIGHT_SHIFT);
+        $$->loc = current_symbol_table->gentemp(s1->type.type);
+        emit($$->loc,$1->loc,$3->loc,SR);
     }
     ;
 
@@ -559,10 +559,10 @@ relational_expression
         $$->loc = current_symbol_table->gentemp();
         $$->type = BOOL;
         emit($$->loc,"1","",ASSIGN);
-        $$->truelist = makelist(nextinstr);
+        $$->truelist = makelist(next_instr);
         emit("",$1->loc,$3->loc,GOTO_LT);
         emit($$->loc,"0","",ASSIGN);
-        $$->falselist = makelist(nextinstr);
+        $$->falselist = makelist(next_instr);
         emit("", "", "", GOTO);
 
     }
@@ -590,10 +590,10 @@ relational_expression
         $$->loc = current_symbol_table->gentemp();
         $$->type = BOOL;
         emit($$->loc,"1","",ASSIGN);
-        $$->truelist = makelist(nextinstr);
+        $$->truelist = makelist(next_instr);
         emit("",$1->loc,$3->loc,GOTO_GT);
         emit($$->loc,"0","",ASSIGN);
-        $$->falselist = makelist(nextinstr);
+        $$->falselist = makelist(next_instr);
         emit("", "", "", GOTO);
     }
     | relational_expression LESS_THAN_EQUAL shift_expression {
@@ -620,10 +620,10 @@ relational_expression
         $$->loc = current_symbol_table->gentemp();
         $$->type = BOOL;
         emit($$->loc,"1","",ASSIGN);
-        $$->truelist = makelist(nextinstr);
+        $$->truelist = makelist(next_instr);
         emit("",$1->loc,$3->loc,GOTO_LTE);
         emit($$->loc,"0","",ASSIGN);
-        $$->falselist = makelist(nextinstr);
+        $$->falselist = makelist(next_instr);
         emit("", "", "", GOTO);
 
     }
@@ -653,10 +653,10 @@ relational_expression
         $$->loc = current_symbol_table->gentemp();
         $$->type = BOOL;
         emit($$->loc,"1","",ASSIGN);
-        $$->truelist = makelist(nextinstr);
+        $$->truelist = makelist(next_instr);
         emit("",$1->loc,$3->loc,GOTO_GTE);
         emit($$->loc,"0","",ASSIGN);
-        $$->falselist = makelist(nextinstr);
+        $$->falselist = makelist(next_instr);
         emit("", "", "", GOTO);
     }
     
@@ -689,10 +689,10 @@ equality_expression
         $$->loc = current_symbol_table->gentemp();
         $$->type = BOOL;
         emit($$->loc,"1","",ASSIGN);
-        $$->truelist = makelist(nextinstr);
+        $$->truelist = makelist(next_instr);
         emit("",$1->loc,$3->loc,GOTO_EQ);
         emit($$->loc,"0","",ASSIGN);
-        $$->falselist = makelist(nextinstr);
+        $$->falselist = makelist(next_instr);
         emit("", "", "", GOTO);
     }
     | equality_expression NOT_EQUAL relational_expression {
@@ -720,10 +720,10 @@ equality_expression
         $$->loc = current_symbol_table->gentemp();
         $$->type = BOOL;
         emit($$->loc,"1","",ASSIGN);
-        $$->truelist = makelist(nextinstr);
+        $$->truelist = makelist(next_instr);
         emit("",$1->loc,$3->loc,GOTO_NEQ);
         emit($$->loc,"0","",ASSIGN);
-        $$->falselist = makelist(nextinstr);
+        $$->falselist = makelist(next_instr);
         emit("", "", "", GOTO);
     }
     ;
@@ -753,7 +753,7 @@ AND_expression
 
         $$ = new expression();
         $$->loc = current_symbol_table->gentemp();
-        emit($$->loc,$1->loc,$3->loc,BIT_AND);
+        emit($$->loc,$1->loc,$3->loc,BITWISE_AND);
     }
     ;
 
@@ -782,7 +782,7 @@ exclusive_OR_expression
 
         $$ = new expression();
         $$->loc = current_symbol_table->gentemp();
-        emit($$->loc,$1->loc,$3->loc,BIT_XOR);
+        emit($$->loc,$1->loc,$3->loc,BITWISE_XOR);
     }
     ;
 
@@ -811,7 +811,7 @@ inclusive_OR_expression
 
         $$ = new expression();
         $$->loc = current_symbol_table->gentemp();
-        emit($$->loc,$1->loc,$3->loc,BIT_OR);
+        emit($$->loc,$1->loc,$3->loc,BITWISE_OR);
     }
     ;
 

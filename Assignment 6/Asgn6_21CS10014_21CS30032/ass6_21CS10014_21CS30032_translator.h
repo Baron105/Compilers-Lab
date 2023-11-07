@@ -102,7 +102,7 @@ public:
     symbol_table();
     symbol* lookup(string name ,data_type type = INT,int pc = 0);
     symbol* search_global_table(string name);
-    string gentemp(data_type);
+    string gentemp(data_type t = INT);
 
     void print_st(string );
 };

@@ -1948,7 +1948,7 @@ yyreduce:
   case 9:
 #line 115 "ass6_21CS10014_21CS30032.y"
                                                                              {
-        symbol_type* t = current_symbol_table->lookup((yyvsp[-3].expr)->loc)->type;
+        symbol_type t = current_symbol_table->lookup((yyvsp[-3].expr)->loc)->type;
         string str = "" ;
         if(!((yyvsp[-3].expr)->fold))
         {
@@ -1981,7 +1981,7 @@ yyreduce:
                                                                                          { 
         // Corresponds to calling a function with the  function name and the appropriate number of parameters
         symbol_table* table = global_symbol_table.lookup((yyvsp[-3].expr)->loc)->nested_table;
-        vector<p> params = *((yyvsp[-1].p_list));
+        vector<param*> params = *((yyvsp[-1].p_list));
         vector<symbol*> param_list = table->symbol_list;
 
         for(int i =0 ;i<params.size();i++)
@@ -2017,21 +2017,21 @@ yyreduce:
 #line 161 "ass6_21CS10014_21CS30032.y"
                                    {
         (yyval.expr) = new expression();
-        symbol_type* t = current_symbol_table->lookup((yyvsp[-1].expr)->loc)->type;
+        symbol_type t = current_symbol_table->lookup((yyvsp[-1].expr)->loc)->type;
         if(t.type == ARR)
         {
             (yyval.expr)->loc = current_symbol_table->gentemp(current_symbol_table->lookup((yyvsp[-1].expr)->loc)->type.nextType);
             emit((yyval.expr)->loc,(yyvsp[-1].expr)->loc,*((yyvsp[-1].expr)->folder),ARR_IDX_ARG);
             string temp = current_symbol_table->gentemp(t.nextType);
-            emit(temp,(yyvsp[-1].expr)->loc,*(1->folder),ARR_IDX_ARG);
-            emit(temp,temp,"1",PLUS);
-            emit((yyvsp[-1].expr)->loc,temp,*(1->folder),ARR_IDX_RES);
+            emit(temp,(yyvsp[-1].expr)->loc,*((yyvsp[-1].expr)->folder),ARR_IDX_ARG);
+            emit(temp,temp,"1",ADD);
+            emit((yyvsp[-1].expr)->loc,temp,*((yyvsp[-1].expr)->folder),ARR_IDX_RES);
         }
         else 
         {
             (yyval.expr)->loc = current_symbol_table->gentemp(current_symbol_table->lookup((yyvsp[-1].expr)->loc)->type.type);
             emit((yyval.expr)->loc,(yyvsp[-1].expr)->loc,"",ASSIGN);
-            emit((yyvsp[-1].expr)->loc,(yyvsp[-1].expr)->loc,"1",PLUS);
+            emit((yyvsp[-1].expr)->loc,(yyvsp[-1].expr)->loc,"1",ADD);
         }
 
     }
@@ -2042,23 +2042,23 @@ yyreduce:
 #line 181 "ass6_21CS10014_21CS30032.y"
                                    {
         (yyval.expr) = new expression();
-        (yyval.expr)->loc = ST->gentemp(ST->lookup((yyvsp[-1].expr)->loc)->type.type);          // Generate a new temporary variable
-        symbol_type* t = current_symbol_table->lookup((yyvsp[-1].expr)->loc)->type;
+        (yyval.expr)->loc = current_symbol_table->gentemp(current_symbol_table->lookup((yyvsp[-1].expr)->loc)->type.type);          // Generate a new temporary variable
+        symbol_type t = current_symbol_table->lookup((yyvsp[-1].expr)->loc)->type;
         if(t.type == ARR)
         {
             (yyval.expr)->loc = current_symbol_table->gentemp(current_symbol_table->lookup((yyvsp[-1].expr)->loc)->type.nextType);
             emit((yyval.expr)->loc,(yyvsp[-1].expr)->loc,*((yyvsp[-1].expr)->folder),ARR_IDX_ARG);
             string temp = current_symbol_table->gentemp(t.nextType);
-            emit(temp,(yyvsp[-1].expr)->loc,*(1->folder),ARR_IDX_ARG);
-            emit((yyval.expr)->loc,temp,"",ASSIGN)
-            emit(temp,temp,"1",MINUS);
-            emit((yyvsp[-1].expr)->loc,temp,*(1->folder),ARR_IDX_RES);
+            emit(temp,(yyvsp[-1].expr)->loc,*((yyvsp[-1].expr)->folder),ARR_IDX_ARG);
+            emit((yyval.expr)->loc,temp,"",ASSIGN);
+            emit(temp,temp,"1",SUB);
+            emit((yyvsp[-1].expr)->loc,temp,*((yyvsp[-1].expr)->folder),ARR_IDX_RES);
         }
         else 
         {
             (yyval.expr)->loc = current_symbol_table->gentemp(current_symbol_table->lookup((yyvsp[-1].expr)->loc)->type.type);
             emit((yyval.expr)->loc,(yyvsp[-1].expr)->loc,"",ASSIGN);
-            emit((yyvsp[-1].expr)->loc,(yyvsp[-1].expr)->loc,"1",MINUS);
+            emit((yyvsp[-1].expr)->loc,(yyvsp[-1].expr)->loc,"1",SUB);
         }
     }
 #line 2065 "ass6_21CS10014_21CS30032.tab.c"
@@ -2111,16 +2111,16 @@ yyreduce:
                                  {
         (yyval.expr) = new expression();  
         symbol_type t = current_symbol_table->lookup((yyvsp[0].expr)->loc)->type;
-        if(type.type == ARR)
+        if(t.type == ARR)
         {
             string temp = current_symbol_table->gentemp(t.nextType);
             emit(temp,(yyvsp[0].expr)->loc,*((yyvsp[0].expr)->folder),ARR_IDX_ARG);
-            emit(temp,temp,"1",PLUS);
-            emit((yyvsp[0].expr)->loc,temp,*(2->folder),ARR_IDX_RES);
+            emit(temp,temp,"1",ADD);
+            emit((yyvsp[0].expr)->loc,temp,*((yyvsp[0].expr)->folder),ARR_IDX_RES);
             (yyval.expr)->loc = current_symbol_table->gentemp(current_symbol_table->lookup((yyvsp[0].expr)->loc)->type.nextType);
         }
         else{
-            emit((yyvsp[0].expr)->loc,(yyvsp[0].expr)->loc,"1",PLUS);
+            emit((yyvsp[0].expr)->loc,(yyvsp[0].expr)->loc,"1",ADD);
             (yyval.expr)->loc = current_symbol_table->gentemp(current_symbol_table->lookup((yyvsp[0].expr)->loc)->type.type);
         }
         (yyval.expr)->loc = current_symbol_table->gentemp(current_symbol_table->lookup((yyvsp[0].expr)->loc)->type.type);
@@ -2134,17 +2134,17 @@ yyreduce:
                                  {
         (yyval.expr) = new expression();
         symbol_type t = current_symbol_table->lookup((yyvsp[0].expr)->loc)->type;
-        if(tyoe.type == ARR)
+        if(t.type == ARR)
         {
             string temp = current_symbol_table->gentemp(t.nextType);
             emit(temp,(yyvsp[0].expr)->loc,*((yyvsp[0].expr)->folder),ARR_IDX_ARG);
-            emit(temp,temp,"1",MINUS);
-            emit((yyvsp[0].expr)->loc,temp,*(2->folder),ARR_IDX_RES);
+            emit(temp,temp,"1",SUB);
+            emit((yyvsp[0].expr)->loc,temp,*((yyvsp[0].expr)->folder),ARR_IDX_RES);
             (yyval.expr)->loc = current_symbol_table->gentemp(current_symbol_table->lookup((yyvsp[0].expr)->loc)->type.nextType);
         }
         else 
         {
-            emit((yyvsp[0].expr)->loc,(yyvsp[0].expr)->loc,"1",MINUS);
+            emit((yyvsp[0].expr)->loc,(yyvsp[0].expr)->loc,"1",SUB);
             (yyval.expr)->loc = current_symbol_table->gentemp(current_symbol_table->lookup((yyvsp[0].expr)->loc)->type.type);
         }
         emit((yyval.expr)->loc,(yyvsp[0].expr)->loc,"",ASSIGN);
@@ -2174,19 +2174,19 @@ yyreduce:
             case '-' :
                 (yyval.expr)= new expression();
                 (yyval.expr)->loc = current_symbol_table->gentemp();
-                emit((yyval.expr)->loc,(yyvsp[0].expr)->loc,"",UMINUS);
+                emit((yyval.expr)->loc,(yyvsp[0].expr)->loc,"",UNARY_MINUS);
                 break;
 
             
             case '!' :
                 (yyval.expr) = new expression();
                 (yyval.expr)->loc = current_symbol_table->gentemp(INT);
-                int temp = nextinstr + 2;
+                int temp = next_instr + 2;
                 emit(to_string(temp),(yyvsp[0].expr)->loc,"0",GOTO_EQ);
-                temp = nextinstr + 3;
+                temp = next_instr + 3;
                 emit(to_string(temp),"","",GOTO);
                 emit((yyval.expr)->loc,"1","",ASSIGN);
-                temp = nextinstr + 2;
+                temp = next_instr + 2;
                 emit(to_string(temp),"","",GOTO);
                 emit((yyval.expr)->loc,"0","",ASSIGN);
                 break;
@@ -2308,9 +2308,9 @@ yyreduce:
 
         // assign the result of the multiplication to a new temporary variable in the higher data type
 
-        data_type result = ((s1.type.type > s2.type.type) ? s1.type.type : s2.type.type);
+        data_type result = ((s1->type.type > s2->type.type) ? s1->type.type : s2->type.type);
         (yyval.expr)->loc = current_symbol_table->gentemp(result);
-        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,MULTIPLY);
+        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,MULT);
     }
 #line 2316 "ass6_21CS10014_21CS30032.tab.c"
     break;
@@ -2339,9 +2339,9 @@ yyreduce:
         }
 
         // assign the result of the division to a new temporary variable in the higher data type
-        data_type result = ((s1.type.type > s2.type.type) ? s1.type.type : s2.type.type);
+        data_type result = ((s1->type.type > s2->type.type) ? s1->type.type : s2->type.type);
         (yyval.expr)->loc = current_symbol_table->gentemp(result);
-        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,DIVIDE);
+        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,DIV);
     }
 #line 2347 "ass6_21CS10014_21CS30032.tab.c"
     break;
@@ -2370,9 +2370,9 @@ yyreduce:
         }
 
         // assign the result of the modulo to a new temporary variable in the higher data type
-        data_type result = ((s1.type.type > s2.type.type) ? s1.type.type : s2.type.type);
+        data_type result = ((s1->type.type > s2->type.type) ? s1->type.type : s2->type.type);
         (yyval.expr)->loc = current_symbol_table->gentemp(result);
-        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,MODULO);
+        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,MOD);
     }
 #line 2378 "ass6_21CS10014_21CS30032.tab.c"
     break;
@@ -2407,9 +2407,9 @@ yyreduce:
         }
 
         // assign the result of the addition to a new temporary variable in the higher data type
-        data_type result = ((s1.type.type > s2.type.type) ? s1.type.type : s2.type.type);
+        data_type result = ((s1->type.type > s2->type.type) ? s1->type.type : s2->type.type);
         (yyval.expr)->loc = current_symbol_table->gentemp(result);
-        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,PLUS);
+        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,ADD);
     }
 #line 2415 "ass6_21CS10014_21CS30032.tab.c"
     break;
@@ -2439,9 +2439,9 @@ yyreduce:
         }
 
         // assign the result of the subtraction to a new temporary variable in the higher data type
-        data_type result = ((s1.type.type > s2.type.type) ? s1.type.type : s2.type.type);
+        data_type result = ((s1->type.type > s2->type.type) ? s1->type.type : s2->type.type);
         (yyval.expr)->loc = current_symbol_table->gentemp(result);
-        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,MINUS);
+        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,SUB);
     }
 #line 2447 "ass6_21CS10014_21CS30032.tab.c"
     break;
@@ -2475,8 +2475,8 @@ yyreduce:
             (yyvsp[-2].expr)->type = s1->type.nextType;
         }
 
-        (yyval.expr)->loc = current_symbol_table->gentemp(s1.type.type);
-        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,LEFT_SHIFT);
+        (yyval.expr)->loc = current_symbol_table->gentemp(s1->type.type);
+        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,SL);
     }
 #line 2482 "ass6_21CS10014_21CS30032.tab.c"
     break;
@@ -2504,8 +2504,8 @@ yyreduce:
             (yyvsp[-2].expr)->type = s1->type.nextType;
         }
 
-        (yyval.expr)->loc = current_symbol_table->gentemp(s1.type.type);
-        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,RIGHT_SHIFT);
+        (yyval.expr)->loc = current_symbol_table->gentemp(s1->type.type);
+        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,SR);
     }
 #line 2511 "ass6_21CS10014_21CS30032.tab.c"
     break;
@@ -2542,10 +2542,10 @@ yyreduce:
         (yyval.expr)->loc = current_symbol_table->gentemp();
         (yyval.expr)->type = BOOL;
         emit((yyval.expr)->loc,"1","",ASSIGN);
-        (yyval.expr)->truelist = makelist(nextinstr);
+        (yyval.expr)->truelist = makelist(next_instr);
         emit("",(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,GOTO_LT);
         emit((yyval.expr)->loc,"0","",ASSIGN);
-        (yyval.expr)->falselist = makelist(nextinstr);
+        (yyval.expr)->falselist = makelist(next_instr);
         emit("", "", "", GOTO);
 
     }
@@ -2578,10 +2578,10 @@ yyreduce:
         (yyval.expr)->loc = current_symbol_table->gentemp();
         (yyval.expr)->type = BOOL;
         emit((yyval.expr)->loc,"1","",ASSIGN);
-        (yyval.expr)->truelist = makelist(nextinstr);
+        (yyval.expr)->truelist = makelist(next_instr);
         emit("",(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,GOTO_GT);
         emit((yyval.expr)->loc,"0","",ASSIGN);
-        (yyval.expr)->falselist = makelist(nextinstr);
+        (yyval.expr)->falselist = makelist(next_instr);
         emit("", "", "", GOTO);
     }
 #line 2588 "ass6_21CS10014_21CS30032.tab.c"
@@ -2613,10 +2613,10 @@ yyreduce:
         (yyval.expr)->loc = current_symbol_table->gentemp();
         (yyval.expr)->type = BOOL;
         emit((yyval.expr)->loc,"1","",ASSIGN);
-        (yyval.expr)->truelist = makelist(nextinstr);
+        (yyval.expr)->truelist = makelist(next_instr);
         emit("",(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,GOTO_LTE);
         emit((yyval.expr)->loc,"0","",ASSIGN);
-        (yyval.expr)->falselist = makelist(nextinstr);
+        (yyval.expr)->falselist = makelist(next_instr);
         emit("", "", "", GOTO);
 
     }
@@ -2649,10 +2649,10 @@ yyreduce:
         (yyval.expr)->loc = current_symbol_table->gentemp();
         (yyval.expr)->type = BOOL;
         emit((yyval.expr)->loc,"1","",ASSIGN);
-        (yyval.expr)->truelist = makelist(nextinstr);
+        (yyval.expr)->truelist = makelist(next_instr);
         emit("",(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,GOTO_GTE);
         emit((yyval.expr)->loc,"0","",ASSIGN);
-        (yyval.expr)->falselist = makelist(nextinstr);
+        (yyval.expr)->falselist = makelist(next_instr);
         emit("", "", "", GOTO);
     }
 #line 2659 "ass6_21CS10014_21CS30032.tab.c"
@@ -2691,10 +2691,10 @@ yyreduce:
         (yyval.expr)->loc = current_symbol_table->gentemp();
         (yyval.expr)->type = BOOL;
         emit((yyval.expr)->loc,"1","",ASSIGN);
-        (yyval.expr)->truelist = makelist(nextinstr);
+        (yyval.expr)->truelist = makelist(next_instr);
         emit("",(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,GOTO_EQ);
         emit((yyval.expr)->loc,"0","",ASSIGN);
-        (yyval.expr)->falselist = makelist(nextinstr);
+        (yyval.expr)->falselist = makelist(next_instr);
         emit("", "", "", GOTO);
     }
 #line 2701 "ass6_21CS10014_21CS30032.tab.c"
@@ -2727,10 +2727,10 @@ yyreduce:
         (yyval.expr)->loc = current_symbol_table->gentemp();
         (yyval.expr)->type = BOOL;
         emit((yyval.expr)->loc,"1","",ASSIGN);
-        (yyval.expr)->truelist = makelist(nextinstr);
+        (yyval.expr)->truelist = makelist(next_instr);
         emit("",(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,GOTO_NEQ);
         emit((yyval.expr)->loc,"0","",ASSIGN);
-        (yyval.expr)->falselist = makelist(nextinstr);
+        (yyval.expr)->falselist = makelist(next_instr);
         emit("", "", "", GOTO);
     }
 #line 2737 "ass6_21CS10014_21CS30032.tab.c"
@@ -2767,7 +2767,7 @@ yyreduce:
 
         (yyval.expr) = new expression();
         (yyval.expr)->loc = current_symbol_table->gentemp();
-        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,BIT_AND);
+        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,BITWISE_AND);
     }
 #line 2773 "ass6_21CS10014_21CS30032.tab.c"
     break;
@@ -2803,7 +2803,7 @@ yyreduce:
 
         (yyval.expr) = new expression();
         (yyval.expr)->loc = current_symbol_table->gentemp();
-        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,BIT_XOR);
+        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,BITWISE_XOR);
     }
 #line 2809 "ass6_21CS10014_21CS30032.tab.c"
     break;
@@ -2839,7 +2839,7 @@ yyreduce:
 
         (yyval.expr) = new expression();
         (yyval.expr)->loc = current_symbol_table->gentemp();
-        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,BIT_OR);
+        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,BITWISE_OR);
     }
 #line 2845 "ass6_21CS10014_21CS30032.tab.c"
     break;
