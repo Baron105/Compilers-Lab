@@ -303,7 +303,7 @@ string gettype(symbol_type x)
         else if (x.nextType==CHAR) s += "char";
         else if (x.nextType==INT) s += "int";
         else if (x.nextType==FLOAT) s += "float";
-        s += string("*");
+        s += string(x.ptr, '*');
         return s;
     }
 
@@ -324,7 +324,7 @@ string gettype(symbol_type x)
         if (v.size()==0) s += "[]";
         return s;
     }
-    return "undefined";
+    return "unknown";
 }
 
 string getval(symbol* sym)
@@ -340,5 +340,5 @@ string getval(symbol* sym)
             return to_string(sym->initial_value->char_val);
         }
     }
-    return "x";
+    return "-";
 }
