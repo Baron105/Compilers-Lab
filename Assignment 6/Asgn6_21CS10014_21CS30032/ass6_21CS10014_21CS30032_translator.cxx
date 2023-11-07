@@ -1,42 +1,45 @@
+/*
+    Made by Barun Parua and Navaneeth Shaji
+    Roll Numbers: 21CS10014 and 21CS30032
+    Assignment 6
+*/
+
 #include <iostream>
 #include <string>
+#include <iomanip>
 using namespace std;
 
 #include "ass6_21CS10014_21CS30032_translator.h"
-#include <iomanip>
 
-symbol *current_symbol;
+// declare and initialize static/global variables
 symbol_table *current_symbol_table;
 symbol_table global_symbol_table;
 quad_array quad_list;
-int symbol_table_counter;
-
 int next_instr = 0;
-
 int symbol_table::count = 0;
 
 void symbol_value::set_value(int val) {
-    int_val = val;
+    int_val = char_val = float_val = val;
+    ptr_val = NULL;
 }
 
 void symbol_value::set_value(float val) {
-    float_val = val;
+    float_val = int_val = char_val = val;
+    ptr_val = NULL;
 }
 
 void symbol_value::set_value(char val) {
-    char_val = val;
+    char_val = int_val = float_val = val;
+    ptr_val = NULL;
 }
 
-symbol::symbol(): initial_value(NULL), size(0), offset(0), nested_table(NULL) {}
+symbol::symbol(): nested_table(NULL) {}
 
 symbol_table::symbol_table() : offset(0) {}
 
 symbol* symbol_table::lookup(string name, data_type type, int pc) {
     map<string, symbol*>::iterator it = table.find(name);
-    if (it != table.end()) {
-        return it->second;
-    }
-    else {
+    if (it == table.end()) {
         symbol* sym = new symbol();
         sym->name = name;
         sym->type.type = type;
@@ -56,10 +59,11 @@ symbol* symbol_table::lookup(string name, data_type type, int pc) {
         table[name] = sym;
         return sym;
     }
+    return table[name];
 }
 
 string symbol_table::gentemp(data_type type) {
-    string name = "t" + to_string(count++);
+    string name = "t" + to_string(symbol_table::count++);
     symbol* sym = new symbol();
     sym->name = name;
     sym->type.type = type;
@@ -88,22 +92,17 @@ void symbol_table::print_st(string name) {
             cout << s << endl;
             v.push_back(make_pair(s, symbol_list[i]->nested_table));
         }
+        else cout << "NULL" << endl;
     }
     cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
 
-    for (int i = 0; i < v.size(); i++) {
-        v[i].second->print_st(v[i].first);
+    for (auto it = v.begin(); it != v.end(); it++) {
+        it->second->print_st(it->first);
     }
 }
 
 symbol* symbol_table::search_global_table(string name) {
-    map<string, symbol*>::iterator it = table.find(name);
-    if (it != table.end()) {
-        return it->second;
-    }
-    else {
-        return NULL;
-    }
+    return (table.find(name) == table.end()) ? NULL : table[name];
 }
 
 string quad::print_quad()
@@ -179,27 +178,27 @@ void quad_array::print_quad_array() {
     }
 }
 
-quad::quad(string result, string arg1, opcode op, string arg2) : result(result), arg1(arg1), op(op), arg2(arg2) {}
+quad::quad(string result, string arg1, string arg2, opcode op) : result(result), arg1(arg1), arg2(arg2), op(op) {}
 
 expression::expression() : fold(0), folder(NULL) {}
 
 void emit(string result, string arg1, string arg2, opcode op) {
-    quad_list.arr.push_back(quad(result, arg1, op, arg2));
+    quad_list.arr.push_back(quad(result, arg1, arg2, op));
     next_instr++;
 }
 
 void emit(string result, int constant, opcode op) {
-    quad_list.arr.push_back(quad(result, to_string(constant), op, ""));
+    quad_list.arr.push_back(quad(result, to_string(constant), "", op));
     next_instr++;
 }
 
 void emit(string result, float constant, opcode op) {
-    quad_list.arr.push_back(quad(result, to_string(constant), op, ""));
+    quad_list.arr.push_back(quad(result, to_string(constant), "", op));
     next_instr++;
 }
 
 void emit(string result, char constant, opcode op) {
-    quad_list.arr.push_back(quad(result, to_string(constant), op, ""));
+    quad_list.arr.push_back(quad(result, to_string(constant), "", op));
     next_instr++;
 }
 

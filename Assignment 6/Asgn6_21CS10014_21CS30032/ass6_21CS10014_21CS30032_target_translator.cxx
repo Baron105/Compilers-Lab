@@ -13,8 +13,8 @@ extern quad_array quad_list;
 
 // Global variables
 vector<string> consts;
-map<int,string> labels ;
-stack<pair<string,int>> parameters ;
+map<int,string> labels;
+stack<pair<string,int>> parameters;
 int label_count = 0;
 string function_running = "";
 string dot_s_file_name = "";
@@ -62,9 +62,10 @@ void print_global(ofstream& sfile)
 void print_strings(ofstream& sfile)
 {
     sfile << ".section\t.rodata" << endl;
+    int x = 0;
     for (auto it = consts.begin(); it != consts.end(); it++)
     {
-        sfile << ".LC" << it - consts.begin() << ":" << endl;
+        sfile << ".LC" << x++ << ":" << endl;
         sfile << "\t.string\t" << *it << endl;
     }
 }
@@ -485,10 +486,11 @@ void gen_target_code(ofstream& sfile)
 {
     print_global(sfile);
     print_strings(sfile);
-    set_goto_labels();
 
     symbol_table* function_symbol_table = NULL;
     symbol* curr_func = NULL;
+
+    set_goto_labels();
 
     for(int i = 0; i < quad_list.arr.size(); i++)
     {

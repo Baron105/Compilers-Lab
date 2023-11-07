@@ -33,7 +33,7 @@ ENUMERATION_CONSTANT                {IDENTIFIER}
 ESCAPE_SEQUENCE                     \\['"?\\abfnrtv]
 C_CHAR                              [^\'\\\n]|{ESCAPE_SEQUENCE}
 C_CHAR_SEQUENCE                     {C_CHAR}+
-CHAR_CONSTANT                       \'{C_CHAR_SEQUENCE}\'
+CHAR_CONSTANT                       \'({C_CHAR_SEQUENCE})\'
 
 /* all constants */
 CONSTANT                            {INTEGER_CONSTANT}|{FLOATING_CONSTANT}|{CHAR_CONSTANT}|{ENUMERATION_CONSTANT}
@@ -41,7 +41,7 @@ CONSTANT                            {INTEGER_CONSTANT}|{FLOATING_CONSTANT}|{CHAR
 /* string literals */
 S_CHAR                              [^\"\\\n]|{ESCAPE_SEQUENCE}
 S_CHAR_SEQUENCE                     {S_CHAR}+
-STRING_LITERAL                      \"{S_CHAR_SEQUENCE}\"
+STRING_LITERAL                      \"({S_CHAR_SEQUENCE}?)\"
 
 
 /* whitespaces */
@@ -147,7 +147,7 @@ WS                                  [ \t\n]
 {INTEGER_CONSTANT}                  { yylval.intval = atoi(yytext); return INTEGER_CONSTANT; }
 {FLOATING_CONSTANT}                 { yylval.floatval = atof(yytext); return FLOATING_CONSTANT; }
 
-{CHAR_CONSTANT}                     { yylval.charval = yytext[0]; return CHAR_CONSTANT; }
+{CHAR_CONSTANT}                     { yylval.charval = yytext[1]; return CHAR_CONSTANT; }
 {STRING_LITERAL}                    { yylval.str = new string(yytext); return STRING_LITERAL; }
 
 {WS}                                {/* ignore whitespace */}

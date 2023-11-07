@@ -1,5 +1,5 @@
-#ifndef _MYL_H
-#define _MYL_H
+#ifndef __MYL_H
+#define __MYL_H
 #define ERR 0
 #define OK 1
 int printStr(char *);

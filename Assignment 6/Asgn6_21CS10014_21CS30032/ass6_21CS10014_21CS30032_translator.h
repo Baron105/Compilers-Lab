@@ -51,9 +51,7 @@ extern symbol* current_symbol;
 extern symbol_table* current_symbol_table;
 extern symbol_table global_symbol_table;
 extern symbol_table* constant_symbol_table;
-extern quad_array quad_table;
-extern int symbol_table_counter;
-extern string current_block_name;
+extern quad_array quad_list;
 extern int next_instr;
 
 extern char* yytext;
@@ -85,7 +83,6 @@ public :
     char char_val;
     void *ptr_val;
 
-
     void set_value(int val);
     void set_value(float val);
     void set_value(char val);
@@ -104,7 +101,7 @@ public:
     symbol* search_global_table(string name);
     string gentemp(data_type t = INT);
 
-    void print_st(string );
+    void print_st(string name);
 };
 
 class quad {
@@ -114,7 +111,7 @@ public:
     string arg2;
     string result;
 
-    quad(string result, string arg1, opcode op, string arg2);
+    quad(string result, string arg1, string arg2, opcode op);
 
     string print_quad();
 };
@@ -130,17 +127,17 @@ public:
 // class for parameters
 class param{
 public :
-    string name ;
-    symbol_type type ;
+    string name;
+    symbol_type type;
 };
 
 // class for expression
 class expression
 {
     public:
-        int instruction ; // instruction number
-        data_type type ; // type of expression
-        string loc ; // location where result is stored
+        int instruction; // instruction number
+        data_type type; // type of expression
+        string loc; // location where result is stored
         list<int> truelist;  // truelist for expression
         list<int> falselist; // falselist for expression
         list<int> nextlist; // nextlist for expression
@@ -153,12 +150,12 @@ class expression
 // class to represent declaration 
 class declaration{
 public :
-    string name ;                       // name of the declaration
-    int ptrs ;                          // number of pointers
-    data_type type ;                    // type of the declaration
-    data_type next_type ;               
-    vector <int> instr_list ;           // list of instructions
-    expression* initial_value ;         // initial value of the declaration
+    string name;                       // name of the declaration
+    int ptrs;                          // number of pointers
+    data_type type;                    // type of the declaration
+    data_type next_type;               
+    vector <int> instr_list;           // list of instructions
+    expression* initial_value;         // initial value of the declaration
     int pc;
 };
 
@@ -179,7 +176,7 @@ void emit(string result, char constant, opcode op);
 
 // function to create a list consisting of a single entry index , which is an index to the quad array
 // returns a ptr to the list
-list<int> makelist(int );
+list<int> makelist(int i);
 
 
 // function to merge two lists
@@ -203,10 +200,10 @@ void converttype(string o, data_type otype, string n, data_type ntype);
 void inttobool(expression* e);
 
 // function to get the type of a symbol
-string gettype(symbol_type );
+string gettype(symbol_type t);
 
 // function to get the size of a type
-int getsize(data_type );
+int getsize(data_type t);
 
 // function to get the initial value of a symbol
 string getval(symbol* sym);

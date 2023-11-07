@@ -51,8 +51,6 @@
 %token <str> STRING_LITERAL
 %token <str> IDENTIFIER
 
-
-
 %token WS
 
 %type <charval> unary_operator
@@ -846,7 +844,7 @@ logical_OR_expression
 // my part
 
 conditional_expression
-    : logical_OR_expression { $$=$1; }
+    : logical_OR_expression { /* No Action Taken */ }
     | logical_OR_expression N QUESTION_MARK M expression N COLON M conditional_expression {
         symbol* s1 = current_symbol_table->lookup($5->loc);
         $$->loc = current_symbol_table->gentemp(s1->type.type);
@@ -943,7 +941,7 @@ declaration
     | declaration_specifiers init_declarator_list SEMICOLON 
     {
         data_type curr_type = $1;
-        int curr_size = 0;
+        int curr_size = -1;
         if (curr_type == INT) curr_size = SIZE_OF_INT;
         else if (curr_type == FLOAT) curr_size = SIZE_OF_FLOAT;
         else if (curr_type == CHAR) curr_size = SIZE_OF_CHAR;
@@ -991,7 +989,7 @@ declaration
                 }
                 current_symbol_table->offset += temp_size;
                 s3->size = temp_size;
-                current_symbol_table->offset -= SIZE_OF_INT;
+                current_symbol_table->offset -= 4;
             }
 
             else if (curr_decl->ptrs != 0)
