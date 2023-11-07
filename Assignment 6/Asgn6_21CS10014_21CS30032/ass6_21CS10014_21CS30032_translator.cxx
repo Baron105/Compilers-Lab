@@ -184,22 +184,22 @@ quad::quad(string result, string arg1, opcode op, string arg2) : result(result),
 expression::expression() : fold(0), folder(NULL) {}
 
 void emit(string result, string arg1, string arg2, opcode op) {
-    quad_table.arr.push_back(quad(result, arg1, op, arg2));
+    quad_list.arr.push_back(quad(result, arg1, op, arg2));
     next_instr++;
 }
 
 void emit(string result, int constant, opcode op) {
-    quad_table.arr.push_back(quad(result, to_string(constant), op, ""));
+    quad_list.arr.push_back(quad(result, to_string(constant), op, ""));
     next_instr++;
 }
 
 void emit(string result, float constant, opcode op) {
-    quad_table.arr.push_back(quad(result, to_string(constant), op, ""));
+    quad_list.arr.push_back(quad(result, to_string(constant), op, ""));
     next_instr++;
 }
 
 void emit(string result, char constant, opcode op) {
-    quad_table.arr.push_back(quad(result, to_string(constant), op, ""));
+    quad_list.arr.push_back(quad(result, to_string(constant), op, ""));
     next_instr++;
 }
 
@@ -209,7 +209,7 @@ list<int> makelist(int i)
     return lst;
 }
 
-list<int> merge(list<int> &l1, list<int> &l2)
+list<int> merge(list<int> l1, list<int> l2)
 {
     l1.merge(l2);
     return l1;
@@ -219,7 +219,7 @@ list<int> merge(list<int> &l1, list<int> &l2)
 void backpatch(list<int> lst, int i)
 {
     string s = to_string(i);
-    for(list<int>::iterator it = lst.begin(); it != lst.end(); it++) quad_table.arr[*it].result = s;
+    for(list<int>::iterator it = lst.begin(); it != lst.end(); it++) quad_list.arr[*it].result = s;
 }
 
 void converttype (expression* arg, expression* res, data_type type)
