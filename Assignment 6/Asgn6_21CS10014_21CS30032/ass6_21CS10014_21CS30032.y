@@ -844,7 +844,7 @@ logical_OR_expression
 // my part
 
 conditional_expression
-    : logical_OR_expression { /* No Action Taken */ }
+    : logical_OR_expression { $$ = $1; }
     | logical_OR_expression N QUESTION_MARK M expression N COLON M conditional_expression {
         symbol* s1 = current_symbol_table->lookup($5->loc);
         $$->loc = current_symbol_table->gentemp(s1->type.type);
@@ -958,6 +958,7 @@ declaration
                 symbol* s2 = s1->nested_table->lookup("RETVAL", curr_type, curr_decl->ptrs);
                 s1->size = 0;
                 s1->initial_value = NULL;
+                continue ;
             }
 
             symbol* s3 = current_symbol_table->lookup(curr_decl->name, curr_type);
@@ -969,8 +970,9 @@ declaration
                 s3->type.type = curr_type;
                 if (curr_decl->initial_value)
                 {
-                    emit(s3->name, curr_decl->initial_value->loc, "", ASSIGN);
-                    s3->initial_value = current_symbol_table->lookup(curr_decl->initial_value->loc)->initial_value;
+                    string rval = curr_decl->initial_value->loc;
+                    emit(s3->name, rval, "", ASSIGN);
+                    s3->initial_value = current_symbol_table->lookup(rval)->initial_value;
                 }
                 else s3->initial_value = NULL;
             }
@@ -1004,18 +1006,24 @@ declaration
     }
     ;
 
-declaration_specifiers
-    : storage_class_specifier declaration_specifiers_opt { /* No Action Taken */ }
-    | type_specifier declaration_specifiers_opt { /* No Action Taken */ }
-    | type_qualifier declaration_specifiers_opt { /* No Action Taken */ }
-    | function_specifier declaration_specifiers_opt { /* No Action Taken */ }
-    ;
-
-declaration_specifiers_opt
-    : declaration_specifiers { /* No Action Taken */ }
-    | %empty
-    { /* No Action Taken */ }
-    ;
+declaration_specifiers: 
+        storage_class_specifier declaration_specifiers
+        {}
+        |storage_class_specifier
+        {}
+        | type_specifier declaration_specifiers
+        {}
+        | type_specifier
+        {}
+        | type_qualifier declaration_specifiers
+        {}
+        | type_qualifier
+        {}
+        | function_specifier declaration_specifiers
+        {}
+        | function_specifier
+        {}
+        ;
 
 init_declarator_list 
     : init_declarator { 
