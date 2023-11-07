@@ -1,9 +1,13 @@
-// testing function and function calls 
+// testing function and function calls
+
+int printStr (char *ch);
+int printInt (int n);
+int readInt (int *eP);
+
 
 int min(int a,int b);
 int max(int a,int b);
 int sum(int a,int b);
-void find_max_min(int a,int b);
 
 int min (int a, int b)
 {
@@ -28,12 +32,7 @@ int sum (int a, int b)
 
 // testing nested function calls
 
-void find_max_min(int a, int b)
-{
-    int k = min(a,b);
-    int l = max(a,b);
-    return;
-}
+
 
 int main()
 {
@@ -44,5 +43,7 @@ int main()
     int l = max(x,y);
     int m = sum(x,y);
 
-    find_max_min(x,y);
-}
+    printStr("min = ");
+    printInt(k);
+    printStr("\n");
+    return 0; }

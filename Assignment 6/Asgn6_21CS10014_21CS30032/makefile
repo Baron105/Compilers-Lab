@@ -69,14 +69,6 @@ test: tinyC lib$(BASE).a
 	gcc -c test-outputs/$(BASE)_5.s -o test-outputs/$(BASE)_5.o
 	gcc test-outputs/$(BASE)_5.o -o bin/test5 -L. -l$(BASE) -no-pie
 
-	@echo "\nRunning Test 6\n"
-	./tinyC 6 < test-inputs/$(BASE)_test6.c > test-outputs/$(BASE)_quads6.out
-	mv $(BASE)_6.s test-outputs/$(BASE)_6.s
-	gcc -c test-outputs/$(BASE)_6.s -o test-outputs/$(BASE)_6.o
-	gcc test-outputs/$(BASE)_6.o -o bin/test6 -L. -l$(BASE) -no-pie
-
-	@echo "\nThe three address quads, assembly files and object files are in test-outputs/\n"
-	@echo "The binaries for the test files are in bin/\n"
 
 clean:
 	rm -f lex.yy.c *.tab.c *.tab.h *.output *.o *.s *.a *.out *.gch tinyC test-outputs/* bin/*

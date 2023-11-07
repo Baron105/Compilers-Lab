@@ -12,12 +12,13 @@ using namespace std;
 #include "ass6_21CS10014_21CS30032_translator.h"
 
 // declare and initialize static/global variables
-symbol_table *current_symbol_table;
-symbol_table global_symbol_table;
+symbol_table *current_symbol_table;             // pointer to current symbol table
+symbol_table global_symbol_table;               // global symbol table
 quad_array quad_list;
 int next_instr = 0;
 int symbol_table::count = 0;
 
+// set initial values for symbol_value
 void symbol_value::set_value(int val) {
     int_val = char_val = float_val = val;
     ptr_val = NULL;
@@ -33,10 +34,12 @@ void symbol_value::set_value(char val) {
     ptr_val = NULL;
 }
 
+// constructors for symbol_table and symbol
 symbol::symbol(): nested_table(NULL) {}
 
 symbol_table::symbol_table() : offset(0) {}
 
+// lookup for a symbol in the symbol table
 symbol* symbol_table::lookup(string name, data_type type, int pc) {
     map<string, symbol*>::iterator it = table.find(name);
     if (it == table.end()) {
@@ -62,6 +65,7 @@ symbol* symbol_table::lookup(string name, data_type type, int pc) {
     return table[name];
 }
 
+// generate a temporary variable using gentemp
 string symbol_table::gentemp(data_type type) {
     string name = "t" + to_string(symbol_table::count++);
     symbol* sym = new symbol();
@@ -77,6 +81,8 @@ string symbol_table::gentemp(data_type type) {
     return name;
 }
 
+// print the symbol table
+// well formatted
 void symbol_table::print_st(string name) {
     cout << "Symbol Table: " << name << endl;
     cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
@@ -101,10 +107,13 @@ void symbol_table::print_st(string name) {
     }
 }
 
+// search for a symbol in the global symbol table
 symbol* symbol_table::search_global_table(string name) {
     return (table.find(name) == table.end()) ? NULL : table[name];
 }
 
+// print the quads
+// well formatted
 string quad::print_quad()
 {
     string s = "";
@@ -156,6 +165,8 @@ string quad::print_quad()
     return s;
 }
 
+// prints the quad array
+// well formatted
 void quad_array::print_quad_array() {
     cout << "Three Address Codes:" << endl;
     cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
@@ -178,10 +189,12 @@ void quad_array::print_quad_array() {
     }
 }
 
+// constructor for quad and expression
 quad::quad(string result, string arg1, string arg2, opcode op) : result(result), arg1(arg1), arg2(arg2), op(op) {}
 
 expression::expression() : fold(0), folder(NULL) {}
 
+// four emit functions to emit quads for different types of operations
 void emit(string result, string arg1, string arg2, opcode op) {
     quad_list.arr.push_back(quad(result, arg1, arg2, op));
     next_instr++;
@@ -202,25 +215,28 @@ void emit(string result, char constant, opcode op) {
     next_instr++;
 }
 
+// implementation of makelist that makes a list of integers
 list<int> makelist(int i)
 {
     list<int> lst(1,i);
     return lst;
 }
 
+// implementation of merge that merges two lists
 list<int> merge(list<int> l1, list<int> l2)
 {
     l1.merge(l2);
     return l1;
 }
 
-
+// implementation of backpatch that backpatches a list of quads with a given instruction number
 void backpatch(list<int> lst, int i)
 {
     string s = to_string(i);
     for(list<int>::iterator it = lst.begin(); it != lst.end(); it++) quad_list.arr[*it].result = s;
 }
 
+// implementation of converttype that converts an expression to a given type
 void converttype (expression* arg, expression* res, data_type type)
 {
     if (res->type == type) return;
@@ -242,6 +258,7 @@ void converttype (expression* arg, expression* res, data_type type)
     }
 }
 
+// implementation of converttype with overloading
 void converttype(string o, data_type otype, string n, data_type ntype)
 {
     if (otype == ntype) return;
@@ -263,6 +280,8 @@ void converttype(string o, data_type otype, string n, data_type ntype)
     }
 }
 
+// implementation of inttobool
+// used to convert an integer expression to a boolean expression for if and while statements
 void inttobool(expression* e)
 {
     if(e->type != BOOL)
@@ -275,6 +294,7 @@ void inttobool(expression* e)
     }
 }
 
+// implementation of getsize that returns the size of a data_type
 int getsize(data_type t)
 {
     if (t==VOID) return SIZE_OF_VOID;
@@ -286,7 +306,8 @@ int getsize(data_type t)
     return 0;
 }
 
-
+// implementation of gettype
+// basically returns the string representation of a data_type
 string gettype(symbol_type x)
 {
     if (x.type==VOID) return "void";
@@ -295,6 +316,7 @@ string gettype(symbol_type x)
     else if (x.type==FLOAT) return "float";
     else if (x.type==FUNC) return "function";
 
+    // for pointers types
     else if (x.type==PTR) 
     {
         string s = "";
@@ -306,6 +328,7 @@ string gettype(symbol_type x)
         return s;
     }
 
+    // for array types
     else if (x.type==ARR) 
     {
         string s = "";
@@ -326,6 +349,7 @@ string gettype(symbol_type x)
     return "unknown";
 }
 
+// get the initial value of a symbol
 string getval(symbol* sym)
 {
     if (sym->initial_value != NULL) {

@@ -15,6 +15,7 @@
 
 using namespace std;
 
+// define sizes
 #define SIZE_OF_VOID 0
 #define SIZE_OF_INT 4
 #define SIZE_OF_CHAR 1
@@ -22,6 +23,7 @@ using namespace std;
 #define SIZE_OF_FUNC 0
 #define SIZE_OF_PTR 8
 
+// enum for all data types
 typedef enum {
     VOID,
     INT,
@@ -33,9 +35,7 @@ typedef enum {
     ARR
 } data_type;
 
-/*
-    An enum for all opcodes
-*/
+// An enum for all opcodes
 typedef enum  {
     ADD, SUB, MULT, DIV, MOD, SL, SR, 
     BITWISE_AND, BITWISE_OR, BITWISE_XOR, 
@@ -54,16 +54,18 @@ class quad_array;           // class to represent the quad array
 
 class expression;           // class to represent an expression
 
+// extern variables
 extern symbol* current_symbol;
 extern symbol_table* current_symbol_table;
 extern symbol_table global_symbol_table;
 extern symbol_table* constant_symbol_table;
 extern quad_array quad_list;
 extern int next_instr;
-
+// from parsers
 extern char* yytext;
 extern int yyparse();
 
+// classes for symbol_type
 class symbol_type {
 public:
     int ptr;
@@ -72,6 +74,7 @@ public:
     vector <int> dimensions;
 };
 
+// class for symbol
 class symbol {
 public:
     string name;
@@ -83,6 +86,7 @@ public:
     symbol();
 };
 
+// class for symbol_value
 class symbol_value {
 public :
     int int_val;
@@ -95,6 +99,7 @@ public :
     void set_value(char val);
 };
 
+// class for symbol_table
 class symbol_table {
 public:
     map<string, symbol*> table;
@@ -111,6 +116,7 @@ public:
     void print_st(string name);
 };
 
+// class for quad
 class quad {
 public:
     opcode op;
@@ -123,6 +129,7 @@ public:
     string print_quad();
 };
 
+// class for quad_array
 class quad_array {
 public:
     vector<quad> arr;

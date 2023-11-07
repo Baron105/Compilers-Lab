@@ -19,6 +19,9 @@ int label_count = 0;
 string function_running = "";
 string dot_s_file_name = "";
 
+
+
+// function to print global information to assembly file
 void print_global(ofstream& sfile)
 {
     for (auto it = global_symbol_table.symbol_list.begin(); it != global_symbol_table.symbol_list.end(); it++)
@@ -59,6 +62,7 @@ void print_global(ofstream& sfile)
     }
 }
 
+// prints all the strings used in the program to the assembly file 
 void print_strings(ofstream& sfile)
 {
     sfile << ".section\t.rodata" << endl;
@@ -70,6 +74,7 @@ void print_strings(ofstream& sfile)
     }
 }
 
+// makes labels for different targets
 void set_goto_labels()
 {
     int i = 0;
@@ -482,6 +487,7 @@ void gen_ass_from_quad(quad q , ofstream& sfile)
     }
 }
 
+// a top level fucntion which handles the different parts of the target code generation 
 void gen_target_code(ofstream& sfile)
 {
     print_global(sfile);
@@ -493,7 +499,8 @@ void gen_target_code(ofstream& sfile)
     set_goto_labels();
 
     for(int i = 0; i < quad_list.arr.size(); i++)
-    {
+    {   
+        // just prints the quad in the assembly file as a comment 
         sfile << "# " << quad_list.arr[i].print_quad() << endl;
         if (labels.count(i) > 0)
         {
@@ -545,7 +552,7 @@ void gen_target_code(ofstream& sfile)
             gen_prologue(local_var_size, sfile);
 
         }
-
+        // Function epilogue (while leaving a function)
         else if (quad_list.arr[i].op == FUNC_END)
         {
             current_symbol_table = &global_symbol_table;
@@ -559,6 +566,7 @@ void gen_target_code(ofstream& sfile)
     }
 }
 
+// main function 
 int main(int argc, char* argv[])
 {
     current_symbol_table = &global_symbol_table;

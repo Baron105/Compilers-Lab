@@ -844,7 +844,7 @@ logical_OR_expression
 // my part
 
 conditional_expression
-    : logical_OR_expression { $$ = $1; }
+    : logical_OR_expression { /* No Action Taken */ }
     | logical_OR_expression N QUESTION_MARK M expression N COLON M conditional_expression {
         symbol* s1 = current_symbol_table->lookup($5->loc);
         $$->loc = current_symbol_table->gentemp(s1->type.type);
@@ -958,7 +958,6 @@ declaration
                 symbol* s2 = s1->nested_table->lookup("RETVAL", curr_type, curr_decl->ptrs);
                 s1->size = 0;
                 s1->initial_value = NULL;
-                continue ;
             }
 
             symbol* s3 = current_symbol_table->lookup(curr_decl->name, curr_type);
@@ -970,9 +969,8 @@ declaration
                 s3->type.type = curr_type;
                 if (curr_decl->initial_value)
                 {
-                    string rval = curr_decl->initial_value->loc;
-                    emit(s3->name, rval, "", ASSIGN);
-                    s3->initial_value = current_symbol_table->lookup(rval)->initial_value;
+                    emit(s3->name, curr_decl->initial_value->loc, "", ASSIGN);
+                    s3->initial_value = current_symbol_table->lookup(curr_decl->initial_value->loc)->initial_value;
                 }
                 else s3->initial_value = NULL;
             }
@@ -991,7 +989,7 @@ declaration
                 }
                 current_symbol_table->offset += temp_size;
                 s3->size = temp_size;
-                current_symbol_table->offset -= 4;
+                current_symbol_table->offset -= SIZE_OF_INT;
             }
 
             else if (curr_decl->ptrs != 0)
@@ -1006,24 +1004,18 @@ declaration
     }
     ;
 
-declaration_specifiers: 
-        storage_class_specifier declaration_specifiers
-        {}
-        |storage_class_specifier
-        {}
-        | type_specifier declaration_specifiers
-        {}
-        | type_specifier
-        {}
-        | type_qualifier declaration_specifiers
-        {}
-        | type_qualifier
-        {}
-        | function_specifier declaration_specifiers
-        {}
-        | function_specifier
-        {}
-        ;
+declaration_specifiers
+    : storage_class_specifier declaration_specifiers_opt { /* No Action Taken */ }
+    | type_specifier declaration_specifiers_opt { /* No Action Taken */ }
+    | type_qualifier declaration_specifiers_opt { /* No Action Taken */ }
+    | function_specifier declaration_specifiers_opt { /* No Action Taken */ }
+    ;
+
+declaration_specifiers_opt
+    : declaration_specifiers { /* No Action Taken */ }
+    | %empty
+    { /* No Action Taken */ }
+    ;
 
 init_declarator_list 
     : init_declarator { 
@@ -1142,9 +1134,9 @@ direct_declarator
     }
     | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list_opt SQUARE_BRACKET_CLOSE
     {
+        $$ = $1;
         $1->type = ARR;
         $1->next_type = INT;
-        $$ = $1;
         $$->instr_list.push_back(0); 
     }
     | direct_declarator SQUARE_BRACKET_OPEN STATIC type_qualifier_list_opt assignment_expression SQUARE_BRACKET_CLOSE
@@ -1157,18 +1149,18 @@ direct_declarator
     }
     | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list_opt assignment_expression SQUARE_BRACKET_CLOSE
     {
+        $$ = $1;
         $1->type = ARR;
         $1->next_type = INT;
-        $$ = $1;
         int id = current_symbol_table->lookup($4->loc)->initial_value->int_val;
         $$->instr_list.push_back(id);
         // check
     }
-    | direct_declarator ROUND_BRACKET_OPEN parameter_type_list_opt ROUND_BRACKET_CLOSE
+    | direct_declarator ROUND_BRACKET_OPEN parameter_type_list ROUND_BRACKET_CLOSE
     {
         $$ = $1;
         $$->type = FUNC;
-        symbol* s1 = current_symbol_table->lookup($$->name, $$->type);
+        symbol* s1 = current_symbol_table->lookup($1->name, $1->type);
         symbol_table* st = new symbol_table();
         s1->nested_table = st;
 
@@ -1188,7 +1180,7 @@ direct_declarator
             {
                 st->lookup(curr_param->name, curr_param->type.type);
                 st->lookup(curr_param->name)->type.nextType = INT;
-                st->lookup(curr_param->name)->type.dimensions.push_back(0);
+                st->lookup(curr_param->name)->type.ptr = curr_param->type.ptr;
             }
             
             else
@@ -1206,9 +1198,9 @@ direct_declarator
     }
     | direct_declarator SQUARE_BRACKET_OPEN type_qualifier_list_opt MULTIPLY SQUARE_BRACKET_CLOSE
     {
-        $1->type = PTR;
-        $1->next_type = INT;
         $$ = $1;
+        $$->type = PTR;
+        $$->next_type = INT;
     }
     ;
 
