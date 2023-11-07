@@ -1,42 +1,38 @@
-/**
-* Vanshita Garg | 19CS10064
-* Ashutosh Kumar Singh | 19CS30008
-* Compilers Laboratory
-* Assignment 6
-*
-* Source file for translation
+/*
+    Made by Barun Parua and Navaneeth Shaji
+    Roll Numbers: 21CS10014 and 21CS30032
+    Assignment 6
 */
 
-#include "ass6_19CS10064_19CS30008_translator.h"
-#include <iomanip>
-#include <string>
+#include "ass6_21CS10014_21CS30032_translator.h"
+
 using namespace std;
 
 // Initialize the global variables
-int nextinstr = 0;
+int nextinstr;
 
 // Intiailize the static variables
-int symbolTable::tempCount = 0;
+int symbol_table::count = 0;
 
-quadArray quadList;
-symbolTable globalST;
-symbolTable* ST;
+quad_array quadList;
+symbol_table globalST;
+symbol_table* ST;
 
 
-// Implementations of constructors and functions for the symbolValue class
-void symbolValue::setInitVal(int val) {
-    c = f = i = val;
-    p = NULL;
+// Implementations of constructors and functions for the symbol_value class
+void symbol_value::set_value(int val) {
+    int_val = char_val = float_val = val;
+    ptr_val = NULL;
 }
 
-void symbolValue::setInitVal(char val) {
-    c = f = i = val;
-    p = NULL;
+void symbol_value::set_value(char val) {
+    int_val = char_val = float_val = val;
+    ptr_val = NULL;
 }
 
-void symbolValue::setInitVal(float val) {
-    c = f = i = val;
-    p = NULL;
+void symbol_value::set_value(float val) {
+    int_val = char_val = float_val = val;
+    ptr_val = NULL;
 }
 
 
@@ -44,10 +40,10 @@ void symbolValue::setInitVal(float val) {
 symbol::symbol(): nestedTable(NULL) {}
 
 
-// Implementations of constructors and functions for the symbolTable class
-symbolTable::symbolTable(): offset(0) {}
+// Implementations of constructors and functions for the symbol_table class
+symbol_table::symbol_table(): offset(0) {}
 
-symbol* symbolTable::lookup(string name, DataType t, int pc) {
+symbol* symbol_table::lookup(string name, data_type t, int pc) {
     if(table.count(name) == 0) {
         symbol* sym = new symbol();
         sym->name = name;
@@ -71,13 +67,13 @@ symbol* symbolTable::lookup(string name, DataType t, int pc) {
     return table[name];
 }
 
-symbol* symbolTable::searchGlobal(string name) {
+symbol* symbol_table::searchGlobal(string name) {
     return (table.count(name) ? table[name] : NULL);
 }
 
-string symbolTable::gentemp(DataType t) {
+string symbol_table::gentemp(data_type t) {
     // Create the name for the temporary
-    string tempName = "t" + to_string(symbolTable::tempCount++);
+    string tempName = "t" + to_string(symbol_table::count++);
     
     // Initialize the required attributes
     symbol* sym = new symbol();
@@ -94,7 +90,7 @@ string symbolTable::gentemp(DataType t) {
     return tempName;
 }
 
-void symbolTable::print(string tableName) {
+void symbol_table::print(string tableName) {
     for(int i = 0; i < 120; i++) {
         cout << '-';
     }
@@ -117,7 +113,7 @@ void symbolTable::print(string tableName) {
     cout << endl;
 
     // For storing nested symbol tables
-    vector<pair<string, symbolTable*>> tableList;
+    vector<pair<string, symbol_table*>> tableList;
 
     // Print the symbols in the symbol table
     for(int i = 0; i < (int)symbols.size(); i++) {
@@ -143,8 +139,8 @@ void symbolTable::print(string tableName) {
     cout << endl << endl;
 
     // Recursively call the print function for the nested symbol tables
-    for(vector<pair<string, symbolTable*>>::iterator it = tableList.begin(); it != tableList.end(); it++) {
-        pair<string, symbolTable*> p = (*it);
+    for(vector<pair<string, symbol_table*>>::iterator it = tableList.begin(); it != tableList.end(); it++) {
+        pair<string, symbol_table*> p = (*it);
         p.second->print(p.first);
     }
 
@@ -240,8 +236,8 @@ string quad::print() {
 }
 
 
-// Implementations of constructors and functions for the quadArray class
-void quadArray::print() {
+// Implementations of constructors and functions for the quad_array class
+void quad_array::print() {
     for(int i = 0; i < 120; i++)
         cout << '-';
     cout << endl;
@@ -316,7 +312,7 @@ void backpatch(list<int> l, int address) {
 
 
 // Implementation of the overloaded convertToType functions
-void convertToType(expression* arg, expression* res, DataType toType) {
+void convertToType(expression* arg, expression* res, data_type toType) {
     if(res->type == toType)
         return;
 
@@ -340,7 +336,7 @@ void convertToType(expression* arg, expression* res, DataType toType) {
     }
 }
 
-void convertToType(string t, DataType to, string f, DataType from) {
+void convertToType(string t, data_type to, string f, data_type from) {
     if(to == from)
         return;
     
@@ -376,7 +372,7 @@ void convertIntToBool(expression* expr) {
 }
 
 // Implementation of the sizeOfType function
-int sizeOfType(DataType t) {
+int sizeOfType(data_type t) {
     if(t == VOID)
         return __VOID_SIZE;
     else if(t == CHAR)
