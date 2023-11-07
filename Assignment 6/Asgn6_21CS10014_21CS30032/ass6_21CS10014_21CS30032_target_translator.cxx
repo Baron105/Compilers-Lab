@@ -1,4 +1,4 @@
-#include "translator.h"
+#include "ass6_21CS10014_21CS30032_translator.h"
 #include <fstream>
 #include <sstream>
 #include <stack>
