@@ -63,7 +63,7 @@
 %type <dec> direct_declarator declarator init_declarator function_prototype
 %type <dec_list> init_declarator_list
 %type <p> parameter_declaration
-%type <p_list> parameter_list parameter_type_list parameter_type_list_opt argument_expression_list argument_expression_list_opt
+%type <p_list> parameter_list parameter_type_list argument_expression_list argument_expression_list_opt
 
 %start translation_unit
 
@@ -1406,7 +1406,7 @@ jump_statement
     : GOTO_T IDENTIFIER SEMICOLON { /* No Action Taken */ }
     | CONTINUE SEMICOLON { /* No Action Taken */ }
     | BREAK SEMICOLON { /* No Action Taken */ }
-    | RETURN_T expression SEMICOLON
+    | RETURN_T SEMICOLON
     {
         if (current_symbol_table->lookup("RETVAL")->type.type == VOID) emit("", "", "", RETURN);
         $$ = new statement();
