@@ -119,7 +119,7 @@ WS                                  [ \t\n]
 ">="                                { return GREATER_THAN_EQUAL; }
 "=="                                { return EQUAL; }
 "!="                                { return NOT_EQUAL; }
-"^"                                 { return BITWISE_XOR; }
+"^"                                 { return BIT_XOR; }
 "|"                                 { return BITWISE_OR; }
 "&&"                                { return LOGICAL_AND; }
 "||"                                { return LOGICAL_OR; }
@@ -135,20 +135,20 @@ WS                                  [ \t\n]
 "-="                                { return MINUS_ASSIGN; }
 "<<="                               { return LEFT_SHIFT_ASSIGN; }
 ">>="                               { return RIGHT_SHIFT_ASSIGN; }
-"&="                                { return BITWISE_AND_ASSIGN; }
-"^="                                { return BITWISE_XOR_ASSIGN; }
-"|="                                { return BITWISE_OR_ASSIGN; }
+"&="                                { return BIT_AND_ASSIGN; }
+"^="                                { return BIT_XOR_ASSIGN; }
+"|="                                { return BIT_OR_ASSIGN; }
 ","                                 { return COMMA; }
 "#"                                 { return HASH; }
 
 
-{IDENTIFIER}                        { yylval.sym = string(yytext); return IDENTIFIER; }
+{IDENTIFIER}                        { yylval.symp = string(yytext); return IDENTIFIER; }
 
 {INTEGER_CONSTANT}                  { yylval.intval = atoi(yytext); return INTEGER_CONSTANT; }
 {FLOATING_CONSTANT}                 { yylval.floatval = atof(yytext); return FLOATING_CONSTANT; }
 
 {CHAR_CONSTANT}                     { yylval.charval = yytext[0]; return CHAR_CONSTANT; }
-{STRING_LITERAL}                    { yylval.strval = string(yytext); return STRING_LITERAL; }
+{STRING_LITERAL}                    { yylval.str = string(yytext); return STRING_LITERAL; }
 
 {WS}                                {/* ignore whitespace */}
 

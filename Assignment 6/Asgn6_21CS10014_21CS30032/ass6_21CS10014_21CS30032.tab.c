@@ -179,9 +179,9 @@ extern int yydebug;
     ARROW = 302,
     INCREMENT = 303,
     DECREMENT = 304,
-    BITWISE_AND = 305,
-    BITWISE_OR = 306,
-    BITWISE_XOR = 307,
+    BIT_AND = 305,
+    BIT_OR = 306,
+    BIT_XOR = 307,
     BITWISE_NOT = 308,
     LOGICAL_AND = 309,
     LOGICAL_OR = 310,
@@ -207,9 +207,9 @@ extern int yydebug;
     MODULO_ASSIGN = 330,
     LEFT_SHIFT_ASSIGN = 331,
     RIGHT_SHIFT_ASSIGN = 332,
-    BITWISE_AND_ASSIGN = 333,
-    BITWISE_XOR_ASSIGN = 334,
-    BITWISE_OR_ASSIGN = 335,
+    BIT_AND_ASSIGN = 333,
+    BIT_XOR_ASSIGN = 334,
+    BIT_OR_ASSIGN = 335,
     COMMA = 336,
     COLON = 337,
     SEMICOLON = 338,
@@ -668,14 +668,14 @@ static const char *const yytname[] =
   "BOOL_T", "COMPLEX", "IMAGINARY", "SQUARE_BRACKET_OPEN",
   "SQUARE_BRACKET_CLOSE", "ROUND_BRACKET_OPEN", "ROUND_BRACKET_CLOSE",
   "CURLY_BRACKET_OPEN", "CURLY_BRACKET_CLOSE", "DOT", "ARROW", "INCREMENT",
-  "DECREMENT", "BITWISE_AND", "BITWISE_OR", "BITWISE_XOR", "BITWISE_NOT",
+  "DECREMENT", "BIT_AND", "BIT_OR", "BIT_XOR", "BITWISE_NOT",
   "LOGICAL_AND", "LOGICAL_OR", "LOGICAL_NOT", "MULTIPLY", "DIVIDE",
   "MODULO", "PLUS", "MINUS", "LEFT_SHIFT", "RIGHT_SHIFT", "LESS_THAN",
   "GREATER_THAN", "LESS_THAN_EQUAL", "GREATER_THAN_EQUAL", "EQUAL",
   "NOT_EQUAL", "ASSIGN_T", "PLUS_ASSIGN", "MINUS_ASSIGN",
   "MULTIPLY_ASSIGN", "DIVIDE_ASSIGN", "MODULO_ASSIGN", "LEFT_SHIFT_ASSIGN",
-  "RIGHT_SHIFT_ASSIGN", "BITWISE_AND_ASSIGN", "BITWISE_XOR_ASSIGN",
-  "BITWISE_OR_ASSIGN", "COMMA", "COLON", "SEMICOLON", "ELLIPSIS",
+  "RIGHT_SHIFT_ASSIGN", "BIT_AND_ASSIGN", "BIT_XOR_ASSIGN",
+  "BIT_OR_ASSIGN", "COMMA", "COLON", "SEMICOLON", "ELLIPSIS",
   "QUESTION_MARK", "HASH", "INTEGER_CONSTANT", "FLOATING_CONSTANT",
   "CHAR_CONSTANT", "STRING_LITERAL", "IDENTIFIER", "WS", "$accept",
   "primary_expression", "postfix_expression", "argument_expression_list",
@@ -2209,7 +2209,7 @@ yyreduce:
 
   case 26:
 #line 308 "ass6_21CS10014_21CS30032.y"
-                  { (yyval.charval) = '&'; }
+              { (yyval.charval) = '&'; }
 #line 2214 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
@@ -2744,7 +2744,7 @@ yyreduce:
 
   case 53:
 #line 733 "ass6_21CS10014_21CS30032.y"
-                                                     { 
+                                                 { 
         
         (yyval.expr) = new expression();
         symbol * s1 = current_symbol_table->lookup((yyvsp[-2].expr)->loc);
@@ -2767,7 +2767,7 @@ yyreduce:
 
         (yyval.expr) = new expression();
         (yyval.expr)->loc = current_symbol_table->gentemp();
-        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,BITWISE_AND);
+        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,BIT_AND);
     }
 #line 2773 "ass6_21CS10014_21CS30032.tab.c"
     break;
@@ -2780,7 +2780,7 @@ yyreduce:
 
   case 55:
 #line 762 "ass6_21CS10014_21CS30032.y"
-                                                         {
+                                                     {
         
         (yyval.expr) = new expression();
         symbol * s1 = current_symbol_table->lookup((yyvsp[-2].expr)->loc);
@@ -2803,7 +2803,7 @@ yyreduce:
 
         (yyval.expr) = new expression();
         (yyval.expr)->loc = current_symbol_table->gentemp();
-        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,BITWISE_XOR);
+        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,BIT_XOR);
     }
 #line 2809 "ass6_21CS10014_21CS30032.tab.c"
     break;
@@ -2816,7 +2816,7 @@ yyreduce:
 
   case 57:
 #line 791 "ass6_21CS10014_21CS30032.y"
-                                                                 {
+                                                             {
         
         (yyval.expr) = new expression();
         symbol * s1 = current_symbol_table->lookup((yyvsp[-2].expr)->loc);
@@ -2839,7 +2839,7 @@ yyreduce:
 
         (yyval.expr) = new expression();
         (yyval.expr)->loc = current_symbol_table->gentemp();
-        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,BITWISE_OR);
+        emit((yyval.expr)->loc,(yyvsp[-2].expr)->loc,(yyvsp[0].expr)->loc,BIT_OR);
     }
 #line 2845 "ass6_21CS10014_21CS30032.tab.c"
     break;

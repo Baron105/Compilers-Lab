@@ -42,7 +42,7 @@ Grammar
    23                 | SIZEOF unary_expression
    24                 | SIZEOF ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE
 
-   25 unary_operator: BITWISE_AND
+   25 unary_operator: BIT_AND
    26               | MULTIPLY
    27               | PLUS
    28               | MINUS
@@ -76,13 +76,13 @@ Grammar
    50                    | equality_expression NOT_EQUAL relational_expression
 
    51 AND_expression: equality_expression
-   52               | AND_expression BITWISE_AND equality_expression
+   52               | AND_expression BIT_AND equality_expression
 
    53 exclusive_OR_expression: AND_expression
-   54                        | exclusive_OR_expression BITWISE_XOR AND_expression
+   54                        | exclusive_OR_expression BIT_XOR AND_expression
 
    55 inclusive_OR_expression: exclusive_OR_expression
-   56                        | inclusive_OR_expression BITWISE_OR exclusive_OR_expression
+   56                        | inclusive_OR_expression BIT_OR exclusive_OR_expression
 
    57 logical_AND_expression: inclusive_OR_expression
    58                       | logical_AND_expression LOGICAL_AND M inclusive_OR_expression
@@ -108,9 +108,9 @@ Grammar
    72                    | MINUS_ASSIGN
    73                    | LEFT_SHIFT_ASSIGN
    74                    | RIGHT_SHIFT_ASSIGN
-   75                    | BITWISE_AND_ASSIGN
-   76                    | BITWISE_XOR_ASSIGN
-   77                    | BITWISE_OR_ASSIGN
+   75                    | BIT_AND_ASSIGN
+   76                    | BIT_XOR_ASSIGN
+   77                    | BIT_OR_ASSIGN
 
    78 expression: assignment_expression
    79           | expression COMMA assignment_expression
@@ -337,9 +337,9 @@ Terminals, with rules where they appear
     ARROW (302) 12
     INCREMENT (303) 13 20
     DECREMENT (304) 14 21
-    BITWISE_AND (305) 25 52
-    BITWISE_OR (306) 56
-    BITWISE_XOR (307) 54
+    BIT_AND (305) 25 52
+    BIT_OR (306) 56
+    BIT_XOR (307) 54
     BITWISE_NOT (308) 29
     LOGICAL_AND (309) 58
     LOGICAL_OR (310) 60
@@ -365,9 +365,9 @@ Terminals, with rules where they appear
     MODULO_ASSIGN (330) 70
     LEFT_SHIFT_ASSIGN (331) 73
     RIGHT_SHIFT_ASSIGN (332) 74
-    BITWISE_AND_ASSIGN (333) 75
-    BITWISE_XOR_ASSIGN (334) 76
-    BITWISE_OR_ASSIGN (335) 77
+    BIT_AND_ASSIGN (333) 75
+    BIT_XOR_ASSIGN (334) 76
+    BIT_OR_ASSIGN (335) 77
     COMMA (336) 16 18 79 90 115 120 147 149 153 157 159
     COLON (337) 62 173 174 175
     SEMICOLON (338) 81 82 182 183 188 190 191 192 193 194
@@ -1269,7 +1269,7 @@ State 51
     CURLY_BRACKET_CLOSE  shift, and go to state 80
     INCREMENT            shift, and go to state 81
     DECREMENT            shift, and go to state 82
-    BITWISE_AND          shift, and go to state 83
+    BIT_AND              shift, and go to state 83
     BITWISE_NOT          shift, and go to state 84
     LOGICAL_NOT          shift, and go to state 85
     MULTIPLY             shift, and go to state 86
@@ -1404,7 +1404,7 @@ State 60
     CURLY_BRACKET_OPEN  shift, and go to state 131
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -1590,7 +1590,7 @@ State 68
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -1675,7 +1675,7 @@ State 75
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -1717,7 +1717,7 @@ State 76
     ROUND_BRACKET_OPEN  shift, and go to state 158
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -1778,7 +1778,7 @@ State 79
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -1830,7 +1830,7 @@ State 81
     ROUND_BRACKET_OPEN  shift, and go to state 167
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -1856,7 +1856,7 @@ State 82
     ROUND_BRACKET_OPEN  shift, and go to state 167
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -1876,7 +1876,7 @@ State 82
 
 State 83
 
-   25 unary_operator: BITWISE_AND .
+   25 unary_operator: BIT_AND .
 
     $default  reduce using rule 25 (unary_operator)
 
@@ -2002,9 +2002,9 @@ State 97
     MODULO_ASSIGN       shift, and go to state 182
     LEFT_SHIFT_ASSIGN   shift, and go to state 183
     RIGHT_SHIFT_ASSIGN  shift, and go to state 184
-    BITWISE_AND_ASSIGN  shift, and go to state 185
-    BITWISE_XOR_ASSIGN  shift, and go to state 186
-    BITWISE_OR_ASSIGN   shift, and go to state 187
+    BIT_AND_ASSIGN      shift, and go to state 185
+    BIT_XOR_ASSIGN      shift, and go to state 186
+    BIT_OR_ASSIGN       shift, and go to state 187
 
     $default  reduce using rule 31 (cast_expression)
 
@@ -2019,7 +2019,7 @@ State 98
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -2113,30 +2113,30 @@ State 104
 
 State 105
 
-   52 AND_expression: AND_expression . BITWISE_AND equality_expression
+   52 AND_expression: AND_expression . BIT_AND equality_expression
    53 exclusive_OR_expression: AND_expression .
 
-    BITWISE_AND  shift, and go to state 203
+    BIT_AND  shift, and go to state 203
 
     $default  reduce using rule 53 (exclusive_OR_expression)
 
 
 State 106
 
-   54 exclusive_OR_expression: exclusive_OR_expression . BITWISE_XOR AND_expression
+   54 exclusive_OR_expression: exclusive_OR_expression . BIT_XOR AND_expression
    55 inclusive_OR_expression: exclusive_OR_expression .
 
-    BITWISE_XOR  shift, and go to state 204
+    BIT_XOR  shift, and go to state 204
 
     $default  reduce using rule 55 (inclusive_OR_expression)
 
 
 State 107
 
-   56 inclusive_OR_expression: inclusive_OR_expression . BITWISE_OR exclusive_OR_expression
+   56 inclusive_OR_expression: inclusive_OR_expression . BIT_OR exclusive_OR_expression
    57 logical_AND_expression: inclusive_OR_expression .
 
-    BITWISE_OR  shift, and go to state 205
+    BIT_OR  shift, and go to state 205
 
     $default  reduce using rule 57 (logical_AND_expression)
 
@@ -2406,7 +2406,7 @@ State 138
     ROUND_BRACKET_OPEN    shift, and go to state 79
     INCREMENT             shift, and go to state 81
     DECREMENT             shift, and go to state 82
-    BITWISE_AND           shift, and go to state 83
+    BIT_AND               shift, and go to state 83
     BITWISE_NOT           shift, and go to state 84
     LOGICAL_NOT           shift, and go to state 85
     MULTIPLY              shift, and go to state 226
@@ -2565,7 +2565,7 @@ State 151
     CURLY_BRACKET_OPEN  shift, and go to state 51
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -2625,7 +2625,7 @@ State 152
     CURLY_BRACKET_OPEN  shift, and go to state 51
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -2673,7 +2673,7 @@ State 153
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -2723,7 +2723,7 @@ State 155
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -2798,7 +2798,7 @@ State 158
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -2850,7 +2850,7 @@ State 160
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3000,7 +3000,7 @@ State 167
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3071,7 +3071,7 @@ State 170
     CURLY_BRACKET_OPEN  shift, and go to state 51
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3119,7 +3119,7 @@ State 171
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3161,7 +3161,7 @@ State 172
     ROUND_BRACKET_CLOSE  shift, and go to state 252
     INCREMENT            shift, and go to state 81
     DECREMENT            shift, and go to state 82
-    BITWISE_AND          shift, and go to state 83
+    BIT_AND              shift, and go to state 83
     BITWISE_NOT          shift, and go to state 84
     LOGICAL_NOT          shift, and go to state 85
     MULTIPLY             shift, and go to state 86
@@ -3279,21 +3279,21 @@ State 184
 
 State 185
 
-   75 assignment_operator: BITWISE_AND_ASSIGN .
+   75 assignment_operator: BIT_AND_ASSIGN .
 
     $default  reduce using rule 75 (assignment_operator)
 
 
 State 186
 
-   76 assignment_operator: BITWISE_XOR_ASSIGN .
+   76 assignment_operator: BIT_XOR_ASSIGN .
 
     $default  reduce using rule 76 (assignment_operator)
 
 
 State 187
 
-   77 assignment_operator: BITWISE_OR_ASSIGN .
+   77 assignment_operator: BIT_OR_ASSIGN .
 
     $default  reduce using rule 77 (assignment_operator)
 
@@ -3306,7 +3306,7 @@ State 188
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3352,7 +3352,7 @@ State 190
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3379,7 +3379,7 @@ State 191
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3406,7 +3406,7 @@ State 192
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3433,7 +3433,7 @@ State 193
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3461,7 +3461,7 @@ State 194
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3489,7 +3489,7 @@ State 195
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3518,7 +3518,7 @@ State 196
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3547,7 +3547,7 @@ State 197
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3577,7 +3577,7 @@ State 198
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3607,7 +3607,7 @@ State 199
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3637,7 +3637,7 @@ State 200
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3667,7 +3667,7 @@ State 201
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3698,7 +3698,7 @@ State 202
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3723,13 +3723,13 @@ State 202
 
 State 203
 
-   52 AND_expression: AND_expression BITWISE_AND . equality_expression
+   52 AND_expression: AND_expression BIT_AND . equality_expression
 
     SIZEOF              shift, and go to state 76
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3755,13 +3755,13 @@ State 203
 
 State 204
 
-   54 exclusive_OR_expression: exclusive_OR_expression BITWISE_XOR . AND_expression
+   54 exclusive_OR_expression: exclusive_OR_expression BIT_XOR . AND_expression
 
     SIZEOF              shift, and go to state 76
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3788,13 +3788,13 @@ State 204
 
 State 205
 
-   56 inclusive_OR_expression: inclusive_OR_expression BITWISE_OR . exclusive_OR_expression
+   56 inclusive_OR_expression: inclusive_OR_expression BIT_OR . exclusive_OR_expression
 
     SIZEOF              shift, and go to state 76
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3853,7 +3853,7 @@ State 209
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3939,7 +3939,7 @@ State 212
     CURLY_BRACKET_OPEN  shift, and go to state 51
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -3995,7 +3995,7 @@ State 213
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -4052,7 +4052,7 @@ State 216
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -4109,7 +4109,7 @@ State 219
     CURLY_BRACKET_OPEN  shift, and go to state 131
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -4175,7 +4175,7 @@ State 223
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -4252,7 +4252,7 @@ State 228
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -4368,7 +4368,7 @@ State 234
     CURLY_BRACKET_OPEN  shift, and go to state 51
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -4486,7 +4486,7 @@ State 243
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -4557,7 +4557,7 @@ State 248
     CURLY_BRACKET_OPEN  shift, and go to state 303
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -4801,7 +4801,7 @@ State 271
 
    49 equality_expression: equality_expression . EQUAL relational_expression
    50                    | equality_expression . NOT_EQUAL relational_expression
-   52 AND_expression: AND_expression BITWISE_AND equality_expression .
+   52 AND_expression: AND_expression BIT_AND equality_expression .
 
     EQUAL      shift, and go to state 201
     NOT_EQUAL  shift, and go to state 202
@@ -4811,20 +4811,20 @@ State 271
 
 State 272
 
-   52 AND_expression: AND_expression . BITWISE_AND equality_expression
-   54 exclusive_OR_expression: exclusive_OR_expression BITWISE_XOR AND_expression .
+   52 AND_expression: AND_expression . BIT_AND equality_expression
+   54 exclusive_OR_expression: exclusive_OR_expression BIT_XOR AND_expression .
 
-    BITWISE_AND  shift, and go to state 203
+    BIT_AND  shift, and go to state 203
 
     $default  reduce using rule 54 (exclusive_OR_expression)
 
 
 State 273
 
-   54 exclusive_OR_expression: exclusive_OR_expression . BITWISE_XOR AND_expression
-   56 inclusive_OR_expression: inclusive_OR_expression BITWISE_OR exclusive_OR_expression .
+   54 exclusive_OR_expression: exclusive_OR_expression . BIT_XOR AND_expression
+   56 inclusive_OR_expression: inclusive_OR_expression BIT_OR exclusive_OR_expression .
 
-    BITWISE_XOR  shift, and go to state 204
+    BIT_XOR  shift, and go to state 204
 
     $default  reduce using rule 56 (inclusive_OR_expression)
 
@@ -4837,7 +4837,7 @@ State 274
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -4872,7 +4872,7 @@ State 275
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -5074,7 +5074,7 @@ State 298
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -5147,7 +5147,7 @@ State 301
     CURLY_BRACKET_OPEN  shift, and go to state 51
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -5253,7 +5253,7 @@ State 308
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -5286,10 +5286,10 @@ State 308
 
 State 309
 
-   56 inclusive_OR_expression: inclusive_OR_expression . BITWISE_OR exclusive_OR_expression
+   56 inclusive_OR_expression: inclusive_OR_expression . BIT_OR exclusive_OR_expression
    58 logical_AND_expression: logical_AND_expression LOGICAL_AND M inclusive_OR_expression .
 
-    BITWISE_OR  shift, and go to state 205
+    BIT_OR  shift, and go to state 205
 
     $default  reduce using rule 58 (logical_AND_expression)
 
@@ -5312,7 +5312,7 @@ State 311
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -5367,7 +5367,7 @@ State 314
     CURLY_BRACKET_OPEN  shift, and go to state 131
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -5497,7 +5497,7 @@ State 326
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -5559,7 +5559,7 @@ State 328
     CURLY_BRACKET_OPEN  shift, and go to state 51
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -5659,7 +5659,7 @@ State 334
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -5721,7 +5721,7 @@ State 336
     CURLY_BRACKET_OPEN  shift, and go to state 51
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -5822,7 +5822,7 @@ State 343
     ROUND_BRACKET_OPEN  shift, and go to state 79
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -5918,7 +5918,7 @@ State 350
     CURLY_BRACKET_OPEN  shift, and go to state 51
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86
@@ -5978,7 +5978,7 @@ State 351
     CURLY_BRACKET_OPEN  shift, and go to state 51
     INCREMENT           shift, and go to state 81
     DECREMENT           shift, and go to state 82
-    BITWISE_AND         shift, and go to state 83
+    BIT_AND             shift, and go to state 83
     BITWISE_NOT         shift, and go to state 84
     LOGICAL_NOT         shift, and go to state 85
     MULTIPLY            shift, and go to state 86

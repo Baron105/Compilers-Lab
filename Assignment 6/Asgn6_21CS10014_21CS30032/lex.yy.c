@@ -1276,7 +1276,7 @@ YY_RULE_SETUP
 case 66:
 YY_RULE_SETUP
 #line 122 "ass6_21CS10014_21CS30032.l"
-{ return BITWISE_XOR; }
+{ return BIT_XOR; }
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
@@ -1356,17 +1356,17 @@ YY_RULE_SETUP
 case 82:
 YY_RULE_SETUP
 #line 138 "ass6_21CS10014_21CS30032.l"
-{ return BITWISE_AND_ASSIGN; }
+{ return BIT_AND_ASSIGN; }
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
 #line 139 "ass6_21CS10014_21CS30032.l"
-{ return BITWISE_XOR_ASSIGN; }
+{ return BIT_XOR_ASSIGN; }
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
 #line 140 "ass6_21CS10014_21CS30032.l"
-{ return BITWISE_OR_ASSIGN; }
+{ return BIT_OR_ASSIGN; }
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
@@ -1381,7 +1381,7 @@ YY_RULE_SETUP
 case 87:
 YY_RULE_SETUP
 #line 145 "ass6_21CS10014_21CS30032.l"
-{ yylval.sym = string(yytext); return IDENTIFIER; }
+{ yylval.symp = string(yytext); return IDENTIFIER; }
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
@@ -1401,7 +1401,7 @@ YY_RULE_SETUP
 case 91:
 YY_RULE_SETUP
 #line 151 "ass6_21CS10014_21CS30032.l"
-{ yylval.strval = string(yytext); return STRING_LITERAL; }
+{ yylval.str = string(yytext); return STRING_LITERAL; }
 	YY_BREAK
 case 92:
 /* rule 92 can match eol */

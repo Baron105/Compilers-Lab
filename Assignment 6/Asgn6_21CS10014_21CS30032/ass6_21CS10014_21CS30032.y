@@ -38,11 +38,11 @@
 
 %token SQUARE_BRACKET_OPEN SQUARE_BRACKET_CLOSE ROUND_BRACKET_OPEN ROUND_BRACKET_CLOSE CURLY_BRACKET_OPEN CURLY_BRACKET_CLOSE
 %token DOT ARROW INCREMENT DECREMENT
-%token BITWISE_AND BITWISE_OR BITWISE_XOR BITWISE_NOT
+%token BIT_AND BIT_OR BIT_XOR BITWISE_NOT
 %token LOGICAL_AND LOGICAL_OR LOGICAL_NOT
 %token MULTIPLY DIVIDE MODULO PLUS MINUS
 %token LEFT_SHIFT RIGHT_SHIFT LESS_THAN GREATER_THAN LESS_THAN_EQUAL GREATER_THAN_EQUAL EQUAL NOT_EQUAL
-%token ASSIGN_T PLUS_ASSIGN MINUS_ASSIGN MULTIPLY_ASSIGN DIVIDE_ASSIGN MODULO_ASSIGN LEFT_SHIFT_ASSIGN RIGHT_SHIFT_ASSIGN BITWISE_AND_ASSIGN BITWISE_XOR_ASSIGN BITWISE_OR_ASSIGN
+%token ASSIGN_T PLUS_ASSIGN MINUS_ASSIGN MULTIPLY_ASSIGN DIVIDE_ASSIGN MODULO_ASSIGN LEFT_SHIFT_ASSIGN RIGHT_SHIFT_ASSIGN BIT_AND_ASSIGN BIT_XOR_ASSIGN BIT_OR_ASSIGN
 %token COMMA COLON SEMICOLON ELLIPSIS QUESTION_MARK HASH
 
 %token <intval> INTEGER_CONSTANT
@@ -305,7 +305,7 @@ unary_expression
     ;
 
 unary_operator
-    : BITWISE_AND { $$ = '&'; }
+    : BIT_AND { $$ = '&'; }
     | MULTIPLY { $$ = '*';}
     | PLUS { $$ = '+';}
     | MINUS { $$ = '-';}
@@ -730,7 +730,7 @@ equality_expression
 
 AND_expression
     : equality_expression {}
-    | AND_expression BITWISE_AND equality_expression { 
+    | AND_expression BIT_AND equality_expression { 
         
         $$ = new expression();
         symbol * s1 = current_symbol_table->lookup($1->loc);
@@ -753,13 +753,13 @@ AND_expression
 
         $$ = new expression();
         $$->loc = current_symbol_table->gentemp();
-        emit($$->loc,$1->loc,$3->loc,BITWISE_AND);
+        emit($$->loc,$1->loc,$3->loc,BIT_AND);
     }
     ;
 
 exclusive_OR_expression
     : AND_expression { $$ = $1; }
-    | exclusive_OR_expression BITWISE_XOR AND_expression {
+    | exclusive_OR_expression BIT_XOR AND_expression {
         
         $$ = new expression();
         symbol * s1 = current_symbol_table->lookup($1->loc);
@@ -782,13 +782,13 @@ exclusive_OR_expression
 
         $$ = new expression();
         $$->loc = current_symbol_table->gentemp();
-        emit($$->loc,$1->loc,$3->loc,BITWISE_XOR);
+        emit($$->loc,$1->loc,$3->loc,BIT_XOR);
     }
     ;
 
 inclusive_OR_expression
     : exclusive_OR_expression {new expression() ;$$ = $1;}
-    | inclusive_OR_expression BITWISE_OR exclusive_OR_expression {
+    | inclusive_OR_expression BIT_OR exclusive_OR_expression {
         
         $$ = new expression();
         symbol * s1 = current_symbol_table->lookup($1->loc);
@@ -811,7 +811,7 @@ inclusive_OR_expression
 
         $$ = new expression();
         $$->loc = current_symbol_table->gentemp();
-        emit($$->loc,$1->loc,$3->loc,BITWISE_OR);
+        emit($$->loc,$1->loc,$3->loc,BIT_OR);
     }
     ;
 
@@ -915,11 +915,11 @@ assignment_operator
     { /* No Action Taken */}
     | RIGHT_SHIFT_ASSIGN 
     { /* No Action Taken */}
-    | BITWISE_AND_ASSIGN 
+    | BIT_AND_ASSIGN 
     { /* No Action Taken */}
-    | BITWISE_XOR_ASSIGN 
+    | BIT_XOR_ASSIGN 
     { /* No Action Taken */}
-    | BITWISE_OR_ASSIGN 
+    | BIT_OR_ASSIGN 
     { /* No Action Taken */}
     ;
 
