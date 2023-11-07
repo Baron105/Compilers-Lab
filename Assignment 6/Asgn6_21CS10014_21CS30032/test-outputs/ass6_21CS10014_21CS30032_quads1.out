@@ -1,0 +1,39 @@
+Error: syntax error
+Line: 15
+Text: )
+Three Address Codes:
+------------------------------------------------------------------------------------------------------------------------
+
+                   0           printStr:
+function printStr ends
+
+
+                   2           printInt:
+function printInt ends
+
+
+                   4            readInt:
+function readInt ends
+
+                   6              t0 = 0
+                   7     global_var = t0
+                   8              t2 = 0
+                   9        counter = t2
+
+                  10               fibn:
+function fibn ends
+
+Symbol Table: Global Symbol Table
+------------------------------------------------------------------------------------------------------------------------
+                Name                Type       Initial Value                Size              Offset        Nested Table
+            printStr                 int                   -                   4                   0                   0
+            printInt                 int                   -                   4                   0                   0
+             readInt                 int                   -                   4                   0                   0
+                  t0                 int                   0                   4                   0                   0
+                  t1                void                   -                   0                   4                   0
+          global_var                 int                   0                   4                   4                   0
+                  t2                 int                   0                   4                   8                   0
+                  t3                void                   -                   0                  12                   0
+             counter                 int                   0                   4                  12                   0
+                fibn                 int                   -                   4                  16                   0
+------------------------------------------------------------------------------------------------------------------------

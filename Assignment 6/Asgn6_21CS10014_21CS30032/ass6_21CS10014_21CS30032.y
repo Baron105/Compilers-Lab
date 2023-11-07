@@ -51,8 +51,7 @@
 %token <str> STRING_LITERAL
 %token <str> IDENTIFIER
 
-%expect 1
-%nonassoc ELSE
+
 
 %token WS
 
@@ -63,7 +62,10 @@
 %type <dec> direct_declarator declarator init_declarator function_prototype
 %type <dec_list> init_declarator_list
 %type <p> parameter_declaration
-%type <p_list> parameter_list parameter_type_list argument_expression_list
+%type <p_list> parameter_list parameter_type_list parameter_type_list_opt argument_expression_list
+
+%expect 1
+%nonassoc ELSE
 
 %start translation_unit
 
@@ -787,7 +789,7 @@ exclusive_OR_expression
     ;
 
 inclusive_OR_expression
-    : exclusive_OR_expression {new expression() ;$$ = $1;}
+    : exclusive_OR_expression { $$=new expression() ;$$ = $1;}
     | inclusive_OR_expression BIT_OR exclusive_OR_expression {
         
         $$ = new expression();
@@ -844,7 +846,7 @@ logical_OR_expression
 // my part
 
 conditional_expression
-    : logical_OR_expression { /* No Action Taken */ }
+    : logical_OR_expression { $$=$1; }
     | logical_OR_expression N QUESTION_MARK M expression N COLON M conditional_expression {
         symbol* s1 = current_symbol_table->lookup($5->loc);
         $$->loc = current_symbol_table->gentemp(s1->type.type);
@@ -893,7 +895,7 @@ assignment_expression
             if (s1->type.type != ARR) emit($1->loc, $3->loc, "", ASSIGN);
             else emit($1->loc, $3->loc, *($1->folder), ARR_IDX_RES);
         }
-        else emit(*($1->folder), $3->loc, "", ASSIGN);
+        else emit(*($1->folder), $3->loc, "", L_DEREF);
 
         $$ = $1;
     }
@@ -947,9 +949,9 @@ declaration
         else if (curr_type == CHAR) curr_size = SIZE_OF_CHAR;
 
         vector<declaration*> decl_list = *($2);
-        for (int i = 0; i < decl_list.size(); i++)
+        for (vector<declaration*>::iterator it = decl_list.begin();it!=decl_list.end();it++)
         {
-            declaration* curr_decl = decl_list[i];
+            declaration* curr_decl = *it;
             if (curr_decl->type == FUNC)
             {
                 current_symbol_table = &global_symbol_table;
@@ -1018,8 +1020,14 @@ declaration_specifiers_opt
     ;
 
 init_declarator_list 
-    : init_declarator { /* No Action Taken */ }
-    | init_declarator_list COMMA init_declarator { /* No Action Taken */ }
+    : init_declarator { 
+        $$ = new vector<declaration*>;
+        $$->push_back($1);
+     }
+    | init_declarator_list COMMA init_declarator {
+        $1->push_back($3);
+        $$ = $1;
+    }
     ;
 
 init_declarator
@@ -1197,6 +1205,15 @@ direct_declarator
         $$->next_type = INT;
     }
     ;
+
+parameter_type_list_opt:
+        parameter_type_list
+        {}
+        | %empty
+        {
+            $$ = new vector<param*>;
+        }
+        ;
     
 
 

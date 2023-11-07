@@ -1,5 +1,10 @@
 // testing function and function calls 
 
+int min(int a,int b);
+int max(int a,int b);
+int sum(int a,int b);
+void find_max_min(int a,int b);
+
 int min (int a, int b)
 {
     if(a<b)
