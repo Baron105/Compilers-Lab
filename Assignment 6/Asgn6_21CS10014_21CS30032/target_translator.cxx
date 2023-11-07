@@ -69,7 +69,35 @@ void print_strings(ofstream& sfile)
     }
 }
 
+void set_goto_labels()
+{
+    int i = 0;
+    for (auto it = quad_list.arr.begin(); it != quad_list.arr.end(); it++)
+    {
+        if (it->op == GOTO || it->op == GOTO_LT || it->op == GOTO_GT || it->op == GOTO_GTE || it->op == GOTO_LTE || it->op == GOTO_EQ || it->op == GOTO_NEQ || it->op == IF_GOTO || it->op == IF_FALSE_GOTO)
+        {
+            int target = atoi(it->result.c_str());
+            if(labels.find(target) == labels.end())
+            {
+                labels[target] = ".L" + to_string(i);
+            }
+            it->result = labels[target];
+        }
+    }
+}
 
+// generated function prologue
+void gen_prologue(int local_var_size, ofstream& sfile)
+{
+    int size = 16;
+    sfile << endl << "\t.text" << endl;
+    sfile << "\t.globl\t" << function_running << endl;
+    sfile << "\t.type\t" << function_running << ", @function" << endl;
+    sfile << function_running << ":" << endl;
+    sfile << "\tpushq\t%rbp" << endl;
+    sfile << "\tmovq\t%rsp, %rbp" << endl;
+    sfile << "\tsubq\t$" << local_var_size + size << ", %rsp" << endl;
+}
 
 // function that generates the assembly code for the given quad
 void gen_ass_from_quad(quad q , ofstream& sfile)
@@ -451,6 +479,32 @@ void gen_ass_from_quad(quad q , ofstream& sfile)
         if(q.result != "") sfile << "\tmovq\t" << print_res << ", %rax" << endl;
         sfile << "\tleave" << endl << "\tret" << endl;
     }
+}
 
+void gen_target_code(ofstream& sfile)
+{
+    print_global(sfile);
+    print_strings(sfile);
+    set_goto_labels();
+
+    symbol_table* current_symbol_table = NULL;
+    symbol* function_running = NULL;
+
+    for(int i = 0; i < quad_list.arr.size(); i++)
+    {
+        sfile << "# " << quad_list.arr[i].print_quad() << endl;
+        if (labels.count(i) > 0)
+        {
+            sfile << labels[i] << ":" << endl;
+        }
+
+        if (quad_list.arr[i].op == FUNC_BEG)
+        {
+            i++;
+            if (quad_list.arr[i].op == FUNC_END) i--;
+            function_running = global_symbol_table->search_global_table(quad_list.arr[i].result);
+            current_symbol_table = function_running->nested_table;
+        }
+    }
 
 }
