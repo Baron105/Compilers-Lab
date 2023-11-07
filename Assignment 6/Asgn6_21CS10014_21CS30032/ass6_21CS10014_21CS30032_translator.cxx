@@ -2,7 +2,7 @@
 #include <string>
 using namespace std;
 
-#include "translator.h"
+#include "ass6_21CS10014_21CS30032_translator.h"
 #include <iomanip>
 
 symbol *current_symbol;

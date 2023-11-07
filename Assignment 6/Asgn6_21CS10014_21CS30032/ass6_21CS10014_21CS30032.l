@@ -1,7 +1,7 @@
 %{
     #include <stdio.h>
-    // #include "ass6_21CS10014_21CS30032_translator.h"
-    // #include "ass6_21CS10014_21CS30032.tab.h"
+    #include "ass6_21CS10014_21CS30032_translator.h"
+    #include "ass6_21CS10014_21CS30032.tab.h"
 %}
 
 %option yylineno
