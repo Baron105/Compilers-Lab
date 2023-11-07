@@ -172,7 +172,7 @@ public :
 
 // it is overloaded for different types of arguments
 
-void emit(string result, string arg1, opcode op,string arg2);
+void emit(string result, string arg1, string arg2, opcode op);
 void emit(string result, int constant, opcode op);
 void emit(string result, float constant, opcode op);
 void emit(string result, char constant, opcode op);

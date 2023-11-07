@@ -1892,7 +1892,7 @@ yyreduce:
         emit((yyval.expr)->loc,(yyvsp[0].charval),ASSIGN);
         symbol_value* val = new symbol_value();
         val->set_value((yyvsp[0].charval));
-        current_symbol_table-lookup((yyval.expr)->loc)->initial_value = val;
+        current_symbol_table->lookup((yyval.expr)->loc)->initial_value = val;
     }
 #line 1898 "ass6_21CS10014_21CS30032.tab.c"
     break;
@@ -1915,7 +1915,7 @@ yyreduce:
         emit((yyval.expr)->loc,(yyvsp[0].floatval),ASSIGN);
         symbol_value* val = new symbol_value();
         val->set_value((yyvsp[0].floatval));
-        current_symbol_table-lookup((yyval.expr)->loc)->initial_value = val;
+        current_symbol_table->lookup((yyval.expr)->loc)->initial_value = val;
     }
 #line 1921 "ass6_21CS10014_21CS30032.tab.c"
     break;
@@ -1928,7 +1928,7 @@ yyreduce:
         emit((yyval.expr)->loc,(yyvsp[0].intval),ASSIGN);
         symbol_value* val = new symbol_value();
         val->set_value((yyvsp[0].intval));
-        current_symbol_table-lookup((yyval.expr)->loc)->initial_value = val;
+        current_symbol_table->lookup((yyval.expr)->loc)->initial_value = val;
     }
 #line 1934 "ass6_21CS10014_21CS30032.tab.c"
     break;
@@ -1959,7 +1959,7 @@ yyreduce:
         string temp = current_symbol_table->gentemp(INT);
 
         emit(temp,(yyvsp[-1].expr)->loc,"",ASSIGN);
-        emit(temp,temp,"4",MULTIPLY);
+        emit(temp,temp,"4",MULT);
         emit(str,temp,"",ASSIGN);
         (yyval.expr)=(yyvsp[-3].expr);
     }
@@ -1984,7 +1984,7 @@ yyreduce:
         vector<p> params = *((yyvsp[-1].p_list));
         vector<symbol*> param_list = table->symbol_list;
 
-        for(int i =0 ;i<(int)params.size();i++)
+        for(int i =0 ;i<params.size();i++)
         {
             emit(params[i]->name,"","",PARAM);
         }

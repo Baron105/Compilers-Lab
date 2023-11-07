@@ -83,7 +83,7 @@ primary_expression
         emit($$->loc,$1,ASSIGN);
         symbol_value* val = new symbol_value();
         val->set_value($1);
-        current_symbol_table-lookup($$->loc)->initial_value = val;
+        current_symbol_table->lookup($$->loc)->initial_value = val;
     }
     | STRING_LITERAL { 
         $$ = new expression() ; 
@@ -97,7 +97,7 @@ primary_expression
         emit($$->loc,$1,ASSIGN);
         symbol_value* val = new symbol_value();
         val->set_value($1);
-        current_symbol_table-lookup($$->loc)->initial_value = val;
+        current_symbol_table->lookup($$->loc)->initial_value = val;
     }
     | INTEGER_CONSTANT {
         $$ = new expression() ;
@@ -105,7 +105,7 @@ primary_expression
         emit($$->loc,$1,ASSIGN);
         symbol_value* val = new symbol_value();
         val->set_value($1);
-        current_symbol_table-lookup($$->loc)->initial_value = val;
+        current_symbol_table->lookup($$->loc)->initial_value = val;
     }
     | ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE { $$ = $2 ; }
     ;
@@ -124,7 +124,7 @@ postfix_expression
         string temp = current_symbol_table->gentemp(INT);
 
         emit(temp,$3->loc,"",ASSIGN);
-        emit(temp,temp,"4",MULTIPLY);
+        emit(temp,temp,"4",MULT);
         emit(str,temp,"",ASSIGN);
         $$=$1;
     }
@@ -140,7 +140,7 @@ postfix_expression
         vector<p> params = *($3);
         vector<symbol*> param_list = table->symbol_list;
 
-        for(int i =0 ;i<(int)params.size();i++)
+        for(int i =0 ;i<params.size();i++)
         {
             emit(params[i]->name,"","",PARAM);
         }
