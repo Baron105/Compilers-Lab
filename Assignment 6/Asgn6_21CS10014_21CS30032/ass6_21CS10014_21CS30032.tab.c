@@ -637,21 +637,21 @@ static const yytype_int16 yyrline[] =
      312,   313,   317,   318,   322,   345,   372,   398,   427,   428,
      454,   484,   485,   509,   536,   537,   569,   599,   631,   666,
      667,   698,   732,   733,   761,   762,   790,   791,   819,   820,
-     834,   835,   847,   848,   870,   877,   886,   887,   902,   904,
-     906,   908,   910,   912,   914,   916,   918,   920,   922,   929,
-     930,   934,   939,   940,  1007,  1008,  1009,  1010,  1014,  1015,
-    1020,  1021,  1025,  1030,  1038,  1039,  1040,  1041,  1047,  1048,
-    1049,  1050,  1051,  1052,  1053,  1054,  1055,  1056,  1057,  1058,
-    1059,  1063,  1064,  1068,  1069,  1074,  1075,  1076,  1080,  1081,
-    1085,  1086,  1090,  1091,  1095,  1096,  1097,  1101,  1106,  1111,
-    1119,  1124,  1128,  1135,  1139,  1143,  1151,  1187,  1191,  1202,
-    1203,  1207,  1208,  1209,  1210,  1214,  1215,  1219,  1220,  1224,
-    1229,  1237,  1256,  1260,  1261,  1265,  1269,  1270,  1271,  1275,
-    1276,  1280,  1281,  1285,  1289,  1290,  1294,  1295,  1299,  1300,
-    1301,  1302,  1303,  1304,  1308,  1309,  1310,  1314,  1315,  1319,
-    1324,  1333,  1334,  1338,  1339,  1342,  1351,  1361,  1365,  1376,
-    1385,  1400,  1401,  1402,  1403,  1408,  1417,  1418,  1422,  1423,
-    1428,  1429,  1437,  1456,  1457
+     834,   835,   847,   848,   871,   878,   887,   888,   903,   905,
+     907,   909,   911,   913,   915,   917,   919,   921,   923,   930,
+     931,   935,   940,   941,  1008,  1009,  1010,  1011,  1015,  1016,
+    1021,  1022,  1026,  1031,  1039,  1040,  1041,  1042,  1048,  1049,
+    1050,  1051,  1052,  1053,  1054,  1055,  1056,  1057,  1058,  1059,
+    1060,  1064,  1065,  1069,  1070,  1075,  1076,  1077,  1081,  1082,
+    1086,  1087,  1091,  1092,  1096,  1097,  1098,  1102,  1107,  1112,
+    1120,  1125,  1129,  1136,  1140,  1144,  1153,  1189,  1193,  1204,
+    1205,  1209,  1210,  1211,  1212,  1216,  1217,  1221,  1222,  1226,
+    1231,  1239,  1258,  1262,  1263,  1267,  1271,  1272,  1273,  1277,
+    1278,  1282,  1283,  1287,  1291,  1292,  1296,  1297,  1301,  1302,
+    1303,  1304,  1305,  1306,  1310,  1311,  1312,  1316,  1317,  1321,
+    1326,  1335,  1336,  1340,  1341,  1344,  1354,  1366,  1370,  1381,
+    1390,  1406,  1407,  1408,  1409,  1414,  1423,  1424,  1428,  1429,
+    1434,  1435,  1443,  1462,  1463
 };
 #endif
 
@@ -2902,7 +2902,8 @@ yyreduce:
         emit("", "", "", GOTO);
         backpatch((yyvsp[-3].expr)->nextlist, next_instr);
         emit((yyval.expr)->loc, (yyvsp[-4].expr)->loc, "", ASSIGN);
-        templist = merge(templist, makelist(next_instr));
+        list<int> temp = makelist(next_instr);
+        templist = merge(templist, temp);
         emit("", "", "", GOTO);
 
         backpatch((yyvsp[-7].expr)->nextlist, next_instr);
@@ -2912,36 +2913,36 @@ yyreduce:
         backpatch((yyvsp[-7].expr)->nextlist, next_instr);
 
     }
-#line 2916 "ass6_21CS10014_21CS30032.tab.c"
+#line 2917 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 64:
-#line 871 "ass6_21CS10014_21CS30032.y"
+#line 872 "ass6_21CS10014_21CS30032.y"
     {
         (yyval.expr) = new expression();
         (yyval.expr)->instruction = next_instr;
     }
-#line 2925 "ass6_21CS10014_21CS30032.tab.c"
+#line 2926 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 65:
-#line 878 "ass6_21CS10014_21CS30032.y"
+#line 879 "ass6_21CS10014_21CS30032.y"
     {
         (yyval.expr) = new expression();
         (yyval.expr)->nextlist = makelist(next_instr);
         emit("", "", "", GOTO);
     }
-#line 2935 "ass6_21CS10014_21CS30032.tab.c"
+#line 2936 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 66:
-#line 886 "ass6_21CS10014_21CS30032.y"
+#line 887 "ass6_21CS10014_21CS30032.y"
                              { /* No Action Taken */ }
-#line 2941 "ass6_21CS10014_21CS30032.tab.c"
+#line 2942 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 67:
-#line 887 "ass6_21CS10014_21CS30032.y"
+#line 888 "ass6_21CS10014_21CS30032.y"
                                                                  {
         symbol* s1 = current_symbol_table->lookup((yyvsp[-2].expr)->loc);
         symbol* s2 = current_symbol_table->lookup((yyvsp[0].expr)->loc);
@@ -2954,101 +2955,101 @@ yyreduce:
 
         (yyval.expr) = (yyvsp[-2].expr);
     }
-#line 2958 "ass6_21CS10014_21CS30032.tab.c"
+#line 2959 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 68:
-#line 903 "ass6_21CS10014_21CS30032.y"
+#line 904 "ass6_21CS10014_21CS30032.y"
     { /* No Action Taken */}
-#line 2964 "ass6_21CS10014_21CS30032.tab.c"
+#line 2965 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 69:
-#line 905 "ass6_21CS10014_21CS30032.y"
+#line 906 "ass6_21CS10014_21CS30032.y"
     { /* No Action Taken */}
-#line 2970 "ass6_21CS10014_21CS30032.tab.c"
+#line 2971 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 70:
-#line 907 "ass6_21CS10014_21CS30032.y"
+#line 908 "ass6_21CS10014_21CS30032.y"
     { /* No Action Taken */}
-#line 2976 "ass6_21CS10014_21CS30032.tab.c"
+#line 2977 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 71:
-#line 909 "ass6_21CS10014_21CS30032.y"
+#line 910 "ass6_21CS10014_21CS30032.y"
     { /* No Action Taken */}
-#line 2982 "ass6_21CS10014_21CS30032.tab.c"
+#line 2983 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 72:
-#line 911 "ass6_21CS10014_21CS30032.y"
+#line 912 "ass6_21CS10014_21CS30032.y"
     { /* No Action Taken */}
-#line 2988 "ass6_21CS10014_21CS30032.tab.c"
+#line 2989 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 73:
-#line 913 "ass6_21CS10014_21CS30032.y"
+#line 914 "ass6_21CS10014_21CS30032.y"
     { /* No Action Taken */}
-#line 2994 "ass6_21CS10014_21CS30032.tab.c"
+#line 2995 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 74:
-#line 915 "ass6_21CS10014_21CS30032.y"
+#line 916 "ass6_21CS10014_21CS30032.y"
     { /* No Action Taken */}
-#line 3000 "ass6_21CS10014_21CS30032.tab.c"
+#line 3001 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 75:
-#line 917 "ass6_21CS10014_21CS30032.y"
+#line 918 "ass6_21CS10014_21CS30032.y"
     { /* No Action Taken */}
-#line 3006 "ass6_21CS10014_21CS30032.tab.c"
+#line 3007 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 76:
-#line 919 "ass6_21CS10014_21CS30032.y"
+#line 920 "ass6_21CS10014_21CS30032.y"
     { /* No Action Taken */}
-#line 3012 "ass6_21CS10014_21CS30032.tab.c"
+#line 3013 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 77:
-#line 921 "ass6_21CS10014_21CS30032.y"
+#line 922 "ass6_21CS10014_21CS30032.y"
     { /* No Action Taken */}
-#line 3018 "ass6_21CS10014_21CS30032.tab.c"
+#line 3019 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 78:
-#line 923 "ass6_21CS10014_21CS30032.y"
+#line 924 "ass6_21CS10014_21CS30032.y"
     { /* No Action Taken */}
-#line 3024 "ass6_21CS10014_21CS30032.tab.c"
+#line 3025 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 79:
-#line 929 "ass6_21CS10014_21CS30032.y"
+#line 930 "ass6_21CS10014_21CS30032.y"
                             { /* No Action Taken */ }
-#line 3030 "ass6_21CS10014_21CS30032.tab.c"
+#line 3031 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 80:
-#line 930 "ass6_21CS10014_21CS30032.y"
+#line 931 "ass6_21CS10014_21CS30032.y"
                                              { /* No Action Taken */ }
-#line 3036 "ass6_21CS10014_21CS30032.tab.c"
+#line 3037 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 81:
-#line 934 "ass6_21CS10014_21CS30032.y"
+#line 935 "ass6_21CS10014_21CS30032.y"
                              { /* No Action Taken */ }
-#line 3042 "ass6_21CS10014_21CS30032.tab.c"
+#line 3043 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 82:
-#line 939 "ass6_21CS10014_21CS30032.y"
+#line 940 "ass6_21CS10014_21CS30032.y"
                                        { /* No Action Taken */ }
-#line 3048 "ass6_21CS10014_21CS30032.tab.c"
+#line 3049 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 83:
-#line 941 "ass6_21CS10014_21CS30032.y"
+#line 942 "ass6_21CS10014_21CS30032.y"
     {
         data_type curr_type = (yyvsp[-2].types);
         int curr_size = 0;
@@ -3060,12 +3061,12 @@ yyreduce:
         for (int i = 0; i < decl_list.size(); i++)
         {
             declaration* curr_decl = decl_list[i];
-            if (curr_decl->type == FUNCTION)
+            if (curr_decl->type == FUNC)
             {
                 current_symbol_table = &global_symbol_table;
                 emit(curr_decl->name, "", "", FUNC_END);
                 symbol* s1 = current_symbol_table->lookup(curr_decl->name);
-                symbol* s2 = s1->nested_table->lookup("RETVAL", curr_type, curr_decl->ptr);
+                symbol* s2 = s1->nested_table->lookup("RETVAL", curr_type, curr_decl->ptrs);
                 s1->size = 0;
                 s1->initial_value = NULL;
             }
@@ -3073,7 +3074,7 @@ yyreduce:
             symbol* s3 = current_symbol_table->lookup(curr_decl->name, curr_type);
             s3->nested_table = NULL;
 
-            if(curr_decl->instr_list == vector<int>() && curr_decl->ptr == 0)
+            if(curr_decl->instr_list == vector<int>() && curr_decl->ptrs == 0)
             {
                 s3->size = curr_size;
                 s3->type.type = curr_type;
@@ -3088,7 +3089,7 @@ yyreduce:
             else if (curr_decl->instr_list != vector<int>())
             {
                 s3->type.type = ARR;
-                s3->type.next_type = curr_type;
+                s3->type.nextType = curr_type;
                 s3->type.dimensions = curr_decl->instr_list;
                 vector<int> temp = s3->type.dimensions;
 
@@ -3102,368 +3103,369 @@ yyreduce:
                 current_symbol_table->offset -= SIZE_OF_INT;
             }
 
-            else if (curr_decl->ptr != 0)
+            else if (curr_decl->ptrs != 0)
             {
                 s3->type.type = PTR;
-                s3->type.next_type = curr_type;
-                s3->type.ptr = curr_decl->ptr;
+                s3->type.nextType = curr_type;
+                s3->type.ptr = curr_decl->ptrs;
                 current_symbol_table->offset += (SIZE_OF_PTR - curr_size);
                 s3->size = SIZE_OF_PTR;
             }
         }
     }
-#line 3116 "ass6_21CS10014_21CS30032.tab.c"
+#line 3117 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 84:
-#line 1007 "ass6_21CS10014_21CS30032.y"
+#line 1008 "ass6_21CS10014_21CS30032.y"
                                                          { /* No Action Taken */ }
-#line 3122 "ass6_21CS10014_21CS30032.tab.c"
+#line 3123 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 85:
-#line 1008 "ass6_21CS10014_21CS30032.y"
+#line 1009 "ass6_21CS10014_21CS30032.y"
                                                 { /* No Action Taken */ }
-#line 3128 "ass6_21CS10014_21CS30032.tab.c"
+#line 3129 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 86:
-#line 1009 "ass6_21CS10014_21CS30032.y"
+#line 1010 "ass6_21CS10014_21CS30032.y"
                                                 { /* No Action Taken */ }
-#line 3134 "ass6_21CS10014_21CS30032.tab.c"
+#line 3135 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 87:
-#line 1010 "ass6_21CS10014_21CS30032.y"
+#line 1011 "ass6_21CS10014_21CS30032.y"
                                                     { /* No Action Taken */ }
-#line 3140 "ass6_21CS10014_21CS30032.tab.c"
+#line 3141 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 88:
-#line 1014 "ass6_21CS10014_21CS30032.y"
+#line 1015 "ass6_21CS10014_21CS30032.y"
                              { /* No Action Taken */ }
-#line 3146 "ass6_21CS10014_21CS30032.tab.c"
+#line 3147 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 89:
-#line 1016 "ass6_21CS10014_21CS30032.y"
+#line 1017 "ass6_21CS10014_21CS30032.y"
     { /* No Action Taken */ }
-#line 3152 "ass6_21CS10014_21CS30032.tab.c"
+#line 3153 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 90:
-#line 1020 "ass6_21CS10014_21CS30032.y"
+#line 1021 "ass6_21CS10014_21CS30032.y"
                       { /* No Action Taken */ }
-#line 3158 "ass6_21CS10014_21CS30032.tab.c"
+#line 3159 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 91:
-#line 1021 "ass6_21CS10014_21CS30032.y"
+#line 1022 "ass6_21CS10014_21CS30032.y"
                                                  { /* No Action Taken */ }
-#line 3164 "ass6_21CS10014_21CS30032.tab.c"
+#line 3165 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 92:
-#line 1026 "ass6_21CS10014_21CS30032.y"
+#line 1027 "ass6_21CS10014_21CS30032.y"
     { 
         (yyval.dec) = (yyvsp[0].dec);
         (yyval.dec)->initial_value = NULL;
     }
-#line 3173 "ass6_21CS10014_21CS30032.tab.c"
+#line 3174 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 93:
-#line 1031 "ass6_21CS10014_21CS30032.y"
+#line 1032 "ass6_21CS10014_21CS30032.y"
     {
         (yyval.dec) = (yyvsp[-2].dec);
         (yyval.dec)->initial_value = (yyvsp[0].expr);
     }
-#line 3182 "ass6_21CS10014_21CS30032.tab.c"
+#line 3183 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 94:
-#line 1038 "ass6_21CS10014_21CS30032.y"
+#line 1039 "ass6_21CS10014_21CS30032.y"
              { /* No Action Taken */ }
-#line 3188 "ass6_21CS10014_21CS30032.tab.c"
+#line 3189 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 95:
-#line 1039 "ass6_21CS10014_21CS30032.y"
+#line 1040 "ass6_21CS10014_21CS30032.y"
              { /* No Action Taken */ }
-#line 3194 "ass6_21CS10014_21CS30032.tab.c"
+#line 3195 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 96:
-#line 1040 "ass6_21CS10014_21CS30032.y"
+#line 1041 "ass6_21CS10014_21CS30032.y"
            { /* No Action Taken */ }
-#line 3200 "ass6_21CS10014_21CS30032.tab.c"
+#line 3201 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 97:
-#line 1041 "ass6_21CS10014_21CS30032.y"
+#line 1042 "ass6_21CS10014_21CS30032.y"
                { /* No Action Taken */ }
-#line 3206 "ass6_21CS10014_21CS30032.tab.c"
+#line 3207 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 98:
-#line 1047 "ass6_21CS10014_21CS30032.y"
+#line 1048 "ass6_21CS10014_21CS30032.y"
              { (yyval.types) = VOID; }
-#line 3212 "ass6_21CS10014_21CS30032.tab.c"
+#line 3213 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 99:
-#line 1048 "ass6_21CS10014_21CS30032.y"
+#line 1049 "ass6_21CS10014_21CS30032.y"
              { (yyval.types) = CHAR; }
-#line 3218 "ass6_21CS10014_21CS30032.tab.c"
+#line 3219 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 100:
-#line 1049 "ass6_21CS10014_21CS30032.y"
+#line 1050 "ass6_21CS10014_21CS30032.y"
             { /* No Action Taken */ }
-#line 3224 "ass6_21CS10014_21CS30032.tab.c"
+#line 3225 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 101:
-#line 1050 "ass6_21CS10014_21CS30032.y"
+#line 1051 "ass6_21CS10014_21CS30032.y"
             { (yyval.types) = INT; }
-#line 3230 "ass6_21CS10014_21CS30032.tab.c"
+#line 3231 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 102:
-#line 1051 "ass6_21CS10014_21CS30032.y"
+#line 1052 "ass6_21CS10014_21CS30032.y"
            { /* No Action Taken */ }
-#line 3236 "ass6_21CS10014_21CS30032.tab.c"
+#line 3237 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 103:
-#line 1052 "ass6_21CS10014_21CS30032.y"
+#line 1053 "ass6_21CS10014_21CS30032.y"
               { (yyval.types) = FLOAT; }
-#line 3242 "ass6_21CS10014_21CS30032.tab.c"
+#line 3243 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 104:
-#line 1053 "ass6_21CS10014_21CS30032.y"
+#line 1054 "ass6_21CS10014_21CS30032.y"
              { /* No Action Taken */ }
-#line 3248 "ass6_21CS10014_21CS30032.tab.c"
+#line 3249 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 105:
-#line 1054 "ass6_21CS10014_21CS30032.y"
+#line 1055 "ass6_21CS10014_21CS30032.y"
              { /* No Action Taken */ }
-#line 3254 "ass6_21CS10014_21CS30032.tab.c"
+#line 3255 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 106:
-#line 1055 "ass6_21CS10014_21CS30032.y"
+#line 1056 "ass6_21CS10014_21CS30032.y"
                { /* No Action Taken */ }
-#line 3260 "ass6_21CS10014_21CS30032.tab.c"
+#line 3261 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 107:
-#line 1056 "ass6_21CS10014_21CS30032.y"
+#line 1057 "ass6_21CS10014_21CS30032.y"
              { /* No Action Taken */ }
-#line 3266 "ass6_21CS10014_21CS30032.tab.c"
+#line 3267 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 108:
-#line 1057 "ass6_21CS10014_21CS30032.y"
+#line 1058 "ass6_21CS10014_21CS30032.y"
               { /* No Action Taken */ }
-#line 3272 "ass6_21CS10014_21CS30032.tab.c"
+#line 3273 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 109:
-#line 1058 "ass6_21CS10014_21CS30032.y"
+#line 1059 "ass6_21CS10014_21CS30032.y"
                 { /* No Action Taken */ }
-#line 3278 "ass6_21CS10014_21CS30032.tab.c"
+#line 3279 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 110:
-#line 1059 "ass6_21CS10014_21CS30032.y"
+#line 1060 "ass6_21CS10014_21CS30032.y"
                      { /* No Action Taken */ }
-#line 3284 "ass6_21CS10014_21CS30032.tab.c"
+#line 3285 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 111:
-#line 1063 "ass6_21CS10014_21CS30032.y"
+#line 1064 "ass6_21CS10014_21CS30032.y"
                                                   { /* No Action Taken */ }
-#line 3290 "ass6_21CS10014_21CS30032.tab.c"
+#line 3291 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 112:
-#line 1064 "ass6_21CS10014_21CS30032.y"
+#line 1065 "ass6_21CS10014_21CS30032.y"
                                                   { /* No Action Taken */ }
-#line 3296 "ass6_21CS10014_21CS30032.tab.c"
+#line 3297 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 113:
-#line 1068 "ass6_21CS10014_21CS30032.y"
+#line 1069 "ass6_21CS10014_21CS30032.y"
                                { /* No Action Taken */ }
-#line 3302 "ass6_21CS10014_21CS30032.tab.c"
+#line 3303 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 114:
-#line 1070 "ass6_21CS10014_21CS30032.y"
+#line 1071 "ass6_21CS10014_21CS30032.y"
     { /* No Action Taken */ }
-#line 3308 "ass6_21CS10014_21CS30032.tab.c"
+#line 3309 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 115:
-#line 1074 "ass6_21CS10014_21CS30032.y"
+#line 1075 "ass6_21CS10014_21CS30032.y"
                                                                                  { /* No Action Taken */ }
-#line 3314 "ass6_21CS10014_21CS30032.tab.c"
+#line 3315 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 116:
-#line 1075 "ass6_21CS10014_21CS30032.y"
+#line 1076 "ass6_21CS10014_21CS30032.y"
                                                                                        { /* No Action Taken */ }
-#line 3320 "ass6_21CS10014_21CS30032.tab.c"
+#line 3321 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 117:
-#line 1076 "ass6_21CS10014_21CS30032.y"
+#line 1077 "ass6_21CS10014_21CS30032.y"
                       { /* No Action Taken */ }
-#line 3326 "ass6_21CS10014_21CS30032.tab.c"
+#line 3327 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 118:
-#line 1080 "ass6_21CS10014_21CS30032.y"
+#line 1081 "ass6_21CS10014_21CS30032.y"
                  { /* No Action Taken */ }
-#line 3332 "ass6_21CS10014_21CS30032.tab.c"
+#line 3333 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 119:
-#line 1081 "ass6_21CS10014_21CS30032.y"
+#line 1082 "ass6_21CS10014_21CS30032.y"
              { /* No Action Taken */ }
-#line 3338 "ass6_21CS10014_21CS30032.tab.c"
+#line 3339 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 120:
-#line 1085 "ass6_21CS10014_21CS30032.y"
+#line 1086 "ass6_21CS10014_21CS30032.y"
                  { /* No Action Taken */ }
-#line 3344 "ass6_21CS10014_21CS30032.tab.c"
+#line 3345 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 121:
-#line 1086 "ass6_21CS10014_21CS30032.y"
+#line 1087 "ass6_21CS10014_21CS30032.y"
                                        { /* No Action Taken */ }
-#line 3350 "ass6_21CS10014_21CS30032.tab.c"
+#line 3351 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 122:
-#line 1090 "ass6_21CS10014_21CS30032.y"
+#line 1091 "ass6_21CS10014_21CS30032.y"
                  { /* No Action Taken */ }
-#line 3356 "ass6_21CS10014_21CS30032.tab.c"
+#line 3357 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 123:
-#line 1091 "ass6_21CS10014_21CS30032.y"
+#line 1092 "ass6_21CS10014_21CS30032.y"
                                               { /* No Action Taken */ }
-#line 3362 "ass6_21CS10014_21CS30032.tab.c"
+#line 3363 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 124:
-#line 1095 "ass6_21CS10014_21CS30032.y"
+#line 1096 "ass6_21CS10014_21CS30032.y"
             { /* No Action Taken */ }
-#line 3368 "ass6_21CS10014_21CS30032.tab.c"
+#line 3369 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 125:
-#line 1096 "ass6_21CS10014_21CS30032.y"
+#line 1097 "ass6_21CS10014_21CS30032.y"
                { /* No Action Taken */ }
-#line 3374 "ass6_21CS10014_21CS30032.tab.c"
+#line 3375 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 126:
-#line 1097 "ass6_21CS10014_21CS30032.y"
+#line 1098 "ass6_21CS10014_21CS30032.y"
                { /* No Action Taken */ }
-#line 3380 "ass6_21CS10014_21CS30032.tab.c"
+#line 3381 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 127:
-#line 1101 "ass6_21CS10014_21CS30032.y"
+#line 1102 "ass6_21CS10014_21CS30032.y"
              { /* No Action Taken */ }
-#line 3386 "ass6_21CS10014_21CS30032.tab.c"
+#line 3387 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 128:
-#line 1107 "ass6_21CS10014_21CS30032.y"
+#line 1108 "ass6_21CS10014_21CS30032.y"
     {
         (yyval.dec) = (yyvsp[0].dec);
-        (yyval.dec)->ptr = (yyvsp[-1].intval);
+        (yyval.dec)->ptrs = (yyvsp[-1].intval);
     }
-#line 3395 "ass6_21CS10014_21CS30032.tab.c"
+#line 3396 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 129:
-#line 1112 "ass6_21CS10014_21CS30032.y"
+#line 1113 "ass6_21CS10014_21CS30032.y"
     {
         (yyval.dec) = (yyvsp[0].dec);
-        (yyval.dec)->ptr = 0;
+        (yyval.dec)->ptrs = 0;
     }
-#line 3404 "ass6_21CS10014_21CS30032.tab.c"
+#line 3405 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 130:
-#line 1120 "ass6_21CS10014_21CS30032.y"
+#line 1121 "ass6_21CS10014_21CS30032.y"
     {
         (yyval.dec) = new declaration();
         (yyval.dec)->name = *((yyvsp[0].str));
     }
-#line 3413 "ass6_21CS10014_21CS30032.tab.c"
+#line 3414 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 131:
-#line 1125 "ass6_21CS10014_21CS30032.y"
+#line 1126 "ass6_21CS10014_21CS30032.y"
     {
         /* No Action Taken */
     }
-#line 3421 "ass6_21CS10014_21CS30032.tab.c"
+#line 3422 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 132:
-#line 1129 "ass6_21CS10014_21CS30032.y"
+#line 1130 "ass6_21CS10014_21CS30032.y"
     {
         (yyval.dec) = (yyvsp[-3].dec);
         (yyvsp[-3].dec)->type = ARR;
         (yyvsp[-3].dec)->next_type = INT;
         (yyval.dec)->instr_list.push_back(0); 
     }
-#line 3432 "ass6_21CS10014_21CS30032.tab.c"
+#line 3433 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 133:
-#line 1136 "ass6_21CS10014_21CS30032.y"
+#line 1137 "ass6_21CS10014_21CS30032.y"
     {
         /* No Action Taken */
     }
-#line 3440 "ass6_21CS10014_21CS30032.tab.c"
+#line 3441 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 134:
-#line 1140 "ass6_21CS10014_21CS30032.y"
+#line 1141 "ass6_21CS10014_21CS30032.y"
     {
         /* No Action Taken */
     }
-#line 3448 "ass6_21CS10014_21CS30032.tab.c"
+#line 3449 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 135:
-#line 1144 "ass6_21CS10014_21CS30032.y"
+#line 1145 "ass6_21CS10014_21CS30032.y"
     {
         (yyval.dec) = (yyvsp[-4].dec);
         (yyvsp[-4].dec)->type = ARR;
         (yyvsp[-4].dec)->next_type = INT;
-        (yyval.dec)->instr_list.push_back(current_symbol_table->lookup((yyvsp[-1].expr)->loc)->initial_value);
+        int id = current_symbol_table->lookup((yyvsp[-1].expr)->loc)->initial_value->int_val;
+        (yyval.dec)->instr_list.push_back(id);
         // check
     }
-#line 3460 "ass6_21CS10014_21CS30032.tab.c"
+#line 3462 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 136:
-#line 1152 "ass6_21CS10014_21CS30032.y"
+#line 1154 "ass6_21CS10014_21CS30032.y"
     {
         (yyval.dec) = (yyvsp[-3].dec);
-        (yyval.dec)->type = FUNCTION;
+        (yyval.dec)->type = FUNC;
         symbol* s1 = current_symbol_table->lookup((yyvsp[-3].dec)->name, (yyvsp[-3].dec)->type);
         symbol_table* st = new symbol_table();
         s1->nested_table = st;
@@ -3476,14 +3478,14 @@ yyreduce:
             if (curr_param->type.type == ARR)
             {
                 st->lookup(curr_param->name, curr_param->type.type);
-                st->lookup(curr_param->name)->type.next_type = INT;
+                st->lookup(curr_param->name)->type.nextType = INT;
                 st->lookup(curr_param->name)->type.dimensions.push_back(0);
             }
             
             else if (curr_param->type.type == PTR)
             {
                 st->lookup(curr_param->name, curr_param->type.type);
-                st->lookup(curr_param->name)->type.next_type = INT;
+                st->lookup(curr_param->name)->type.nextType = INT;
                 st->lookup(curr_param->name)->type.ptr = curr_param->type.ptr;
             }
             
@@ -3494,350 +3496,351 @@ yyreduce:
         }
 
         current_symbol_table = st;
-        emit((yyvsp[-3].dec)->name, "", "", FUNC_BEGIN);
+        emit((yyvsp[-3].dec)->name, "", "", FUNC_BEG);
     }
-#line 3500 "ass6_21CS10014_21CS30032.tab.c"
+#line 3502 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 137:
-#line 1188 "ass6_21CS10014_21CS30032.y"
+#line 1190 "ass6_21CS10014_21CS30032.y"
     {
         /* No Action Taken */
     }
-#line 3508 "ass6_21CS10014_21CS30032.tab.c"
+#line 3510 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 138:
-#line 1192 "ass6_21CS10014_21CS30032.y"
+#line 1194 "ass6_21CS10014_21CS30032.y"
     {
         (yyval.dec) = (yyvsp[-4].dec);
         (yyval.dec)->type = PTR;
         (yyval.dec)->next_type = INT;
     }
-#line 3518 "ass6_21CS10014_21CS30032.tab.c"
+#line 3520 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 139:
-#line 1202 "ass6_21CS10014_21CS30032.y"
+#line 1204 "ass6_21CS10014_21CS30032.y"
                           { /* No Action Taken */ }
-#line 3524 "ass6_21CS10014_21CS30032.tab.c"
+#line 3526 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 140:
-#line 1203 "ass6_21CS10014_21CS30032.y"
+#line 1205 "ass6_21CS10014_21CS30032.y"
              { /* No Action Taken */ }
-#line 3530 "ass6_21CS10014_21CS30032.tab.c"
+#line 3532 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 141:
-#line 1207 "ass6_21CS10014_21CS30032.y"
+#line 1209 "ass6_21CS10014_21CS30032.y"
                                    { /* No Action Taken */ }
-#line 3536 "ass6_21CS10014_21CS30032.tab.c"
+#line 3538 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 142:
-#line 1208 "ass6_21CS10014_21CS30032.y"
+#line 1210 "ass6_21CS10014_21CS30032.y"
                                            { /* No Action Taken */ }
-#line 3542 "ass6_21CS10014_21CS30032.tab.c"
+#line 3544 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 143:
-#line 1209 "ass6_21CS10014_21CS30032.y"
+#line 1211 "ass6_21CS10014_21CS30032.y"
                        { (yyval.intval) = 1+(yyvsp[0].intval); }
-#line 3548 "ass6_21CS10014_21CS30032.tab.c"
+#line 3550 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 144:
-#line 1210 "ass6_21CS10014_21CS30032.y"
+#line 1212 "ass6_21CS10014_21CS30032.y"
                { /* No Action Taken */ }
-#line 3554 "ass6_21CS10014_21CS30032.tab.c"
+#line 3556 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 145:
-#line 1214 "ass6_21CS10014_21CS30032.y"
+#line 1216 "ass6_21CS10014_21CS30032.y"
                      { /* No Action Taken */ }
-#line 3560 "ass6_21CS10014_21CS30032.tab.c"
+#line 3562 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 146:
-#line 1215 "ass6_21CS10014_21CS30032.y"
+#line 1217 "ass6_21CS10014_21CS30032.y"
                                          { /* No Action Taken */ }
-#line 3566 "ass6_21CS10014_21CS30032.tab.c"
+#line 3568 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 147:
-#line 1219 "ass6_21CS10014_21CS30032.y"
+#line 1221 "ass6_21CS10014_21CS30032.y"
                      { /* No Action Taken */ }
-#line 3572 "ass6_21CS10014_21CS30032.tab.c"
+#line 3574 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 148:
-#line 1220 "ass6_21CS10014_21CS30032.y"
+#line 1222 "ass6_21CS10014_21CS30032.y"
                                     { /* No Action Taken */ }
-#line 3578 "ass6_21CS10014_21CS30032.tab.c"
+#line 3580 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 149:
-#line 1225 "ass6_21CS10014_21CS30032.y"
+#line 1227 "ass6_21CS10014_21CS30032.y"
     {
         (yyval.p_list) = new vector<param*>();
         (yyval.p_list)->push_back((yyvsp[0].p));
     }
-#line 3587 "ass6_21CS10014_21CS30032.tab.c"
+#line 3589 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 150:
-#line 1230 "ass6_21CS10014_21CS30032.y"
+#line 1232 "ass6_21CS10014_21CS30032.y"
     {
         (yyvsp[-2].p_list)->push_back((yyvsp[0].p));  
         (yyval.p_list) = (yyvsp[-2].p_list);
     }
-#line 3596 "ass6_21CS10014_21CS30032.tab.c"
+#line 3598 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 151:
-#line 1238 "ass6_21CS10014_21CS30032.y"
+#line 1240 "ass6_21CS10014_21CS30032.y"
     {
         (yyval.p) = new param();
         (yyval.p)->name = (yyvsp[0].dec)->name;
         if ((yyvsp[0].dec)->type == ARR)
         {
             (yyval.p)->type.type = ARR;
-            (yyval.p)->type.next_type = (yyvsp[-1].types);
+            (yyval.p)->type.nextType = (yyvsp[-1].types);
         }
         else if ((yyvsp[0].dec)->pc)
         {
             (yyval.p)->type.type = PTR;
-            (yyval.p)->type.next_type = (yyvsp[-1].types);
+            (yyval.p)->type.nextType = (yyvsp[-1].types);
         }
         else
         {
             (yyval.p)->type.type = (yyvsp[-1].types);
         }
     }
-#line 3619 "ass6_21CS10014_21CS30032.tab.c"
+#line 3621 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 152:
-#line 1256 "ass6_21CS10014_21CS30032.y"
+#line 1258 "ass6_21CS10014_21CS30032.y"
                              { /* No Action Taken */ }
-#line 3625 "ass6_21CS10014_21CS30032.tab.c"
+#line 3627 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 153:
-#line 1260 "ass6_21CS10014_21CS30032.y"
+#line 1262 "ass6_21CS10014_21CS30032.y"
                  { /* No Action Taken */ }
-#line 3631 "ass6_21CS10014_21CS30032.tab.c"
+#line 3633 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 154:
-#line 1261 "ass6_21CS10014_21CS30032.y"
+#line 1263 "ass6_21CS10014_21CS30032.y"
                                        { /* No Action Taken */ }
-#line 3637 "ass6_21CS10014_21CS30032.tab.c"
+#line 3639 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 155:
-#line 1265 "ass6_21CS10014_21CS30032.y"
+#line 1267 "ass6_21CS10014_21CS30032.y"
                                { /* No Action Taken */ }
-#line 3643 "ass6_21CS10014_21CS30032.tab.c"
+#line 3645 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 156:
-#line 1269 "ass6_21CS10014_21CS30032.y"
+#line 1271 "ass6_21CS10014_21CS30032.y"
                             { /* No Action Taken */ }
-#line 3649 "ass6_21CS10014_21CS30032.tab.c"
+#line 3651 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 157:
-#line 1270 "ass6_21CS10014_21CS30032.y"
+#line 1272 "ass6_21CS10014_21CS30032.y"
                                                               { /* No Action Taken */ }
-#line 3655 "ass6_21CS10014_21CS30032.tab.c"
+#line 3657 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 158:
-#line 1271 "ass6_21CS10014_21CS30032.y"
+#line 1273 "ass6_21CS10014_21CS30032.y"
                                                                     { /* No Action Taken */ }
-#line 3661 "ass6_21CS10014_21CS30032.tab.c"
+#line 3663 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 159:
-#line 1275 "ass6_21CS10014_21CS30032.y"
+#line 1277 "ass6_21CS10014_21CS30032.y"
                                   { /* No Action Taken */ }
-#line 3667 "ass6_21CS10014_21CS30032.tab.c"
+#line 3669 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 160:
-#line 1276 "ass6_21CS10014_21CS30032.y"
+#line 1278 "ass6_21CS10014_21CS30032.y"
                                                          { /* No Action Taken */ }
-#line 3673 "ass6_21CS10014_21CS30032.tab.c"
+#line 3675 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 161:
-#line 1280 "ass6_21CS10014_21CS30032.y"
+#line 1282 "ass6_21CS10014_21CS30032.y"
                   { /* No Action Taken */ }
-#line 3679 "ass6_21CS10014_21CS30032.tab.c"
+#line 3681 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 162:
-#line 1281 "ass6_21CS10014_21CS30032.y"
+#line 1283 "ass6_21CS10014_21CS30032.y"
              { /* No Action Taken */ }
-#line 3685 "ass6_21CS10014_21CS30032.tab.c"
+#line 3687 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 163:
-#line 1285 "ass6_21CS10014_21CS30032.y"
+#line 1287 "ass6_21CS10014_21CS30032.y"
                                { /* No Action Taken */ }
-#line 3691 "ass6_21CS10014_21CS30032.tab.c"
+#line 3693 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 164:
-#line 1289 "ass6_21CS10014_21CS30032.y"
+#line 1291 "ass6_21CS10014_21CS30032.y"
                  { /* No Action Taken */ }
-#line 3697 "ass6_21CS10014_21CS30032.tab.c"
+#line 3699 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 165:
-#line 1290 "ass6_21CS10014_21CS30032.y"
+#line 1292 "ass6_21CS10014_21CS30032.y"
                                  { /* No Action Taken */ }
-#line 3703 "ass6_21CS10014_21CS30032.tab.c"
+#line 3705 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 166:
-#line 1294 "ass6_21CS10014_21CS30032.y"
+#line 1296 "ass6_21CS10014_21CS30032.y"
                                                                    { /* No Action Taken */ }
-#line 3709 "ass6_21CS10014_21CS30032.tab.c"
+#line 3711 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 167:
-#line 1295 "ass6_21CS10014_21CS30032.y"
+#line 1297 "ass6_21CS10014_21CS30032.y"
                      { /* No Action Taken */ }
-#line 3715 "ass6_21CS10014_21CS30032.tab.c"
+#line 3717 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 168:
-#line 1299 "ass6_21CS10014_21CS30032.y"
+#line 1301 "ass6_21CS10014_21CS30032.y"
                         { /* No Action Taken */ }
-#line 3721 "ass6_21CS10014_21CS30032.tab.c"
+#line 3723 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 169:
-#line 1300 "ass6_21CS10014_21CS30032.y"
+#line 1302 "ass6_21CS10014_21CS30032.y"
                          { /* No Action Taken */ }
-#line 3727 "ass6_21CS10014_21CS30032.tab.c"
+#line 3729 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 170:
-#line 1301 "ass6_21CS10014_21CS30032.y"
+#line 1303 "ass6_21CS10014_21CS30032.y"
                            { /* No Action Taken */ }
-#line 3733 "ass6_21CS10014_21CS30032.tab.c"
+#line 3735 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 171:
-#line 1302 "ass6_21CS10014_21CS30032.y"
+#line 1304 "ass6_21CS10014_21CS30032.y"
                           { /* No Action Taken */ }
-#line 3739 "ass6_21CS10014_21CS30032.tab.c"
+#line 3741 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 172:
-#line 1303 "ass6_21CS10014_21CS30032.y"
+#line 1305 "ass6_21CS10014_21CS30032.y"
                           { /* No Action Taken */ }
-#line 3745 "ass6_21CS10014_21CS30032.tab.c"
+#line 3747 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 173:
-#line 1304 "ass6_21CS10014_21CS30032.y"
+#line 1306 "ass6_21CS10014_21CS30032.y"
                      { /* No Action Taken */ }
-#line 3751 "ass6_21CS10014_21CS30032.tab.c"
+#line 3753 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 174:
-#line 1308 "ass6_21CS10014_21CS30032.y"
+#line 1310 "ass6_21CS10014_21CS30032.y"
                                  { /* No Action Taken */ }
-#line 3757 "ass6_21CS10014_21CS30032.tab.c"
+#line 3759 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 175:
-#line 1309 "ass6_21CS10014_21CS30032.y"
+#line 1311 "ass6_21CS10014_21CS30032.y"
                                                { /* No Action Taken */ }
-#line 3763 "ass6_21CS10014_21CS30032.tab.c"
+#line 3765 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 176:
-#line 1310 "ass6_21CS10014_21CS30032.y"
+#line 1312 "ass6_21CS10014_21CS30032.y"
                               { /* No Action Taken */ }
-#line 3769 "ass6_21CS10014_21CS30032.tab.c"
+#line 3771 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 177:
-#line 1314 "ass6_21CS10014_21CS30032.y"
+#line 1316 "ass6_21CS10014_21CS30032.y"
                                              { /* No Action Taken */ }
-#line 3775 "ass6_21CS10014_21CS30032.tab.c"
+#line 3777 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 178:
-#line 1315 "ass6_21CS10014_21CS30032.y"
+#line 1317 "ass6_21CS10014_21CS30032.y"
                                                              { (yyval.expr) = (yyvsp[-1].expr); }
-#line 3781 "ass6_21CS10014_21CS30032.tab.c"
+#line 3783 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 179:
-#line 1320 "ass6_21CS10014_21CS30032.y"
+#line 1322 "ass6_21CS10014_21CS30032.y"
     { 
         (yyval.expr) = (yyvsp[0].expr); 
         backpatch((yyvsp[0].expr)->nextlist, next_instr);
     }
-#line 3790 "ass6_21CS10014_21CS30032.tab.c"
+#line 3792 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 180:
-#line 1325 "ass6_21CS10014_21CS30032.y"
+#line 1327 "ass6_21CS10014_21CS30032.y"
     {
         (yyval.expr) = new expression();
         backpatch((yyvsp[-2].expr)->nextlist, (yyvsp[-1].expr)->instruction);
         (yyval.expr)->nextlist = (yyvsp[0].expr)->nextlist;
     }
-#line 3800 "ass6_21CS10014_21CS30032.tab.c"
+#line 3802 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 181:
-#line 1333 "ass6_21CS10014_21CS30032.y"
+#line 1335 "ass6_21CS10014_21CS30032.y"
                   { (yyval.expr) = new expression(); }
-#line 3806 "ass6_21CS10014_21CS30032.tab.c"
+#line 3808 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 182:
-#line 1334 "ass6_21CS10014_21CS30032.y"
+#line 1336 "ass6_21CS10014_21CS30032.y"
                 { /* No Action Taken */ }
-#line 3812 "ass6_21CS10014_21CS30032.tab.c"
+#line 3814 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 183:
-#line 1338 "ass6_21CS10014_21CS30032.y"
+#line 1340 "ass6_21CS10014_21CS30032.y"
                            { /* No Action Taken */ }
-#line 3818 "ass6_21CS10014_21CS30032.tab.c"
+#line 3820 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 184:
-#line 1339 "ass6_21CS10014_21CS30032.y"
+#line 1341 "ass6_21CS10014_21CS30032.y"
                 { (yyval.expr) = new expression(); }
-#line 3824 "ass6_21CS10014_21CS30032.tab.c"
+#line 3826 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 185:
-#line 1343 "ass6_21CS10014_21CS30032.y"
+#line 1345 "ass6_21CS10014_21CS30032.y"
     {
         backpatch((yyvsp[-4].expr)->nextlist, next_instr);
         inttobool((yyvsp[-5].expr));
         (yyval.expr) = new expression();
-        backpatch((yyvsp[-5].expr)->truelist, (yyvsp[-2].expr));
+        backpatch((yyvsp[-5].expr)->truelist, (yyvsp[-2].expr)->instruction);
 
-        (yyval.expr)->nextlist = merge((yyvsp[-5].expr)->falselist, merge((yyvsp[-1].expr)->nextlist, (yyvsp[0].expr)->nextlist));
+        (yyvsp[-1].expr)->nextlist = merge((yyvsp[0].expr)->nextlist, (yyvsp[-1].expr)->nextlist);
+        (yyval.expr)->nextlist = merge((yyvsp[-5].expr)->falselist, (yyvsp[-1].expr)->nextlist);
     }
-#line 3837 "ass6_21CS10014_21CS30032.tab.c"
+#line 3840 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 186:
-#line 1352 "ass6_21CS10014_21CS30032.y"
+#line 1355 "ass6_21CS10014_21CS30032.y"
     {
         backpatch((yyvsp[-8].expr)->nextlist, next_instr);
         inttobool((yyvsp[-9].expr));
@@ -3845,19 +3848,21 @@ yyreduce:
         backpatch((yyvsp[-9].expr)->truelist, (yyvsp[-6].expr)->instruction);
         backpatch((yyvsp[-9].expr)->falselist, (yyvsp[-2].expr)->instruction);
 
-        (yyval.expr)->nextlist = merge(merge(merge((yyvsp[-5].expr)->nextlist, (yyvsp[-4].expr)->nextlist), (yyvsp[-1].expr)->nextlist), (yyvsp[0].expr)->nextlist);
+        (yyval.expr)->nextlist = merge((yyvsp[-5].expr)->nextlist, (yyvsp[-4].expr)->nextlist);
+        (yyval.expr)->nextlist = merge((yyval.expr)->nextlist, (yyvsp[-1].expr)->nextlist);
+        (yyval.expr)->nextlist = merge((yyval.expr)->nextlist, (yyvsp[0].expr)->nextlist);
     }
-#line 3851 "ass6_21CS10014_21CS30032.tab.c"
+#line 3856 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 187:
-#line 1361 "ass6_21CS10014_21CS30032.y"
+#line 1366 "ass6_21CS10014_21CS30032.y"
                                                                          { /* No Action Taken */ }
-#line 3857 "ass6_21CS10014_21CS30032.tab.c"
+#line 3862 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 188:
-#line 1366 "ass6_21CS10014_21CS30032.y"
+#line 1371 "ass6_21CS10014_21CS30032.y"
     {
         (yyval.expr) = new expression();
         emit("", "", "", GOTO);
@@ -3868,11 +3873,11 @@ yyreduce:
         backpatch((yyvsp[-4].expr)->truelist, (yyvsp[-1].expr)->instruction);
         backpatch((yyvsp[0].expr)->nextlist, (yyvsp[-6].expr)->instruction);
     }
-#line 3872 "ass6_21CS10014_21CS30032.tab.c"
+#line 3877 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 189:
-#line 1377 "ass6_21CS10014_21CS30032.y"
+#line 1382 "ass6_21CS10014_21CS30032.y"
     {
         (yyval.expr) = new expression();
         backpatch((yyvsp[-2].expr)->nextlist, next_instr);
@@ -3881,15 +3886,16 @@ yyreduce:
         backpatch((yyvsp[-3].expr)->truelist, (yyvsp[-8].expr)->instruction);
         backpatch((yyvsp[-7].expr)->nextlist, (yyvsp[-6].expr)->instruction);
     }
-#line 3885 "ass6_21CS10014_21CS30032.tab.c"
+#line 3890 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 190:
-#line 1386 "ass6_21CS10014_21CS30032.y"
+#line 1391 "ass6_21CS10014_21CS30032.y"
     {
         (yyval.expr) = new expression();
         emit("", "", "", GOTO);
-        (yyvsp[0].expr)->nextlist = merge((yyvsp[0].expr)->nextlist, makelist(next_instr-1));
+        auto temp = makelist(next_instr-1);
+        (yyvsp[0].expr)->nextlist = merge((yyvsp[0].expr)->nextlist, temp);
         backpatch((yyvsp[0].expr)->nextlist, (yyvsp[-5].expr)->instruction);
         backpatch((yyvsp[-6].expr)->nextlist, next_instr);
         backpatch((yyvsp[-3].expr)->nextlist, (yyvsp[-8].expr)->instruction);
@@ -3897,86 +3903,86 @@ yyreduce:
         backpatch((yyvsp[-7].expr)->truelist, (yyvsp[-1].expr)->instruction);
         (yyval.expr)->nextlist = (yyvsp[-7].expr)->falselist;
     }
-#line 3901 "ass6_21CS10014_21CS30032.tab.c"
-    break;
-
-  case 191:
-#line 1400 "ass6_21CS10014_21CS30032.y"
-                                  { /* No Action Taken */ }
 #line 3907 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
-  case 192:
-#line 1401 "ass6_21CS10014_21CS30032.y"
-                         { /* No Action Taken */ }
+  case 191:
+#line 1406 "ass6_21CS10014_21CS30032.y"
+                                  { /* No Action Taken */ }
 #line 3913 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
-  case 193:
-#line 1402 "ass6_21CS10014_21CS30032.y"
-                      { /* No Action Taken */ }
+  case 192:
+#line 1407 "ass6_21CS10014_21CS30032.y"
+                         { /* No Action Taken */ }
 #line 3919 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
+  case 193:
+#line 1408 "ass6_21CS10014_21CS30032.y"
+                      { /* No Action Taken */ }
+#line 3925 "ass6_21CS10014_21CS30032.tab.c"
+    break;
+
   case 194:
-#line 1404 "ass6_21CS10014_21CS30032.y"
+#line 1410 "ass6_21CS10014_21CS30032.y"
     {
         if (current_symbol_table->lookup("RETVAL")->type.type == VOID) emit("", "", "", RETURN);
-        (yyval.expr) = new statement();
+        (yyval.expr) = new expression();
     }
-#line 3928 "ass6_21CS10014_21CS30032.tab.c"
+#line 3934 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 195:
-#line 1409 "ass6_21CS10014_21CS30032.y"
+#line 1415 "ass6_21CS10014_21CS30032.y"
     {
         if (current_symbol_table->lookup("RETVAL")->type.type == current_symbol_table->lookup((yyvsp[-1].expr)->loc)->type.type) emit((yyvsp[-1].expr)->loc, "", "", RETURN);
-        (yyval.expr) = new statement();
+        (yyval.expr) = new expression();
     }
-#line 3937 "ass6_21CS10014_21CS30032.tab.c"
-    break;
-
-  case 196:
-#line 1417 "ass6_21CS10014_21CS30032.y"
-                           { /* No Action Taken */ }
 #line 3943 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
-  case 197:
-#line 1418 "ass6_21CS10014_21CS30032.y"
-                                            { /* No Action Taken */ }
+  case 196:
+#line 1423 "ass6_21CS10014_21CS30032.y"
+                           { /* No Action Taken */ }
 #line 3949 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
-  case 198:
-#line 1422 "ass6_21CS10014_21CS30032.y"
-                          { /* No Action Taken */ }
+  case 197:
+#line 1424 "ass6_21CS10014_21CS30032.y"
+                                            { /* No Action Taken */ }
 #line 3955 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
-  case 199:
-#line 1423 "ass6_21CS10014_21CS30032.y"
-                  { /* No Action Taken */ }
+  case 198:
+#line 1428 "ass6_21CS10014_21CS30032.y"
+                          { /* No Action Taken */ }
 #line 3961 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
-  case 200:
-#line 1428 "ass6_21CS10014_21CS30032.y"
-                                                                            { /* No Action Taken */ }
+  case 199:
+#line 1429 "ass6_21CS10014_21CS30032.y"
+                  { /* No Action Taken */ }
 #line 3967 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
+  case 200:
+#line 1434 "ass6_21CS10014_21CS30032.y"
+                                                                            { /* No Action Taken */ }
+#line 3973 "ass6_21CS10014_21CS30032.tab.c"
+    break;
+
   case 201:
-#line 1430 "ass6_21CS10014_21CS30032.y"
+#line 1436 "ass6_21CS10014_21CS30032.y"
     {
         current_symbol_table = &global_symbol_table;
         emit((yyvsp[-1].dec)->name, "", "", FUNC_END);
     }
-#line 3976 "ass6_21CS10014_21CS30032.tab.c"
+#line 3982 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
   case 202:
-#line 1438 "ass6_21CS10014_21CS30032.y"
+#line 1444 "ass6_21CS10014_21CS30032.y"
     {
         data_type temp = (yyvsp[-1].types);
         int size = 0;
@@ -3985,31 +3991,31 @@ yyreduce:
         else if (temp == FLOAT) size = SIZE_OF_FLOAT;
         declaration* new1 = (yyvsp[0].dec);
         symbol* new2 = current_symbol_table->lookup(new1->name);
-        if (new2->type == FUNCTION)
+        if (new1->type == FUNC)
         {
-            symbol* return_value = new2->nested_table->lookup("RETVAL", temp, new2->ptr);
+            symbol* return_value = new2->nested_table->lookup("RETVAL", temp, new1->ptrs);
             new2->size = 0;
             new2->initial_value = NULL;
         }
         (yyval.dec) = (yyvsp[0].dec);
     }
-#line 3997 "ass6_21CS10014_21CS30032.tab.c"
-    break;
-
-  case 203:
-#line 1456 "ass6_21CS10014_21CS30032.y"
-                  { /* No Action Taken */ }
 #line 4003 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
-  case 204:
-#line 1457 "ass6_21CS10014_21CS30032.y"
-                                   { /* No Action Taken */ }
+  case 203:
+#line 1462 "ass6_21CS10014_21CS30032.y"
+                  { /* No Action Taken */ }
 #line 4009 "ass6_21CS10014_21CS30032.tab.c"
     break;
 
+  case 204:
+#line 1463 "ass6_21CS10014_21CS30032.y"
+                                   { /* No Action Taken */ }
+#line 4015 "ass6_21CS10014_21CS30032.tab.c"
+    break;
 
-#line 4013 "ass6_21CS10014_21CS30032.tab.c"
+
+#line 4019 "ass6_21CS10014_21CS30032.tab.c"
 
       default: break;
     }
@@ -4241,7 +4247,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 1460 "ass6_21CS10014_21CS30032.y"
+#line 1466 "ass6_21CS10014_21CS30032.y"
 
 
 void yyerror(string s) {

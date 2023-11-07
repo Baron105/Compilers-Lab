@@ -54,7 +54,7 @@ extern symbol_table* constant_symbol_table;
 extern quad_array quad_table;
 extern int symbol_table_counter;
 extern string current_block_name;
-int next_instr;
+extern int next_instr;
 
 extern char* yytext;
 extern int yyparse();
@@ -184,7 +184,7 @@ list<int> makelist(int );
 
 // function to merge two lists
 // returns a ptr to the merged list
-list<int> merge(list<int> &, list<int> &);
+list<int> merge(list<int>, list<int>);
 
 // function definition for backpatch
 // it takes a list of indices of the quads and a target label

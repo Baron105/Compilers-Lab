@@ -855,7 +855,8 @@ conditional_expression
         emit("", "", "", GOTO);
         backpatch($6->nextlist, next_instr);
         emit($$->loc, $5->loc, "", ASSIGN);
-        templist = merge(templist, makelist(next_instr));
+        list<int> temp = makelist(next_instr);
+        templist = merge(templist, temp);
         emit("", "", "", GOTO);
 
         backpatch($2->nextlist, next_instr);
@@ -949,12 +950,12 @@ declaration
         for (int i = 0; i < decl_list.size(); i++)
         {
             declaration* curr_decl = decl_list[i];
-            if (curr_decl->type == FUNCTION)
+            if (curr_decl->type == FUNC)
             {
                 current_symbol_table = &global_symbol_table;
                 emit(curr_decl->name, "", "", FUNC_END);
                 symbol* s1 = current_symbol_table->lookup(curr_decl->name);
-                symbol* s2 = s1->nested_table->lookup("RETVAL", curr_type, curr_decl->ptr);
+                symbol* s2 = s1->nested_table->lookup("RETVAL", curr_type, curr_decl->ptrs);
                 s1->size = 0;
                 s1->initial_value = NULL;
             }
@@ -962,7 +963,7 @@ declaration
             symbol* s3 = current_symbol_table->lookup(curr_decl->name, curr_type);
             s3->nested_table = NULL;
 
-            if(curr_decl->instr_list == vector<int>() && curr_decl->ptr == 0)
+            if(curr_decl->instr_list == vector<int>() && curr_decl->ptrs == 0)
             {
                 s3->size = curr_size;
                 s3->type.type = curr_type;
@@ -977,7 +978,7 @@ declaration
             else if (curr_decl->instr_list != vector<int>())
             {
                 s3->type.type = ARR;
-                s3->type.next_type = curr_type;
+                s3->type.nextType = curr_type;
                 s3->type.dimensions = curr_decl->instr_list;
                 vector<int> temp = s3->type.dimensions;
 
@@ -991,11 +992,11 @@ declaration
                 current_symbol_table->offset -= SIZE_OF_INT;
             }
 
-            else if (curr_decl->ptr != 0)
+            else if (curr_decl->ptrs != 0)
             {
                 s3->type.type = PTR;
-                s3->type.next_type = curr_type;
-                s3->type.ptr = curr_decl->ptr;
+                s3->type.nextType = curr_type;
+                s3->type.ptr = curr_decl->ptrs;
                 current_symbol_table->offset += (SIZE_OF_PTR - curr_size);
                 s3->size = SIZE_OF_PTR;
             }
@@ -1106,12 +1107,12 @@ declarator
     : pointer direct_declarator
     {
         $$ = $2;
-        $$->ptr = $1;
+        $$->ptrs = $1;
     }
     | direct_declarator
     {
         $$ = $1;
-        $$->ptr = 0;
+        $$->ptrs = 0;
     }
     ;
 
@@ -1145,13 +1146,14 @@ direct_declarator
         $$ = $1;
         $1->type = ARR;
         $1->next_type = INT;
-        $$->instr_list.push_back(current_symbol_table->lookup($4->loc)->initial_value);
+        int id = current_symbol_table->lookup($4->loc)->initial_value->int_val;
+        $$->instr_list.push_back(id);
         // check
     }
     | direct_declarator ROUND_BRACKET_OPEN parameter_type_list ROUND_BRACKET_CLOSE
     {
         $$ = $1;
-        $$->type = FUNCTION;
+        $$->type = FUNC;
         symbol* s1 = current_symbol_table->lookup($1->name, $1->type);
         symbol_table* st = new symbol_table();
         s1->nested_table = st;
@@ -1164,14 +1166,14 @@ direct_declarator
             if (curr_param->type.type == ARR)
             {
                 st->lookup(curr_param->name, curr_param->type.type);
-                st->lookup(curr_param->name)->type.next_type = INT;
+                st->lookup(curr_param->name)->type.nextType = INT;
                 st->lookup(curr_param->name)->type.dimensions.push_back(0);
             }
             
             else if (curr_param->type.type == PTR)
             {
                 st->lookup(curr_param->name, curr_param->type.type);
-                st->lookup(curr_param->name)->type.next_type = INT;
+                st->lookup(curr_param->name)->type.nextType = INT;
                 st->lookup(curr_param->name)->type.ptr = curr_param->type.ptr;
             }
             
@@ -1182,7 +1184,7 @@ direct_declarator
         }
 
         current_symbol_table = st;
-        emit($1->name, "", "", FUNC_BEGIN);
+        emit($1->name, "", "", FUNC_BEG);
     }
     | direct_declarator ROUND_BRACKET_OPEN identifier_list ROUND_BRACKET_CLOSE
     {
@@ -1241,12 +1243,12 @@ parameter_declaration
         if ($2->type == ARR)
         {
             $$->type.type = ARR;
-            $$->type.next_type = $1;
+            $$->type.nextType = $1;
         }
         else if ($2->pc)
         {
             $$->type.type = PTR;
-            $$->type.next_type = $1;
+            $$->type.nextType = $1;
         }
         else
         {
@@ -1344,9 +1346,10 @@ selection_statement
         backpatch($4->nextlist, next_instr);
         inttobool($3);
         $$ = new expression();
-        backpatch($3->truelist, $6);
+        backpatch($3->truelist, $6->instruction);
 
-        $$->nextlist = merge($3->falselist, merge($7->nextlist, $8->nextlist));
+        $7->nextlist = merge($8->nextlist, $7->nextlist);
+        $$->nextlist = merge($3->falselist, $7->nextlist);
     }
     | IF ROUND_BRACKET_OPEN expression N ROUND_BRACKET_CLOSE M statement N ELSE M statement N
     {
@@ -1356,7 +1359,9 @@ selection_statement
         backpatch($3->truelist, $6->instruction);
         backpatch($3->falselist, $10->instruction);
 
-        $$->nextlist = merge(merge(merge($7->nextlist, $8->nextlist), $11->nextlist), $12->nextlist);
+        $$->nextlist = merge($7->nextlist, $8->nextlist);
+        $$->nextlist = merge($$->nextlist, $11->nextlist);
+        $$->nextlist = merge($$->nextlist, $12->nextlist);
     }
     | SWITCH ROUND_BRACKET_OPEN expression ROUND_BRACKET_CLOSE statement { /* No Action Taken */ }
     ;
@@ -1386,7 +1391,8 @@ iteration_statement
     {
         $$ = new expression();
         emit("", "", "", GOTO);
-        $12->nextlist = merge($12->nextlist, makelist(next_instr-1));
+        auto temp = makelist(next_instr-1);
+        $12->nextlist = merge($12->nextlist, temp);
         backpatch($12->nextlist, $7->instruction);
         backpatch($6->nextlist, next_instr);
         backpatch($9->nextlist, $4->instruction);
@@ -1403,12 +1409,12 @@ jump_statement
     | RETURN_T SEMICOLON
     {
         if (current_symbol_table->lookup("RETVAL")->type.type == VOID) emit("", "", "", RETURN);
-        $$ = new statement();
+        $$ = new expression();
     }
     | RETURN_T expression SEMICOLON
     {
         if (current_symbol_table->lookup("RETVAL")->type.type == current_symbol_table->lookup($2->loc)->type.type) emit($2->loc, "", "", RETURN);
-        $$ = new statement();
+        $$ = new expression();
     }
     ;
 
@@ -1443,9 +1449,9 @@ function_prototype
         else if (temp == FLOAT) size = SIZE_OF_FLOAT;
         declaration* new1 = $2;
         symbol* new2 = current_symbol_table->lookup(new1->name);
-        if (new2->type == FUNCTION)
+        if (new1->type == FUNC)
         {
-            symbol* return_value = new2->nested_table->lookup("RETVAL", temp, new2->ptr);
+            symbol* return_value = new2->nested_table->lookup("RETVAL", temp, new1->ptrs);
             new2->size = 0;
             new2->initial_value = NULL;
         }
