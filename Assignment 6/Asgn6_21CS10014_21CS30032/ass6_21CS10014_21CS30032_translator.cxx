@@ -183,7 +183,7 @@ quad::quad(string result, string arg1, opcode op, string arg2) : result(result),
 
 expression::expression() : fold(0), folder(NULL) {}
 
-void emit(string result, string arg1, opcode op, string arg2) {
+void emit(string result, string arg1, string arg2, opcode op) {
     quad_table.arr.push_back(quad(result, arg1, op, arg2));
     next_instr++;
 }
@@ -228,18 +228,18 @@ void converttype (expression* arg, expression* res, data_type type)
 
     if (res->type == INT)
     {
-        if (type == FLOAT) emit(res->loc, arg->loc, INTtoFLOAT,"");
-        else if (type == CHAR) emit(res->loc, arg->loc, INTtoCHAR,"");
+        if (type == FLOAT) emit(res->loc, arg->loc, "", INTtoFLOAT);
+        else if (type == CHAR) emit(res->loc, arg->loc, "", INTtoCHAR);
     }
     else if (res->type == FLOAT)
     {
-        if (type == INT) emit(res->loc, arg->loc, FLOATtoINT,"");
-        else if (type == CHAR) emit(res->loc, arg->loc, FLOATtoCHAR,"");
+        if (type == INT) emit(res->loc, arg->loc, "", FLOATtoINT);
+        else if (type == CHAR) emit(res->loc, arg->loc, "", FLOATtoCHAR);
     }
     else if (res->type == CHAR)
     {
-        if (type == INT) emit(res->loc, arg->loc, INTtoCHAR,"");
-        else if (type == FLOAT) emit(res->loc, arg->loc, FLOATtoCHAR,"");
+        if (type == INT) emit(res->loc, arg->loc, "", CHARtoINT);
+        else if (type == FLOAT) emit(res->loc, arg->loc, "", CHARtoFLOAT);
     }
 }
 
@@ -249,18 +249,18 @@ void converttype(string o, data_type otype, string n, data_type ntype)
 
     if (otype == INT)
     {
-        if (ntype == FLOAT) emit(n, o, FLOATtoINT,"");
-        else if (ntype == CHAR) emit(n, o, CHARtoINT,"");
+        if (ntype == FLOAT) emit(n, o, "", INTtoFLOAT);
+        else if (ntype == CHAR) emit(n, o, "", INTtoCHAR);
     }
     else if (otype == FLOAT)
     {
-        if (ntype == INT) emit(n, o, INTtoFLOAT,"");
-        else if (ntype == CHAR) emit(n, o, CHARtoFLOAT,"");
+        if (ntype == INT) emit(n, o, "", FLOATtoINT);
+        else if (ntype == CHAR) emit(n, o, "", FLOATtoCHAR);
     }
     else if (otype == CHAR)
     {
-        if (ntype == INT) emit(n, o, INTtoCHAR,"");
-        else if (ntype == FLOAT) emit(n, o, FLOATtoCHAR,"");
+        if (ntype == INT) emit(n, o, "", CHARtoINT);
+        else if (ntype == FLOAT) emit(n, o, "", CHARtoFLOAT);
     }
 }
 
@@ -270,9 +270,9 @@ void inttobool(expression* e)
     {
         e->type = BOOL;
         e->falselist = makelist(next_instr);
-        emit("", e->loc , IF_FALSE_GOTO,"");
+        emit("", e->loc , "", IF_FALSE_GOTO);
         e->truelist = makelist(next_instr);
-        emit("", "" , GOTO,"");
+        emit("", "" , "", GOTO);
     }
 }
 
