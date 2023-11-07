@@ -60,7 +60,7 @@
 %type <expr> expression primary_expression multiplicative_expression additive_expression shift_expression relational_expression equality_expression AND_expression exclusive_OR_expression inclusive_OR_expression logical_AND_expression logical_OR_expression conditional_expression assignment_expression postfix_expression unary_expression cast_expression  expression_statement statement compound_statement selection_statement iteration_statement labeled_statement jump_statement block_item  block_item_list initializer M N
 %type <intval> pointer
 %type <types> type_specifier declaration_specifiers
-%type <dec> direct_declarator declarator init_declarator
+%type <dec> direct_declarator declarator init_declarator function_prototype
 %type <dec_list> init_declarator_list
 %type <p> parameter_declaration
 %type <p_list> parameter_list parameter_type_list parameter_type_list_opt argument_expression_list argument_expression_list_opt
@@ -75,10 +75,6 @@ primary_expression
         string s = *($1);
         current_symbol_table->lookup(s);
         $$->loc = s;
-    }
-    | constant {
-        $$ = new expression() ; 
-        $$->$1 ;
     }
     | STRING_LITERAL { 
         $$ = new expression() ; 
@@ -106,12 +102,7 @@ constant
         current_symbol_table-lookup($$->loc)->initial_value = val;
      }
     | CHAR_CONSTANT {
-        $$ = new expression() ;
-        $$->loc = current_symbol_table->gentemp(CHAR);
-        emit($$->loc,$1,ASSIGN);
-        symbol_value* val = new symbol_value();
-        val->set_value($1);
-        current_symbol_table-lookup($$->loc)->initial_value = val;
+        
     }
     ;
 
@@ -1064,7 +1055,7 @@ type_specifier
     | DOUBLE { /* No Action Taken */ }
     | SIGNED { /* No Action Taken */ }
     | UNSIGNED { /* No Action Taken */ }
-    | BOOL { /* No Action Taken */ }
+    | BOOL_T { /* No Action Taken */ }
     | COMPLEX { /* No Action Taken */ }
     | IMAGINARY { /* No Action Taken */ }
     | enum_specifier { /* No Action Taken */ }
@@ -1099,7 +1090,7 @@ enumerator_list
 
 enumerator
     : IDENTIFIER { /* No Action Taken */ }
-    | IDENTIFIER ASSIGN constant_expression { /* No Action Taken */ }
+    | IDENTIFIER ASSIGN_T constant_expression { /* No Action Taken */ }
     ;
 
 type_qualifier
@@ -1199,7 +1190,7 @@ direct_declarator
     {
         /* No Action Taken */
     }
-    | direct_declarator SQUARE_BRACE_OPEN type_qualifier_list_opt MULTIPLY SQUARE_BRACE_CLOSE
+    | direct_declarator SQUARE_BRACKET type_qualifier_list_opt MULTIPLY SQUARE_BRACKET_CLOSE
     {
         $$ = $1;
         $$->type = PTR;
@@ -1217,7 +1208,7 @@ type_qualifier_list_opt
 pointer 
     : MULTIPLY type_qualifier_list { /* No Action Taken */ }
     | MULTIPLY type_qualifier_list pointer { /* No Action Taken */ }
-    | MULTIPLY pointer { $$ = $1+$2; }
+    | MULTIPLY pointer { $$ = 1+$2; }
     | MULTIPLY { /* No Action Taken */ }
     ;
 
@@ -1327,8 +1318,8 @@ labeled_statement
     ;
 
 compound_statement
-    : CURLY_BRACKET_OPEN CURLY_BRACE_CLOSE { /* No Action Taken */ }
-    | CURLY_BRACKET_OPEN block_item_list CURLY_BRACE_CLOSE { $$ = $2; }
+    : CURLY_BRACKET_OPEN CURLY_BRACKET_CLOSE { /* No Action Taken */ }
+    | CURLY_BRACKET_OPEN block_item_list CURLY_BRACKET_CLOSE { $$ = $2; }
     ;
 
 block_item_list
