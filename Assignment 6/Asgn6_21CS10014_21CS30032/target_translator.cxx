@@ -110,9 +110,9 @@ void gen_ass_from_quad(quad q , ofstream& sfile)
     symbol* loc1 = current_symbol_table->lookup(q.arg1);
     symbol* loc2 = current_symbol_table->lookup(q.arg2);
     symbol* loc3 = current_symbol_table->lookup(q.result);
-    symbol* global1 = global_symbol_table->search_global_table(q.arg1);
-    symbol* global2 = global_symbol_table->search_global_table(q.arg2);
-    symbol* global3 = global_symbol_table->search_global_table(q.result);
+    symbol* global1 = global_symbol_table.search_global_table(q.arg1);
+    symbol* global2 = global_symbol_table.search_global_table(q.arg2);
+    symbol* global3 = global_symbol_table.search_global_table(q.result);
 
 
     if(current_symbol_table != global_symbol_table)
@@ -487,7 +487,7 @@ void gen_target_code(ofstream& sfile)
     print_strings(sfile);
     set_goto_labels();
 
-    symbol_table* current_symbol_table = NULL;
+    symbol_table* function_symbol_table = NULL;
     symbol* function_running = NULL;
 
     for(int i = 0; i < quad_list.arr.size(); i++)
@@ -503,7 +503,44 @@ void gen_target_code(ofstream& sfile)
             i++;
             if (quad_list.arr[i].op == FUNC_END) i--;
             function_running = global_symbol_table->search_global_table(quad_list.arr[i].result);
-            current_symbol_table = function_running->nested_table;
+            function_symbol_table = function_running->nested_table;
+
+            int param = 1;
+            int local_var_size = 16;
+            current_symbol_table = function_symbol_table;
+
+            for (int j = 0; j < current_symbol_table->symbol_list.size(); j++)
+            {
+                if (current_symbol_table->symbol_list[j]->name == "RETVAL")
+                {
+                    param = 0;
+                    local_var_size = 0;
+
+                    if (current_symbol_table->symbol_list.size()>j+1) local_var_size = current_symbol_table->symbol_list[j+1]->size;
+
+                    else 
+                    {
+                        if (!param) 
+                        {
+                            current_symbol_table->symbol_list[j]->offset = local_var_size;
+                            if (current_symbol_table->symbol_list.size()>j+1) local_var_size -= current_symbol_table->symbol_list[j+1]->size;
+                        }
+
+                        else 
+                        {
+                            current_symbol_table->symbol_list[j]->offset = local_var_size;
+                            local_var_size += 8;
+                        }
+                        
+                    }
+                }
+            }
+
+            if (local_var_size >= 0) local_var_size = 0;
+            else local_var_size = -local_var_size;
+
+            gen_prologue(local_var_size, sfile);
+
         }
     }
 
