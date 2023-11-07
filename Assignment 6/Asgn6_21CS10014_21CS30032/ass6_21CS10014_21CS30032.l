@@ -142,13 +142,13 @@ WS                                  [ \t\n]
 "#"                                 { return HASH; }
 
 
-{IDENTIFIER}                        { yylval.symp = string(yytext); return IDENTIFIER; }
+{IDENTIFIER}                        { yylval.str = new string(yytext); return IDENTIFIER; }
 
 {INTEGER_CONSTANT}                  { yylval.intval = atoi(yytext); return INTEGER_CONSTANT; }
 {FLOATING_CONSTANT}                 { yylval.floatval = atof(yytext); return FLOATING_CONSTANT; }
 
 {CHAR_CONSTANT}                     { yylval.charval = yytext[0]; return CHAR_CONSTANT; }
-{STRING_LITERAL}                    { yylval.str = string(yytext); return STRING_LITERAL; }
+{STRING_LITERAL}                    { yylval.str = new string(yytext); return STRING_LITERAL; }
 
 {WS}                                {/* ignore whitespace */}
 

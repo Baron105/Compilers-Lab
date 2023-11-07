@@ -1381,7 +1381,7 @@ YY_RULE_SETUP
 case 87:
 YY_RULE_SETUP
 #line 145 "ass6_21CS10014_21CS30032.l"
-{ yylval.symp = string(yytext); return IDENTIFIER; }
+{ yylval.str = new string(yytext); return IDENTIFIER; }
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
@@ -1401,7 +1401,7 @@ YY_RULE_SETUP
 case 91:
 YY_RULE_SETUP
 #line 151 "ass6_21CS10014_21CS30032.l"
-{ yylval.str = string(yytext); return STRING_LITERAL; }
+{ yylval.str = new string(yytext); return STRING_LITERAL; }
 	YY_BREAK
 case 92:
 /* rule 92 can match eol */
