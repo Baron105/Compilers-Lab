@@ -63,7 +63,7 @@
 %type <dec> direct_declarator declarator init_declarator function_prototype
 %type <dec_list> init_declarator_list
 %type <p> parameter_declaration
-%type <p_list> parameter_list parameter_type_list argument_expression_list argument_expression_list_opt
+%type <p_list> parameter_list parameter_type_list argument_expression_list
 
 %start translation_unit
 
@@ -134,7 +134,7 @@ postfix_expression
         symbol_table* table = global_symbol_table.lookup($1->loc)->nested_table;
         emit($1->loc,"0","",CALL);
     }
-    | postfix_expression ROUND_BRACKET_OPEN argument_expression_list_opt ROUND_BRACKET_CLOSE { 
+    | postfix_expression ROUND_BRACKET_OPEN argument_expression_list ROUND_BRACKET_CLOSE { 
         // Corresponds to calling a function with the  function name and the appropriate number of parameters
         symbol_table* table = global_symbol_table.lookup($1->loc)->nested_table;
         vector<p> params = *($3);
@@ -203,12 +203,6 @@ postfix_expression
     { /* No Action Taken */}
     | ROUND_BRACKET_OPEN type_name ROUND_BRACKET_CLOSE CURLY_BRACKET_OPEN initializer_list COMMA CURLY_BRACKET_CLOSE 
     { /* No Action Taken */}
-    ;
-
-argument_expression_list_opt
-    : argument_expression_list {$$ = $1;}
-    | %empty
-    { $$ = 0; }
     ;
 
 argument_expression_list 
