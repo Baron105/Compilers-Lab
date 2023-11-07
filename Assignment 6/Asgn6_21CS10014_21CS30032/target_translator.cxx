@@ -17,11 +17,11 @@ map<int,string> labels ;
 stack<pair<string,int>> parameters ;
 int label_count = 0;
 string function_running = "";
-string asmFileName ;
+string dot_s_file_name = "";
 
 void print_global(ofstream& sfile)
 {
-    for (auto it = global_symbol_table->symbol_list.begin(); it != global_symbol_table->symbol_list.end(); it++)
+    for (auto it = global_symbol_table.symbol_list.begin(); it != global_symbol_table.symbol_list.end(); it++)
     {
         symbol* s = *it;
         
@@ -115,7 +115,7 @@ void gen_ass_from_quad(quad q , ofstream& sfile)
     symbol* global3 = global_symbol_table.search_global_table(q.result);
 
 
-    if(current_symbol_table != global_symbol_table)
+    if(current_symbol_table != &global_symbol_table)
     {
         if(global1 == NULL) offset1 = loc1->offset;
         if(global2 == NULL) offset2 = loc2->offset;
@@ -488,7 +488,7 @@ void gen_target_code(ofstream& sfile)
     set_goto_labels();
 
     symbol_table* function_symbol_table = NULL;
-    symbol* function_running = NULL;
+    symbol* curr_func = NULL;
 
     for(int i = 0; i < quad_list.arr.size(); i++)
     {
@@ -502,8 +502,8 @@ void gen_target_code(ofstream& sfile)
         {
             i++;
             if (quad_list.arr[i].op == FUNC_END) i--;
-            function_running = global_symbol_table->search_global_table(quad_list.arr[i].result);
-            function_symbol_table = function_running->nested_table;
+            curr_func = global_symbol_table.search_global_table(quad_list.arr[i].result);
+            function_symbol_table = curr_func->nested_table;
 
             int param = 1;
             int local_var_size = 16;
@@ -539,9 +539,41 @@ void gen_target_code(ofstream& sfile)
             if (local_var_size >= 0) local_var_size = 0;
             else local_var_size = -local_var_size;
 
+            function_running = quad_list.arr[i].result;
             gen_prologue(local_var_size, sfile);
 
         }
-    }
 
+        else if (quad_list.arr[i].op == FUNC_END)
+        {
+            current_symbol_table = &global_symbol_table;
+            function_running = "";
+            sfile << "\tleave" << endl << "\tret" << endl;
+            sfile << "\t.size\t" << quad_list.arr[i].result << ", .-" << quad_list.arr[i].result << endl;
+            
+        }
+
+        if (function_running != "") gen_ass_from_quad(quad_list.arr[i], sfile);
+    }
+}
+
+int main(int argc, char* argv[])
+{
+    current_symbol_table = &global_symbol_table;
+    yyparse();
+
+    dot_s_file_name = "ass6_21CS10014_21CS30032_" + string(argv[argc-1]) + ".s";
+    ofstream sfile;
+
+    sfile.open(dot_s_file_name);
+
+    quad_list.print_quad_array();
+
+    current_symbol_table->print_st("Global Symbol Table");
+
+    gen_target_code(sfile);
+
+    sfile.close();
+
+    return 0;
 }

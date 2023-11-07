@@ -49,7 +49,7 @@ class expression;           // class to represent an expression
 
 extern symbol* current_symbol;
 extern symbol_table* current_symbol_table;
-extern symbol_table* global_symbol_table;
+extern symbol_table global_symbol_table;
 extern symbol_table* constant_symbol_table;
 extern quad_array quad_table;
 extern int symbol_table_counter;
