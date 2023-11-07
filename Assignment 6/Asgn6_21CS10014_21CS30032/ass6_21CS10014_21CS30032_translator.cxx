@@ -15,9 +15,6 @@ int next_instr = 0;
 
 int symbol_table::count = 0;
 
-// string last_var_type;
-string typevar;
-
 void symbol_value::set_value(int val) {
     int_val = val;
 }
