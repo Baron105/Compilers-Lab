@@ -10,7 +10,7 @@ lex.yy.o: lex.yy.c
 y.tab.o: y.tab.c
 	cc -c y.tab.c
 
-ass.o: ass4_21CS10014_21CS30032.c
+ass4_21CS10014_21CS30032.o: ass4_21CS10014_21CS30032.c
 	cc -c ass4_21CS10014_21CS30032.c
 
 lex.yy.c: ass4_21CS10014_21CS30032.l y.tab.h
